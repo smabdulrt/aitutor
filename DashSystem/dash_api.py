@@ -1,6 +1,12 @@
 import time
+import sys
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+# Add the project root to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from DashSystem.dash_system import DASHSystem, Question
 
 app = FastAPI()

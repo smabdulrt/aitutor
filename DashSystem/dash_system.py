@@ -6,14 +6,6 @@ from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 
-# Get the absolute path of the directory containing this file
-DASH_SYSTEM_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(DASH_SYSTEM_DIR, '..'))
-
-# Add project root to Python path to allow imports from other folders
-import sys
-sys.path.insert(0, PROJECT_ROOT)
-
 from user_manager import UserManager, UserProfile, SkillState
 from QuestionGeneratorAgent.question_generator_agent import QuestionGeneratorAgent
 
@@ -59,18 +51,18 @@ class DASHSystem:
     def __init__(self, skills_file: Optional[str] = None, curriculum_file: Optional[str] = None):
         
         # Default file paths relative to the project root
-        self.skills_file_path = skills_file if skills_file else os.path.join(PROJECT_ROOT, "QuestionsBank", "skills.json")
-        self.curriculum_file_path = curriculum_file if curriculum_file else os.path.join(PROJECT_ROOT, "QuestionsBank", "curriculum.json")
+        self.skills_file_path = skills_file if skills_file else "QuestionsBank/skills.json"
+        self.curriculum_file_path = curriculum_file if curriculum_file else "QuestionsBank/curriculum.json"
 
         self.skills: Dict[str, Skill] = {}
         self.student_states: Dict[str, Dict[str, StudentSkillState]] = {}
         self.questions: Dict[str, Question] = {}
         self.curriculum: Dict = {}
-        self.user_manager = UserManager(users_folder=os.path.join(PROJECT_ROOT, "Users"))
+        self.user_manager = UserManager(users_folder="Users")
         
         # Initialize the Question Generator Agent
         try:
-            qg_curriculum_path = os.path.join(PROJECT_ROOT, "QuestionsBank", "curriculum.json")
+            qg_curriculum_path = "QuestionsBank/curriculum.json"
             self.question_generator = QuestionGeneratorAgent(curriculum_file=qg_curriculum_path)
             print("✅ Question Generator Agent initialized.")
         except Exception as e:
