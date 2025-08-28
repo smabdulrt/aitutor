@@ -60,6 +60,26 @@ function ControlTray({
   const [isScreenShareOn, setIsScreenShareOn] = useState(false);
 
   useEffect(() => {
+    // Automatically connect when the component mounts
+    if (!connected) {
+      connect();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    // When the connection is established, send the initial prompt to the AI
+    if (connected) {
+      client.send([
+        {
+          text: "System: The session has begun. Greet the student and start the lesson now.",
+        },
+      ]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connected]);
+
+  useEffect(() => {
     if (!connected && connectButtonRef.current) {
       connectButtonRef.current.focus();
     }

@@ -45,6 +45,9 @@ class Question:
     question_id: str
     skill_ids: List[str]
     content: str
+    question_type: str  # e.g., 'multiple-choice', 'static-text'
+    options: Optional[List[str]] = None
+    correct_answer: Optional[str] = None
     difficulty: float = 0.0
 
 class DASHSystem:
@@ -85,6 +88,9 @@ class DASHSystem:
                             question_id=question_data['question_id'],
                             skill_ids=[skill_data['skill_id']],
                             content=question_data['content'],
+                            question_type=question_data.get('type', 'static-text'),
+                            options=question_data.get('options'),
+                            correct_answer=question_data.get('correct_answer'),
                             difficulty=question_data['difficulty']
                         )
                         self.questions[question.question_id] = question
@@ -473,3 +479,31 @@ class DASHSystem:
         except Exception as e:
             print(f"❌ Error during question generation: {e}")
             return None
+
+    def check_answer(self, question_id: str, user_answer: str) -> bool:
+        """
+        Checks if a user's answer is correct for a given question.
+        This method applies different validation logic based on the question type.
+        """
+        question = self.questions.get(question_id)
+        if not question or question.correct_answer is None:
+            return False
+
+        correct_answer = question.correct_answer
+        question_type = question.question_type
+
+        if question_type == "multiple-choice":
+            # Exact match for multiple choice
+            return user_answer == correct_answer
+        elif question_type == "free-response":
+            # Case-insensitive and whitespace-trimmed for free response
+            return user_answer.strip().lower() == correct_answer.strip().lower()
+        elif question_type == "numeric-input":
+            # Numerical comparison for numeric input
+            try:
+                return float(user_answer) == float(correct_answer)
+            except (ValueError, TypeError):
+                return False
+        else:
+            # Default to exact match for any other type (like static-text)
+            return user_answer == correct_answer

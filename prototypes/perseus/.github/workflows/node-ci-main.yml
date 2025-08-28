@@ -1,0 +1,43 @@
+name: Node CI (landed on protected branch)
+
+on:
+    push:
+        branches:
+            - main
+            - changeset-release/*
+            - feature/*
+
+# When a PR is landed to main, we want to ensure that all of these jobs run and
+# that they all complete before the next PR's changes are processed by this
+# workflow.
+# See https://docs.github.com/en/actions/using-jobs/using-concurrency
+concurrency:
+    group: ${{ github.workflow }}
+    cancel-in-progress: false
+
+# Our jobs run like this to minimize wasting resource cycles:
+#   1. Prime caches for primary configuration.  This way subsequent jobs
+#      can run in parallel but rely on this primed cache.
+#
+# For pushes directly to a branch, we assume a PR has been used with wider
+# checks, this just makes sure that our node_modules cache is update to date as
+# it is used as a fallback for PRs against it.
+jobs:
+    prime_cache_primary:
+        name: Prime node_modules cache for primary configuration
+        runs-on: ${{ matrix.os }}
+        strategy:
+            # Use a matrix as it means we get the version info in the job name
+            # which is very helpful.
+            matrix:
+                os: [ubuntu-latest]
+                node-version: [20.x]
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install & cache node_modules
+              uses: ./.github/actions/shared-node-cache
+              with:
+                  node-version: ${{ matrix.node-version }}
+
+    # Add other jobs here that we want to run anytime a PR is landed

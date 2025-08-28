@@ -3,6 +3,7 @@ import sys
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 # Add the project root to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -11,6 +12,13 @@ from DashSystem.dash_system import DASHSystem, Question
 
 app = FastAPI()
 dash_system = DASHSystem()
+
+# Pydantic model for the answer submission
+class AnswerRequest(BaseModel):
+    user_id: str
+    question_id: str
+    answer: str
+    response_time_seconds: float
 
 # Configure CORS
 app.add_middleware(
@@ -35,11 +43,31 @@ def get_next_question(user_id: str):
     if next_question:
         return next_question
     else:
-        # If no specific question is recommended, you could return a default
-        # or a message indicating the student is proficient in all areas.
-        # For now, we'll return a 404, but this can be improved.
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="No recommended question found.")
+
+@app.post("/submit-answer")
+def submit_answer(answer_request: AnswerRequest):
+    """
+    Submits an answer for a question and updates the user's skill profile.
+    """
+    is_correct = dash_system.check_answer(
+        answer_request.question_id, answer_request.answer
+    )
+    
+    user_profile = dash_system.load_user_or_create(answer_request.user_id)
+    question = dash_system.questions.get(answer_request.question_id)
+    
+    if question:
+        dash_system.record_question_attempt(
+            user_profile=user_profile,
+            question_id=answer_request.question_id,
+            skill_ids=question.skill_ids,
+            is_correct=is_correct,
+            response_time_seconds=answer_request.response_time_seconds,
+        )
+    
+    return {"correct": is_correct}
 
 if __name__ == "__main__":
     import uvicorn

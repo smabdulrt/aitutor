@@ -1,0 +1,41 @@
+{
+    "name": "@khanacademy/kmath",
+    "description": "Khan Academy's Javascript Numeric Math Utilities",
+    "author": "Khan Academy",
+    "license": "MIT",
+    "version": "2.2.0",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Khan/perseus.git",
+        "directory": "packages/kmath"
+    },
+    "bugs": {
+        "url": "https://github.com/Khan/perseus/issues"
+    },
+    "module": "dist/es/index.js",
+    "main": "dist/index.js",
+    "source": "src/index.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "prepublishOnly": "../../utils/package-pre-publish-check.sh"
+    },
+    "dependencies": {
+        "@khanacademy/perseus-core": "workspace:*",
+        "@khanacademy/perseus-utils": "workspace:*"
+    },
+    "devDependencies": {
+        "jquery": "catalog:devDeps",
+        "perseus-build-settings": "workspace:*",
+        "underscore": "catalog:devDeps"
+    },
+    "peerDependencies": {
+        "jquery": "catalog:peerDeps",
+        "underscore": "catalog:peerDeps"
+    },
+    "keywords": []
+}

@@ -1,0 +1,57 @@
+{
+    "name": "@khanacademy/perseus-core",
+    "description": "Shared Perseus infrastructure",
+    "author": "Khan Academy",
+    "license": "MIT",
+    "version": "18.9.0",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Khan/perseus.git",
+        "directory": "packages/perseus-core"
+    },
+    "bugs": {
+        "url": "https://github.com/Khan/perseus/issues"
+    },
+    "module": "dist/es/index.js",
+    "main": "dist/index.js",
+    "source": "src/index.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/es/index.js",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts",
+            "source": "./src/index.ts"
+        },
+        "./item-splitting": {
+            "import": "./dist/es/index.item-splitting.js",
+            "require": "./dist/index.item-splitting.js",
+            "types": "./dist/index.item-splitting.d.ts",
+            "source": "./src/index.item-splitting.ts"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "prepublishOnly": "../../utils/package-pre-publish-check.sh"
+    },
+    "dependencies": {
+        "@khanacademy/kas": "workspace:*",
+        "@khanacademy/perseus-utils": "workspace:*",
+        "@khanacademy/pure-markdown": "workspace:*",
+        "tiny-invariant": "catalog:prodDeps"
+    },
+    "devDependencies": {
+        "@khanacademy/wonder-stuff-core": "catalog:devDeps",
+        "perseus-build-settings": "workspace:*",
+        "underscore": "catalog:devDeps"
+    },
+    "peerDependencies": {
+        "@khanacademy/wonder-stuff-core": "catalog:peerDeps",
+        "underscore": "catalog:peerDeps"
+    },
+    "keywords": []
+}

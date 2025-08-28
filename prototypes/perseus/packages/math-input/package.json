@@ -1,0 +1,82 @@
+{
+    "name": "@khanacademy/math-input",
+    "description": "Khan Academy's new expression editor for the mobile web.",
+    "author": "Khan Academy",
+    "license": "MIT",
+    "version": "26.2.0",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Khan/perseus.git",
+        "directory": "packages/math-input"
+    },
+    "bugs": {
+        "url": "https://github.com/Khan/perseus/issues"
+    },
+    "module": "dist/es/index.js",
+    "main": "dist/index.js",
+    "source": "src/index.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/es/index.js",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts",
+            "source": "./src/index.ts"
+        },
+        "./strings": {
+            "import": "./dist/es/strings.js",
+            "require": "./dist/strings.js",
+            "types": "./dist/strings.d.ts",
+            "source": "./src/strings.ts"
+        },
+        "./styles.css": "./dist/index.css"
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "prepublishOnly": "../../utils/package-pre-publish-check.sh"
+    },
+    "dependencies": {
+        "@khanacademy/keypad-context": "workspace:*",
+        "@khanacademy/perseus-core": "workspace:*",
+        "@khanacademy/perseus-utils": "workspace:*"
+    },
+    "devDependencies": {
+        "@khanacademy/mathjax-renderer": "catalog:devDeps",
+        "@khanacademy/wonder-blocks-clickable": "catalog:devDeps",
+        "@khanacademy/wonder-blocks-core": "catalog:devDeps",
+        "@khanacademy/wonder-blocks-popover": "catalog:devDeps",
+        "@khanacademy/wonder-blocks-timing": "catalog:devDeps",
+        "@khanacademy/wonder-blocks-tokens": "catalog:devDeps",
+        "@khanacademy/wonder-stuff-core": "catalog:devDeps",
+        "@phosphor-icons/core": "catalog:devDeps",
+        "aphrodite": "catalog:devDeps",
+        "jquery": "catalog:devDeps",
+        "mathquill": "github:Khan/mathquill#v1.0.3",
+        "perseus-build-settings": "workspace:*",
+        "prop-types": "catalog:devDeps",
+        "react": "catalog:devDeps",
+        "react-dom": "catalog:devDeps",
+        "react-transition-group": "^4.4.1"
+    },
+    "peerDependencies": {
+        "@khanacademy/mathjax-renderer": "catalog:peerDeps",
+        "@khanacademy/wonder-blocks-clickable": "catalog:peerDeps",
+        "@khanacademy/wonder-blocks-core": "catalog:peerDeps",
+        "@khanacademy/wonder-blocks-popover": "catalog:peerDeps",
+        "@khanacademy/wonder-blocks-timing": "catalog:peerDeps",
+        "@khanacademy/wonder-blocks-tokens": "catalog:peerDeps",
+        "@khanacademy/wonder-stuff-core": "catalog:peerDeps",
+        "@phosphor-icons/core": "catalog:peerDeps",
+        "aphrodite": "catalog:peerDeps",
+        "jquery": "catalog:peerDeps",
+        "prop-types": "catalog:peerDeps",
+        "react": "catalog:peerDeps",
+        "react-dom": "catalog:peerDeps",
+        "react-transition-group": "^4.4.1"
+    },
+    "keywords": []
+}

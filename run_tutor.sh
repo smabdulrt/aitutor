@@ -43,6 +43,10 @@ echo "Starting Node.js frontend... Logs -> logs/frontend.log"
 (cd "$SCRIPT_DIR/frontend" && npm start) > "$SCRIPT_DIR/logs/frontend.log" 2>&1 &
 pids+=($!) # Save the PID
 
+# Open the browser to the frontend URL
+echo "Opening browser..."
+open http://localhost:3000
+
 echo "Tutor is running with the following PIDs: ${pids[*]}"
 echo "Press Ctrl+C to stop."
 echo "You can view the logs for each service in the 'logs' directory."

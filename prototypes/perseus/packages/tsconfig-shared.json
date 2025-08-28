@@ -1,0 +1,31 @@
+// This file is used by the tsconfig-build.json files in each package.
+/* Visit https://aka.ms/tsconfig to read more about this file */
+{
+    "exclude": [
+        "dist",
+        "**/*.test.*",
+        "**/__tests__/**",
+        "**/*.testdata.*",
+        "**/__testdata__/**",
+        "**/__testutils__/**",
+        "**/*.stories.*",
+        "**/__stories__/**",
+        "**/*.cypress.*"
+    ],
+    "extends": "../tsconfig-common.json",
+    "compilerOptions": {
+        "composite": true,
+        "incremental": true, // Required for composite projects
+
+        // We use rollup + swc to compile our bundles so we
+        // only need tsc to output .d.ts files
+        "declaration": true,
+        "emitDeclarationOnly": true,
+
+        "paths": {
+            "@khanacademy/*": [
+                "./*/src"
+            ]
+        },
+    },
+}

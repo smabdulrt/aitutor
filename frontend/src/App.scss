@@ -151,9 +151,10 @@ body {
   .main-app-area {
     display: flex;
     flex: 1;
-    align-items: center;
+    align-items: stretch; /* Allow children to fill the height */
     justify-content: center;
     width: 100%;
+    overflow: hidden; /* Prevent this container from scrolling */
   }
 
   .question-panel {
@@ -162,8 +163,10 @@ body {
     flex: 2;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Align to the top */
+    padding-top: 2rem; /* Add some padding */
     height: 100%;
+    overflow-y: auto; /* Allow scrolling if content overflows */
   }
 
   .media-mixer-display {

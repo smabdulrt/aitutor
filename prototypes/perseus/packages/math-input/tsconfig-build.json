@@ -1,0 +1,12 @@
+{
+    "extends": "../tsconfig-shared.json",
+    "compilerOptions": {
+        "outDir": "./dist",
+        "rootDir": "src",
+    },
+    "references": [
+        {"path": "../keypad-context/tsconfig-build.json"},
+        {"path": "../perseus-core/tsconfig-build.json"},
+        {"path": "../perseus-utils/tsconfig-build.json"}
+    ]
+}
