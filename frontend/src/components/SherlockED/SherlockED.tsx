@@ -9,10 +9,11 @@ import { Question } from '../../types';
 
 interface SherlockEDProps {
   question: Question;
-  onAnswerChange: (answer: string | number | string[] | null) => void;
+  onAnswerSubmit: (answer: string | number | string[]) => void;
+  onSelectionChange: (selection: any) => void;
 }
 
-const SherlockED: React.FC<SherlockEDProps> = ({ question, onAnswerChange }) => {
+const SherlockED: React.FC<SherlockEDProps> = ({ question, onAnswerSubmit, onSelectionChange }) => {
   const getWidgetInfo = () => {
     if (!question) return { component: null, name: 'None' };
 
@@ -25,13 +26,13 @@ const SherlockED: React.FC<SherlockEDProps> = ({ question, onAnswerChange }) => 
           id: `${question.question_id}-choice-${index}`,
           content: option,
         }));
-        return { component: <MultipleChoiceDisplay content={question.content} choices={choices} onAnswerChange={onAnswerChange} />, name: 'Multiple Choice Display' };
+        return { component: <MultipleChoiceDisplay content={question.content} choices={choices} onSubmit={onAnswerSubmit} onSelectionChange={onSelectionChange} />, name: 'Multiple Choice Display' };
       case 'free-response':
-        return { component: <FreeResponseDisplay content={question.content} onAnswerChange={onAnswerChange} />, name: 'Free Response Display' };
+        return { component: <FreeResponseDisplay content={question.content} onSubmit={onAnswerSubmit} />, name: 'Free Response Display' };
       case 'numeric-input':
-        return { component: <NumericInputDisplay content={question.content} onAnswerChange={onAnswerChange} />, name: 'Numeric Input Display' };
+        return { component: <NumericInputDisplay content={question.content} onSubmit={onAnswerSubmit} />, name: 'Numeric Input Display' };
       case 'counting-boxes':
-        return { component: <CountingBoxesDisplay content={question.content} onAnswerChange={onAnswerChange} />, name: 'Counting Boxes Display' };
+        return { component: <CountingBoxesDisplay content={question.content} onSubmit={onAnswerSubmit} onSelectionChange={onSelectionChange} />, name: 'Counting Boxes Display' };
       default:
         return { component: <div>Unsupported question type</div>, name: 'Unsupported' };
     }

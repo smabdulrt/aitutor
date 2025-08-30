@@ -7,11 +7,12 @@ interface QuestionDisplayProps {
   question: Question | null;
   error: string | null;
   loading: boolean;
-  onAnswerChange: (answer: any) => void;
+  onAnswerSubmit: (answer: any) => void;
+  onSelectionChange: (selection: any) => void; // Add this line
 }
 
 // This component is now a simple "presenter". It receives all its data via props.
-const QuestionDisplay: React.FC<QuestionDisplayProps> = ({ question, error, loading, onAnswerChange }) => {
+const QuestionDisplay: React.FC<QuestionDisplayProps> = ({ question, error, loading, onAnswerSubmit, onSelectionChange }) => {
   if (loading) {
     return <div className="question-display">Loading question...</div>;
   }
@@ -27,7 +28,7 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({ question, error, load
   // It passes the data down to SherlockED, which will render the correct interactive widget.
   return (
     <div className="question-display">
-      <SherlockED question={question} onAnswerChange={onAnswerChange} />
+      <SherlockED question={question} onAnswerSubmit={onAnswerSubmit} onSelectionChange={onSelectionChange} />
     </div>
   );
 };

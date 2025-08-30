@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 interface NumericInputDisplayProps {
   content: string;
-  onAnswerChange: (answer: number | null) => void;
+  onSubmit: (answer: number) => void;
 }
 
-const NumericInputDisplay: React.FC<NumericInputDisplayProps> = ({ content, onAnswerChange }) => {
+const NumericInputDisplay: React.FC<NumericInputDisplayProps> = ({ content, onSubmit }) => {
   const [answer, setAnswer] = useState('');
 
-  useEffect(() => {
+  const handleSubmit = () => {
     const num = parseFloat(answer);
     if (!isNaN(num)) {
-      onAnswerChange(num);
-    } else {
-      onAnswerChange(null);
+      onSubmit(num);
     }
-  }, [answer, onAnswerChange]);
+  };
 
   return (
     <div className="widget-numeric-input">
@@ -26,6 +24,9 @@ const NumericInputDisplay: React.FC<NumericInputDisplayProps> = ({ content, onAn
         onChange={(e) => setAnswer(e.target.value)}
         placeholder="Enter a number..."
       />
+      <button onClick={handleSubmit} disabled={answer.trim() === ''}>
+        Submit
+      </button>
     </div>
   );
 };

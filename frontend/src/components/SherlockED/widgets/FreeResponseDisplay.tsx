@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 interface FreeResponseDisplayProps {
   content: string;
-  onAnswerChange: (answer: string | null) => void;
+  onSubmit: (answer: string) => void;
 }
 
-const FreeResponseDisplay: React.FC<FreeResponseDisplayProps> = ({ content, onAnswerChange }) => {
+const FreeResponseDisplay: React.FC<FreeResponseDisplayProps> = ({ content, onSubmit }) => {
   const [answer, setAnswer] = useState('');
 
-  useEffect(() => {
-    if (answer.trim()) {
-      onAnswerChange(answer.trim());
-    } else {
-      onAnswerChange(null);
-    }
-  }, [answer, onAnswerChange]);
+  const handleSubmit = () => {
+    onSubmit(answer);
+  };
 
   return (
     <div className="widget-free-response">
@@ -25,6 +21,9 @@ const FreeResponseDisplay: React.FC<FreeResponseDisplayProps> = ({ content, onAn
         onChange={(e) => setAnswer(e.target.value)}
         placeholder="Type your answer here..."
       />
+      <button onClick={handleSubmit} disabled={!answer.trim()}>
+        Submit
+      </button>
     </div>
   );
 };

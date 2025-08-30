@@ -49,5 +49,6 @@ export interface Question {
   content: string;
   question_type: 'static-text' | 'multiple-choice' | 'free-response' | 'numeric-input' | 'counting-boxes';
   options?: string[];
+  correct_answer?: any; // Add this to see the correct answer in the frontend state
   difficulty: number;
 }
