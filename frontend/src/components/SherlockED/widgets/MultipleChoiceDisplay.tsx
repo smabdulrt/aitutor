@@ -22,7 +22,10 @@ const MultipleChoiceDisplay: React.FC<MultipleChoiceDisplayProps> = ({ content, 
 
   const handleSubmit = () => {
     if (selectedChoice) {
-      onSubmit(selectedChoice);
+      const choice = choices.find(c => c.id === selectedChoice);
+      if (choice) {
+        onSubmit(choice.content);
+      }
     }
   };
 

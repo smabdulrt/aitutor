@@ -110,7 +110,7 @@ function App() {
     <div className="App">
       <LiveAPIProvider options={apiOptions}>
         {/* --- DEBUG LOGS --- */}
-        <div style={{ position: 'absolute', top: 0, left: 0, background: 'rgba(0,0,0,0.7)', color: 'white', padding: '10px', zIndex: 1000, fontSize: '12px' }}>
+        <div style={{ position: 'absolute', bottom: 0, right: 0, background: 'rgba(0,0,0,0.7)', color: 'white', padding: '10px', zIndex: 1000, fontSize: '12px' }}>
           <p><strong>Question Type:</strong> {question?.question_type || 'N/A'}</p>
           <p><strong>Current Selection:</strong> {JSON.stringify(currentSelection) || 'N/A'}</p>
           <p><strong>Correct Answer:</strong> {JSON.stringify(question?.correct_answer) || 'N/A'}</p>

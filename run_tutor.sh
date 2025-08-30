@@ -14,9 +14,9 @@ pids=()
 cleanup() {
     echo "Shutting down tutor..."
     for pid in "${pids[@]}"; do
-        echo "Killing process $pid"
-        # Use kill -TERM for a graceful shutdown. Add kill -9 if needed.
-        kill "$pid"
+        echo "Killing process group $pid..."
+        # Use kill -TERM to send a signal to the entire process group
+        kill -TERM -- "-$pid" 2>/dev/null
     done
     echo "All processes terminated."
 }

@@ -1,13 +1,13 @@
 {
   "user_id": "test_student",
-  "created_at": 1756591215.2338638,
-  "last_updated": 1756591232.151384,
+  "created_at": 1756591968.1632261,
+  "last_updated": 1756591968.1633222,
   "skill_states": {
     "counting_1_10": {
-      "memory_strength": 0.9090909090909091,
-      "last_practice_time": 1756591232.148166,
-      "practice_count": 1,
-      "correct_count": 1
+      "memory_strength": 0.0,
+      "last_practice_time": null,
+      "practice_count": 0,
+      "correct_count": 0
     },
     "number_recognition": {
       "memory_strength": 0.0,
@@ -184,17 +184,6 @@
       "correct_count": 0
     }
   },
-  "question_history": [
-    {
-      "question_id": "k_count_1",
-      "skill_ids": [
-        "counting_1_10"
-      ],
-      "is_correct": true,
-      "response_time_seconds": 5.0,
-      "timestamp": 1756591232.1513631,
-      "time_penalty_applied": false
-    }
-  ],
+  "question_history": [],
   "student_notes": {}
 }
