@@ -210,3 +210,50 @@ body {
   height: 100%;
   z-index: 10;
 }
+
+/* --- Button Styles for SherlockED --- */
+.action-button-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.action-button-container button {
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+}
+
+.action-button-container button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.action-button-container button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.action-button-container button:active:not(:disabled) {
+  background-color: #004085;
+  transform: translateY(1px); /* This creates the "pressed" animation */
+}
+
+.feedback-container {
+  margin-top: 15px;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.feedback-text.correct {
+  color: #28a745;
+}
+
+.feedback-text.incorrect {
+  color: #dc3545;
+}

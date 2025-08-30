@@ -32,11 +32,15 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [submissionStatus, setSubmissionStatus] = useState<'unanswered' | 'submitting' | 'answered'>('unanswered');
+  const [userAnswer, setUserAnswer] = useState<any>(null); // To hold the answer from the widget
   const userId = "test_student"; // Hardcoded for now
 
   const fetchQuestion = async () => {
     setLoading(true);
     setFeedback(null);
+    setSubmissionStatus('unanswered');
+    setUserAnswer(null);
     try {
       const response = await fetch(`http://localhost:8000/next-question/${userId}`);
       if (!response.ok) throw new Error('Failed to fetch question.');
@@ -55,26 +59,33 @@ function App() {
     fetchQuestion();
   }, []);
 
-  const handleAnswerSubmit = async (answer: string | number | string[]) => {
-    if (!question) return;
+  const handleAnswerSubmit = async () => {
+    if (!question || userAnswer === null) return;
 
+    setSubmissionStatus('submitting');
     const response = await fetch('http://localhost:8000/submit-answer', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         user_id: userId,
         question_id: question.question_id,
-        answer: answer, // The backend will handle the array format
+        answer: userAnswer,
         response_time_seconds: 5, // Placeholder
       }),
     });
     
     const result = await response.json();
     setFeedback(result.correct ? 'Correct!' : 'Incorrect. Try again!');
+    setSubmissionStatus('answered');
   };
 
   const handleNextQuestion = () => {
     fetchQuestion();
+  };
+
+  // A single function for widgets to update the answer in the parent
+  const handleAnswerChange = (answer: any) => {
+    setUserAnswer(answer);
   };
 
   useEffect(() => {
@@ -86,6 +97,13 @@ function App() {
   return (
     <div className="App">
       <LiveAPIProvider options={apiOptions}>
+        {/* --- DEBUG LOGS --- */}
+        <div style={{ position: 'absolute', top: 0, left: 0, background: 'rgba(0,0,0,0.7)', color: 'white', padding: '10px', zIndex: 1000 }}>
+          <p><strong>Question Type:</strong> {question?.question_type || 'N/A'}</p>
+          <p><strong>Submission Status:</strong> {submissionStatus}</p>
+          <p><strong>User Answer:</strong> {JSON.stringify(userAnswer)}</p>
+        </div>
+        {/* --- END DEBUG LOGS --- */}
         <div className="streaming-console">
           <SidePanel />
           <main>
@@ -96,14 +114,30 @@ function App() {
                     question={question}
                     error={error}
                     loading={loading}
-                    onAnswerSubmit={handleAnswerSubmit}
+                    onAnswerChange={handleAnswerChange}
                   />
                   {feedback && (
                     <div className="feedback-container">
                       <p className="feedback-text">{feedback}</p>
-                      <button onClick={handleNextQuestion}>Next Question</button>
                     </div>
                   )}
+                  <div className="action-button-container">
+                    {question?.question_type === 'static-text' ? (
+                      <button onClick={handleNextQuestion}>Continue</button>
+                    ) : (
+                      <>
+                        {submissionStatus === 'unanswered' && (
+                          <button onClick={handleAnswerSubmit} disabled={userAnswer === null}>Submit</button>
+                        )}
+                        {submissionStatus === 'submitting' && (
+                          <button disabled>Submitting...</button>
+                        )}
+                        {submissionStatus === 'answered' && (
+                          <button onClick={handleNextQuestion}>Next Question</button>
+                        )}
+                      </>
+                    )}
+                  </div>
                   {isScratchpadOpen && (
                     <div className="scratchpad-container">
                       <Scratchpad />

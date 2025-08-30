@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Choice {
   id: string;
@@ -8,17 +8,15 @@ interface Choice {
 interface MultipleChoiceDisplayProps {
   content: string;
   choices: Choice[];
-  onSubmit: (selectedChoiceId: string) => void;
+  onAnswerChange: (selectedChoiceId: string | null) => void;
 }
 
-const MultipleChoiceDisplay: React.FC<MultipleChoiceDisplayProps> = ({ content, choices, onSubmit }) => {
+const MultipleChoiceDisplay: React.FC<MultipleChoiceDisplayProps> = ({ content, choices, onAnswerChange }) => {
   const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
 
-  const handleSubmit = () => {
-    if (selectedChoice) {
-      onSubmit(selectedChoice);
-    }
-  };
+  useEffect(() => {
+    onAnswerChange(selectedChoice);
+  }, [selectedChoice, onAnswerChange]);
 
   return (
     <div className="widget-multiple-choice">
@@ -38,9 +36,6 @@ const MultipleChoiceDisplay: React.FC<MultipleChoiceDisplayProps> = ({ content, 
           </div>
         ))}
       </div>
-      <button onClick={handleSubmit} disabled={!selectedChoice}>
-        Submit
-      </button>
     </div>
   );
 };

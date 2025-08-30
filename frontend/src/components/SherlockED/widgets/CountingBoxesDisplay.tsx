@@ -1,28 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface CountingBoxesDisplayProps {
   content: string;
-  onSubmit: (answers: string[]) => void;
+  onAnswerChange: (answers: string[] | null) => void;
 }
 
-const CountingBoxesDisplay: React.FC<CountingBoxesDisplayProps> = ({ content, onSubmit }) => {
+const CountingBoxesDisplay: React.FC<CountingBoxesDisplayProps> = ({ content, onAnswerChange }) => {
   const [answers, setAnswers] = useState<string[]>(Array(5).fill(''));
+
+  useEffect(() => {
+    // If at least one box is filled, send the answer up. Otherwise, send null.
+    if (answers.some(answer => answer !== '')) {
+      onAnswerChange(answers);
+    } else {
+      onAnswerChange(null);
+    }
+  }, [answers, onAnswerChange]);
 
   const handleChange = (index: number, value: string) => {
     const newAnswers = [...answers];
-    // Allow only single numeric digits
     newAnswers[index] = value.replace(/[^0-9]/g, '').slice(0, 1);
     setAnswers(newAnswers);
   };
-
-  const handleSubmit = () => {
-    // Only submit if all boxes are filled
-    if (answers.every(answer => answer !== '')) {
-      onSubmit(answers);
-    }
-  };
-
-  const isSubmitDisabled = answers.some(answer => answer === '');
 
   return (
     <div className="widget-counting-boxes">
@@ -40,9 +39,7 @@ const CountingBoxesDisplay: React.FC<CountingBoxesDisplayProps> = ({ content, on
           />
         ))}
       </div>
-      <button onClick={handleSubmit} disabled={isSubmitDisabled}>
-        Submit
-      </button>
+      {/* The submit button is now managed by the parent App component */}
     </div>
   );
 };

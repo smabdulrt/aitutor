@@ -4,6 +4,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from typing import Union, List
 
 # Add the project root to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -12,8 +13,6 @@ from DashSystem.dash_system import DASHSystem, Question
 
 app = FastAPI()
 dash_system = DASHSystem()
-
-from typing import Union, List
 
 # Pydantic model for the answer submission
 class AnswerRequest(BaseModel):

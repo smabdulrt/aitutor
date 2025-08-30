@@ -9,41 +9,43 @@ import { Question } from '../../types';
 
 interface SherlockEDProps {
   question: Question;
-  onAnswerSubmit: (answer: string | number | string[]) => void; // Add string[] for the new type
+  onAnswerChange: (answer: string | number | string[] | null) => void;
 }
 
-const SherlockED: React.FC<SherlockEDProps> = ({ question, onAnswerSubmit }) => {
-  const handleAnswerSubmit = (answer: string | number | string[]) => {
-    onAnswerSubmit(answer);
-  };
-
-  const renderWidget = () => {
-    if (!question) return null;
+const SherlockED: React.FC<SherlockEDProps> = ({ question, onAnswerChange }) => {
+  const getWidgetInfo = () => {
+    if (!question) return { component: null, name: 'None' };
 
     switch (question.question_type) {
       case 'static-text':
-        return <StaticTextDisplay content={question.content} onSubmit={handleAnswerSubmit} />;
+        // Static text is just for display. The button is handled in App.tsx.
+        return { component: <StaticTextDisplay content={question.content} />, name: 'Static Text Display' };
       case 'multiple-choice':
         const choices = (question.options || []).map((option, index) => ({
           id: `${question.question_id}-choice-${index}`,
           content: option,
         }));
-        return <MultipleChoiceDisplay content={question.content} choices={choices} onSubmit={handleAnswerSubmit} />;
+        return { component: <MultipleChoiceDisplay content={question.content} choices={choices} onAnswerChange={onAnswerChange} />, name: 'Multiple Choice Display' };
       case 'free-response':
-        return <FreeResponseDisplay content={question.content} onSubmit={handleAnswerSubmit} />;
+        return { component: <FreeResponseDisplay content={question.content} onAnswerChange={onAnswerChange} />, name: 'Free Response Display' };
       case 'numeric-input':
-        return <NumericInputDisplay content={question.content} onSubmit={handleAnswerSubmit} />;
+        return { component: <NumericInputDisplay content={question.content} onAnswerChange={onAnswerChange} />, name: 'Numeric Input Display' };
       case 'counting-boxes':
-        return <CountingBoxesDisplay content={question.content} onSubmit={handleAnswerSubmit} />;
+        return { component: <CountingBoxesDisplay content={question.content} onAnswerChange={onAnswerChange} />, name: 'Counting Boxes Display' };
       default:
-        return <div>Unsupported question type</div>;
+        return { component: <div>Unsupported question type</div>, name: 'Unsupported' };
     }
   };
 
+  const widgetInfo = getWidgetInfo();
+
   return (
     <div className="sherlock-ed">
+      <div className="widget-debug-info" style={{ color: 'grey', fontSize: '0.8em', marginBottom: '10px' }}>
+        SherlockED: {widgetInfo.name}
+      </div>
       <div className="question-container">
-        {renderWidget()}
+        {widgetInfo.component}
       </div>
     </div>
   );

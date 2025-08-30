@@ -12,7 +12,7 @@ lets look at the file for our To-dos and wrap then up one by one. Keep making th
         Phase 1: Build and Test the Core Widget & Skill System
             * Goal: To build a robust, reusable system for rendering basic interactive questions and processing their answers to update user skills. This phase will deliver a complete, end-to-end product for our three core
                 question types.
-            1. Architect the Backend for Multiple Widget Types:
+            1. Architect the Backend for Multiple Widget Types:[DONE]
                 * Action: I will update the Question data model in the DASH system to include a question_type field (e.g., "multiple-choice") and a flexible widget_data field to hold all the unique information a specific widget
                     needs.
             2. Populate a Rich, Multi-Type Curriculum:
