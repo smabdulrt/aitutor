@@ -1,19 +1,19 @@
 {
   "user_id": "test_student",
   "created_at": 1756591968.1632261,
-  "last_updated": 1756591968.1633222,
+  "last_updated": 1756592352.671422,
   "skill_states": {
     "counting_1_10": {
-      "memory_strength": 0.0,
-      "last_practice_time": null,
-      "practice_count": 0,
-      "correct_count": 0
+      "memory_strength": 1.0930217776663602,
+      "last_practice_time": 1756592344.8341382,
+      "practice_count": 3,
+      "correct_count": 2
     },
     "number_recognition": {
-      "memory_strength": 0.0,
-      "last_practice_time": null,
-      "practice_count": 0,
-      "correct_count": 0
+      "memory_strength": 0.9090909090909091,
+      "last_practice_time": 1756592352.670051,
+      "practice_count": 1,
+      "correct_count": 1
     },
     "basic_shapes": {
       "memory_strength": 0.0,
@@ -184,6 +184,47 @@
       "correct_count": 0
     }
   },
-  "question_history": [],
+  "question_history": [
+    {
+      "question_id": "k_count_1",
+      "skill_ids": [
+        "counting_1_10"
+      ],
+      "is_correct": true,
+      "response_time_seconds": 5.0,
+      "timestamp": 1756592328.728058,
+      "time_penalty_applied": false
+    },
+    {
+      "question_id": "k_count_mc_1",
+      "skill_ids": [
+        "counting_1_10"
+      ],
+      "is_correct": false,
+      "response_time_seconds": 5.0,
+      "timestamp": 1756592338.624513,
+      "time_penalty_applied": false
+    },
+    {
+      "question_id": "k_count_mc_1",
+      "skill_ids": [
+        "counting_1_10"
+      ],
+      "is_correct": true,
+      "response_time_seconds": 5.0,
+      "timestamp": 1756592344.8351018,
+      "time_penalty_applied": false
+    },
+    {
+      "question_id": "k_num_fr_1",
+      "skill_ids": [
+        "number_recognition"
+      ],
+      "is_correct": true,
+      "response_time_seconds": 5.0,
+      "timestamp": 1756592352.6714098,
+      "time_penalty_applied": false
+    }
+  ],
   "student_notes": {}
 }
