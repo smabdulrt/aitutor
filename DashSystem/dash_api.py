@@ -13,11 +13,13 @@ from DashSystem.dash_system import DASHSystem, Question
 app = FastAPI()
 dash_system = DASHSystem()
 
+from typing import Union, List
+
 # Pydantic model for the answer submission
 class AnswerRequest(BaseModel):
     user_id: str
     question_id: str
-    answer: str
+    answer: Union[str, int, float, List[str]]
     response_time_seconds: float
 
 # Configure CORS

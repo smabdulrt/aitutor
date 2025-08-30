@@ -9,7 +9,7 @@ lets look at the file for our To-dos and wrap then up one by one. Keep making th
 
     Here is the detailed to-do list, in the order I will perform the work:
         
-        [DONE] Phase 1: Build and Test the Core Widget & Skill System
+        Phase 1: Build and Test the Core Widget & Skill System
             * Goal: To build a robust, reusable system for rendering basic interactive questions and processing their answers to update user skills. This phase will deliver a complete, end-to-end product for our three core
                 question types.
             1. Architect the Backend for Multiple Widget Types:
@@ -18,13 +18,13 @@ lets look at the file for our To-dos and wrap then up one by one. Keep making th
             2. Populate a Rich, Multi-Type Curriculum:
                 * Action: I will significantly expand the curriculum.json file. I will add 10 new `multiple-choice` questions, 10 new `free-response` questions, and 10 new `numeric-input` questions, distributing them across
                     various skills.
-            3. Implement a Smart Answer-Validation API:
+            3. Implement a Smart Answer-Validation API: [DONE]
                 * Action: I will create a single, intelligent POST /submit-answer API endpoint. This endpoint will use a new check_answer method in the DASH system that reads the question's type and applies the correct validation
                     logic for our initial three types.
-            4. Build the `SherlockED` Frontend Renderer:
+            4. Build the `SherlockED` Frontend Renderer: [DONE]
                 * Action: I will create the main SherlockED React component. This component will act as a "widget dispatcher"—its primary job is to read the question_type from the API data and dynamically render the correct widget
                     component.
-            5. Develop the Initial Set of Core Widgets:
+            5. Develop the Initial Set of Core Widgets: [DONE]
                 * Action: I will build the first three fundamental interactive widgets: MultipleChoiceDisplay.tsx, FreeResponseDisplay.tsx, and NumericInputDisplay.tsx.
                 * Action: I will implement the full user interaction loop within SherlockED, handling answer submission to the API and displaying "Correct" or "Incorrect" feedback.
             6. Integrate and Verify the Core System:

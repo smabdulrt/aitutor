@@ -1,39 +1,44 @@
 import React, { useState } from 'react';
 
-interface MultipleChoiceDisplayProps {
+interface Choice {
+  id: string;
   content: string;
-  options: string[];
-  onSubmit: (answer: string) => void;
 }
 
-const MultipleChoiceDisplay: React.FC<MultipleChoiceDisplayProps> = ({ content, options, onSubmit }) => {
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+interface MultipleChoiceDisplayProps {
+  content: string;
+  choices: Choice[];
+  onSubmit: (selectedChoiceId: string) => void;
+}
+
+const MultipleChoiceDisplay: React.FC<MultipleChoiceDisplayProps> = ({ content, choices, onSubmit }) => {
+  const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
 
   const handleSubmit = () => {
-    if (selectedValue) {
-      onSubmit(selectedValue);
+    if (selectedChoice) {
+      onSubmit(selectedChoice);
     }
   };
 
   return (
     <div className="widget-multiple-choice">
       <p className="question-content">{content}</p>
-      <div className="options-container">
-        {options.map((option, index) => (
-          <div key={index} className="option">
+      <div className="choices">
+        {choices.map((choice) => (
+          <div key={choice.id} className="choice">
             <input
               type="radio"
-              id={`option-${index}`}
+              id={choice.id}
               name="multiple-choice"
-              value={option}
-              onChange={(e) => setSelectedValue(e.target.value)}
-              checked={selectedValue === option}
+              value={choice.id}
+              checked={selectedChoice === choice.id}
+              onChange={() => setSelectedChoice(choice.id)}
             />
-            <label htmlFor={`option-${index}`}>{option}</label>
+            <label htmlFor={choice.id}>{choice.content}</label>
           </div>
         ))}
       </div>
-      <button onClick={handleSubmit} disabled={!selectedValue}>
+      <button onClick={handleSubmit} disabled={!selectedChoice}>
         Submit
       </button>
     </div>

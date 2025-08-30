@@ -16,7 +16,7 @@
           "questions": [
             {
               "question_id": "k_count_1",
-              "type": "static-text",
+              "type": "counting-boxes",
               "content": "Let's warm up! Can you count from 1 to 5?",
               "difficulty": 0.1,
               "expected_time_seconds": 30,

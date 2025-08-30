@@ -480,7 +480,7 @@ class DASHSystem:
             print(f"❌ Error during question generation: {e}")
             return None
 
-    def check_answer(self, question_id: str, user_answer: str) -> bool:
+    def check_answer(self, question_id: str, user_answer: any) -> bool:
         """
         Checks if a user's answer is correct for a given question.
         This method applies different validation logic based on the question type.
@@ -493,17 +493,20 @@ class DASHSystem:
         question_type = question.question_type
 
         if question_type == "multiple-choice":
-            # Exact match for multiple choice
-            return user_answer == correct_answer
+            return str(user_answer) == correct_answer
         elif question_type == "free-response":
-            # Case-insensitive and whitespace-trimmed for free response
-            return user_answer.strip().lower() == correct_answer.strip().lower()
+            return str(user_answer).strip().lower() == correct_answer.strip().lower()
         elif question_type == "numeric-input":
-            # Numerical comparison for numeric input
             try:
                 return float(user_answer) == float(correct_answer)
             except (ValueError, TypeError):
                 return False
+        elif question_type == "counting-boxes":
+            # Expects a list of strings, compare to a comma-separated string
+            correct_sequence = [item.strip() for item in correct_answer.split(',')]
+            return user_answer == correct_sequence
+        elif question_type == "static-text":
+            # Static text is always "correct" when the user clicks continue
+            return user_answer == "acknowledged"
         else:
-            # Default to exact match for any other type (like static-text)
-            return user_answer == correct_answer
+            return str(user_answer) == correct_answer

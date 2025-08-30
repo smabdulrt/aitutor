@@ -1,31 +1,14 @@
-/**
- * Copyright 2024 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import { useRef, useState, useEffect } from "react";
 import "./App.scss";
 import { LiveAPIProvider } from "./contexts/LiveAPIContext";
 import SidePanel from "./components/side-panel/SidePanel";
-import { Altair } from "./components/altair/Altair";
 import MediaMixerDisplay from "./components/media-mixer-display/MediaMixerDisplay";
 import ScratchpadCapture from "./components/scratchpad-capture/ScratchpadCapture";
 import QuestionDisplay from "./components/question-display/QuestionDisplay";
 import ControlTray from "./components/control-tray/ControlTray";
-import cn from "classnames";
-import { LiveClientOptions } from "./types";
+import { LiveClientOptions, Question } from "./types";
 import Scratchpad from "./components/scratchpad/Scratchpad";
+import Logger from "./components/logger/Logger";
 
 const API_KEY = process.env.REACT_APP_GEMINI_API_KEY as string;
 if (typeof API_KEY !== "string") {
@@ -37,31 +20,68 @@ const apiOptions: LiveClientOptions = {
 };
 
 function App() {
-  // this video reference is used for displaying the active stream, whether that is the webcam or screen capture
-  // feel free to style as you see fit
   const videoRef = useRef<HTMLVideoElement>(null);
   const renderCanvasRef = useRef<HTMLCanvasElement>(null);
-  // either the screen capture, the video or null, if null we hide it
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
   const [mixerStream, setMixerStream] = useState<MediaStream | null>(null);
-  const mixerVideoRef = useRef<HTMLVideoElement>(null);
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [isScratchpadOpen, setScratchpadOpen] = useState(false);
+
+  // --- State Management for SherlockED ---
+  const [question, setQuestion] = useState<Question | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const userId = "test_student"; // Hardcoded for now
+
+  const fetchQuestion = async () => {
+    setLoading(true);
+    setFeedback(null);
+    try {
+      const response = await fetch(`http://localhost:8000/next-question/${userId}`);
+      if (!response.ok) throw new Error('Failed to fetch question.');
+      const data: Question = await response.json();
+      setQuestion(data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unknown error occurred.");
+      setQuestion(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchQuestion();
+  }, []);
+
+  const handleAnswerSubmit = async (answer: string | number | string[]) => {
+    if (!question) return;
+
+    const response = await fetch('http://localhost:8000/submit-answer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: userId,
+        question_id: question.question_id,
+        answer: answer, // The backend will handle the array format
+        response_time_seconds: 5, // Placeholder
+      }),
+    });
+    
+    const result = await response.json();
+    setFeedback(result.correct ? 'Correct!' : 'Incorrect. Try again!');
+  };
+
+  const handleNextQuestion = () => {
+    fetchQuestion();
+  };
 
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:8765');
     setSocket(ws);
-
-    return () => {
-      ws.close();
-    };
+    return () => ws.close();
   }, []);
-
-  useEffect(() => {
-    if (mixerVideoRef.current && mixerStream) {
-      mixerVideoRef.current.srcObject = mixerStream;
-    }
-  }, [mixerStream]);
 
   return (
     <div className="App">
@@ -72,7 +92,18 @@ function App() {
             <div className="main-app-area">
               <div className="question-panel">
                 <ScratchpadCapture socket={socket}>
-                  <QuestionDisplay />
+                  <QuestionDisplay
+                    question={question}
+                    error={error}
+                    loading={loading}
+                    onAnswerSubmit={handleAnswerSubmit}
+                  />
+                  {feedback && (
+                    <div className="feedback-container">
+                      <p className="feedback-text">{feedback}</p>
+                      <button onClick={handleNextQuestion}>Next Question</button>
+                    </div>
+                  )}
                   {isScratchpadOpen && (
                     <div className="scratchpad-container">
                       <Scratchpad />
@@ -100,6 +131,7 @@ function App() {
             </ControlTray>
           </main>
         </div>
+        <Logger filter="none" />
       </LiveAPIProvider>
     </div>
   );

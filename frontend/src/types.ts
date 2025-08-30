@@ -42,3 +42,12 @@ export type ClientContentLog = {
   turns: Part[];
   turnComplete: boolean;
 };
+
+export interface Question {
+  question_id: string;
+  skill_ids: string[];
+  content: string;
+  question_type: 'static-text' | 'multiple-choice' | 'free-response' | 'numeric-input' | 'counting-boxes';
+  options?: string[];
+  difficulty: number;
+}
