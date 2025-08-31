@@ -1,272 +1,1590 @@
 {
-  "counting_1_10": {
-    "skill_id": "counting_1_10",
-    "name": "Counting 1-10",
-    "grade_level": "K",
-    "prerequisites": [],
-    "forgetting_rate": 0.05,
-    "difficulty": 0.0,
-    "description": "Basic counting from 1 to 10"
-  },
-  "number_recognition": {
-    "skill_id": "number_recognition",
-    "name": "Number Recognition",
-    "grade_level": "K",
-    "prerequisites": [],
-    "forgetting_rate": 0.05,
-    "difficulty": 0.0,
-    "description": "Recognizing written numbers"
-  },
-  "basic_shapes": {
-    "skill_id": "basic_shapes",
-    "name": "Basic Shapes",
-    "grade_level": "K",
-    "prerequisites": [],
-    "forgetting_rate": 0.08,
-    "difficulty": 0.0,
-    "description": "Identifying basic geometric shapes"
-  },
-  "addition_basic": {
-    "skill_id": "addition_basic",
-    "name": "Basic Addition",
-    "grade_level": "GRADE_1",
-    "prerequisites": ["counting_1_10"],
-    "forgetting_rate": 0.07,
-    "difficulty": 0.0,
-    "description": "Single digit addition"
-  },
-  "subtraction_basic": {
-    "skill_id": "subtraction_basic",
-    "name": "Basic Subtraction",
-    "grade_level": "GRADE_1",
-    "prerequisites": ["counting_1_10"],
-    "forgetting_rate": 0.07,
-    "difficulty": 0.0,
-    "description": "Single digit subtraction"
-  },
-  "counting_100": {
-    "skill_id": "counting_100",
-    "name": "Counting to 100",
-    "grade_level": "GRADE_1",
-    "prerequisites": ["counting_1_10"],
-    "forgetting_rate": 0.06,
-    "difficulty": 0.0,
-    "description": "Counting from 1 to 100"
-  },
-  "addition_2digit": {
-    "skill_id": "addition_2digit",
-    "name": "2-Digit Addition",
-    "grade_level": "GRADE_2",
-    "prerequisites": ["addition_basic"],
-    "forgetting_rate": 0.08,
-    "difficulty": 0.0,
-    "description": "Adding two-digit numbers"
-  },
-  "subtraction_2digit": {
-    "skill_id": "subtraction_2digit",
-    "name": "2-Digit Subtraction",
-    "grade_level": "GRADE_2",
-    "prerequisites": ["subtraction_basic"],
-    "forgetting_rate": 0.08,
-    "difficulty": 0.0,
-    "description": "Subtracting two-digit numbers"
-  },
-  "multiplication_intro": {
-    "skill_id": "multiplication_intro",
-    "name": "Introduction to Multiplication",
-    "grade_level": "GRADE_2",
-    "prerequisites": ["addition_basic"],
-    "forgetting_rate": 0.09,
-    "difficulty": 0.0,
-    "description": "Basic multiplication concepts"
-  },
-  "multiplication_tables": {
-    "skill_id": "multiplication_tables",
-    "name": "Multiplication Tables",
-    "grade_level": "GRADE_3",
-    "prerequisites": ["multiplication_intro"],
-    "forgetting_rate": 0.08,
-    "difficulty": 0.0,
-    "description": "Memorizing multiplication tables"
-  },
-  "division_basic": {
-    "skill_id": "division_basic",
-    "name": "Basic Division",
-    "grade_level": "GRADE_3",
-    "prerequisites": ["multiplication_tables"],
-    "forgetting_rate": 0.09,
-    "difficulty": 0.0,
-    "description": "Basic division operations"
-  },
-  "fractions_intro": {
-    "skill_id": "fractions_intro",
-    "name": "Introduction to Fractions",
-    "grade_level": "GRADE_3",
-    "prerequisites": ["division_basic"],
-    "forgetting_rate": 0.10,
-    "difficulty": 0.0,
-    "description": "Basic fraction concepts"
-  },
-  "fractions_operations": {
-    "skill_id": "fractions_operations",
-    "name": "Fraction Operations",
-    "grade_level": "GRADE_4",
-    "prerequisites": ["fractions_intro"],
-    "forgetting_rate": 0.11,
-    "difficulty": 0.0,
-    "description": "Adding, subtracting, multiplying fractions"
-  },
-  "decimals_intro": {
-    "skill_id": "decimals_intro",
-    "name": "Introduction to Decimals",
-    "grade_level": "GRADE_4",
-    "prerequisites": ["fractions_intro"],
-    "forgetting_rate": 0.10,
-    "difficulty": 0.0,
-    "description": "Basic decimal concepts"
-  },
-  "decimals_operations": {
-    "skill_id": "decimals_operations",
-    "name": "Decimal Operations",
-    "grade_level": "GRADE_5",
-    "prerequisites": ["decimals_intro"],
-    "forgetting_rate": 0.10,
-    "difficulty": 0.0,
-    "description": "Adding, subtracting, multiplying decimals"
-  },
-  "percentages": {
-    "skill_id": "percentages",
-    "name": "Percentages",
-    "grade_level": "GRADE_5",
-    "prerequisites": ["decimals_operations"],
-    "forgetting_rate": 0.11,
-    "difficulty": 0.0,
-    "description": "Understanding and calculating percentages"
-  },
-  "integers": {
-    "skill_id": "integers",
-    "name": "Integers",
-    "grade_level": "GRADE_6",
-    "prerequisites": ["subtraction_2digit"],
-    "forgetting_rate": 0.09,
-    "difficulty": 0.0,
-    "description": "Working with positive and negative numbers"
-  },
-  "ratios_proportions": {
-    "skill_id": "ratios_proportions",
-    "name": "Ratios and Proportions",
-    "grade_level": "GRADE_6",
-    "prerequisites": ["fractions_operations"],
-    "forgetting_rate": 0.12,
-    "difficulty": 0.0,
-    "description": "Understanding ratios and proportional relationships"
-  },
-  "algebraic_expressions": {
-    "skill_id": "algebraic_expressions",
-    "name": "Algebraic Expressions",
-    "grade_level": "GRADE_7",
-    "prerequisites": ["integers"],
-    "forgetting_rate": 0.13,
-    "difficulty": 0.0,
-    "description": "Creating and evaluating algebraic expressions"
-  },
-  "linear_equations_1var": {
-    "skill_id": "linear_equations_1var",
-    "name": "Linear Equations (1 Variable)",
-    "grade_level": "GRADE_7",
-    "prerequisites": ["algebraic_expressions"],
-    "forgetting_rate": 0.14,
-    "difficulty": 0.0,
-    "description": "Solving linear equations with one variable"
-  },
-  "linear_equations_2var": {
-    "skill_id": "linear_equations_2var",
-    "name": "Linear Equations (2 Variables)",
-    "grade_level": "GRADE_8",
-    "prerequisites": ["linear_equations_1var"],
-    "forgetting_rate": 0.15,
-    "difficulty": 0.0,
-    "description": "Solving systems of linear equations"
-  },
-  "quadratic_intro": {
-    "skill_id": "quadratic_intro",
-    "name": "Introduction to Quadratics",
-    "grade_level": "GRADE_8",
-    "prerequisites": ["linear_equations_1var"],
-    "forgetting_rate": 0.16,
-    "difficulty": 0.0,
-    "description": "Basic quadratic concepts and graphing"
-  },
-  "quadratic_equations": {
-    "skill_id": "quadratic_equations",
-    "name": "Quadratic Equations",
-    "grade_level": "GRADE_9",
-    "prerequisites": ["quadratic_intro"],
-    "forgetting_rate": 0.15,
-    "difficulty": 0.0,
-    "description": "Solving quadratic equations using various methods"
-  },
-  "polynomial_operations": {
-    "skill_id": "polynomial_operations",
-    "name": "Polynomial Operations",
-    "grade_level": "GRADE_9",
-    "prerequisites": ["algebraic_expressions"],
-    "forgetting_rate": 0.14,
-    "difficulty": 0.0,
-    "description": "Adding, subtracting, multiplying polynomials"
-  },
-  "geometric_proofs": {
-    "skill_id": "geometric_proofs",
-    "name": "Geometric Proofs",
-    "grade_level": "GRADE_10",
-    "prerequisites": ["basic_shapes"],
-    "forgetting_rate": 0.17,
-    "difficulty": 0.0,
-    "description": "Writing geometric proofs and theorems"
-  },
-  "trigonometry_basic": {
-    "skill_id": "trigonometry_basic",
-    "name": "Basic Trigonometry",
-    "grade_level": "GRADE_10",
-    "prerequisites": ["geometric_proofs"],
-    "forgetting_rate": 0.16,
-    "difficulty": 0.0,
-    "description": "Basic trigonometric functions and ratios"
-  },
-  "exponentials_logs": {
-    "skill_id": "exponentials_logs",
-    "name": "Exponentials and Logarithms",
-    "grade_level": "GRADE_11",
-    "prerequisites": ["polynomial_operations"],
-    "forgetting_rate": 0.18,
-    "difficulty": 0.0,
-    "description": "Exponential and logarithmic functions"
-  },
-  "trigonometry_advanced": {
-    "skill_id": "trigonometry_advanced",
-    "name": "Advanced Trigonometry",
-    "grade_level": "GRADE_11",
-    "prerequisites": ["trigonometry_basic"],
-    "forgetting_rate": 0.17,
-    "difficulty": 0.0,
-    "description": "Advanced trigonometric identities and equations"
-  },
-  "limits": {
-    "skill_id": "limits",
-    "name": "Limits",
-    "grade_level": "GRADE_12",
-    "prerequisites": ["exponentials_logs"],
-    "forgetting_rate": 0.19,
-    "difficulty": 0.0,
-    "description": "Understanding limits and continuity"
-  },
-  "derivatives": {
-    "skill_id": "derivatives",
-    "name": "Derivatives",
-    "grade_level": "GRADE_12",
-    "prerequisites": ["limits"],
-    "forgetting_rate": 0.20,
-    "difficulty": 0.0,
-    "description": "Calculating derivatives and applications"
+  "Math": {
+    "learn_to_count_up_to_3": {
+      "skill_id": "learn_to_count_up_to_3",
+      "name": "Learn to count up to 3",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [],
+      "forgetting_rate": 0.05,
+      "difficulty": 0.1,
+      "description": "Recognizing and naming the numbers 1, 2, and 3.",
+      "order": 0
+    },
+    "counting_objects_up_to_3": {
+      "skill_id": "counting_objects_up_to_3",
+      "name": "Counting objects up to 3",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [
+        "learn_to_count_up_to_3"
+      ],
+      "forgetting_rate": 0.05,
+      "difficulty": 0.1,
+      "description": "Counting a collection of up to 3 items.",
+      "order": 1
+    },
+    "learn_to_count_up_to_5": {
+      "skill_id": "learn_to_count_up_to_5",
+      "name": "Learn to count up to 5",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [
+        "learn_to_count_up_to_3"
+      ],
+      "forgetting_rate": 0.06,
+      "difficulty": 0.1,
+      "description": "Learning the sequence of numbers up to 5.",
+      "order": 2
+    },
+    "counting_objects_up_to_5": {
+      "skill_id": "counting_objects_up_to_5",
+      "name": "Counting objects up to 5",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [
+        "counting_objects_up_to_3",
+        "learn_to_count_up_to_5"
+      ],
+      "forgetting_rate": 0.06,
+      "difficulty": 0.1,
+      "description": "Counting a collection of up to 5 items.",
+      "order": 3
+    },
+    "learn_to_count_up_to_10": {
+      "skill_id": "learn_to_count_up_to_10",
+      "name": "Learn to count up to 10",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [
+        "learn_to_count_up_to_5"
+      ],
+      "forgetting_rate": 0.07,
+      "difficulty": 0.15,
+      "description": "Learning the sequence of numbers up to 10.",
+      "order": 4
+    },
+    "counting_objects_up_to_10": {
+      "skill_id": "counting_objects_up_to_10",
+      "name": "Counting objects up to 10",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [
+        "counting_objects_up_to_5",
+        "learn_to_count_up_to_10"
+      ],
+      "forgetting_rate": 0.07,
+      "difficulty": 0.15,
+      "description": "Counting a collection of up to 10 items.",
+      "order": 5
+    },
+    "comparing_more_or_fewer": {
+      "skill_id": "comparing_more_or_fewer",
+      "name": "Comparing more or fewer",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [
+        "counting_objects_up_to_10"
+      ],
+      "forgetting_rate": 0.1,
+      "difficulty": 0.2,
+      "description": "Identifying which of two groups has more or fewer objects.",
+      "order": 6
+    },
+    "basic_shape_recognition": {
+      "skill_id": "basic_shape_recognition",
+      "name": "Basic shape recognition",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [],
+      "forgetting_rate": 0.1,
+      "difficulty": 0.15,
+      "description": "Identifying circles, squares, and triangles.",
+      "order": 7
+    },
+    "solid_shape_recognition": {
+      "skill_id": "solid_shape_recognition",
+      "name": "Solid shape recognition",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [
+        "basic_shape_recognition"
+      ],
+      "forgetting_rate": 0.12,
+      "difficulty": 0.2,
+      "description": "Identifying spheres, cubes, cones, and cylinders.",
+      "order": 8
+    },
+    "basic_patterns": {
+      "skill_id": "basic_patterns",
+      "name": "Basic patterns",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [
+        "basic_shape_recognition"
+      ],
+      "forgetting_rate": 0.1,
+      "difficulty": 0.15,
+      "description": "Recognizing and completing simple patterns involving colors, sizes, and shapes.",
+      "order": 9
+    },
+    "basic_measurement_comparison": {
+      "skill_id": "basic_measurement_comparison",
+      "name": "Basic measurement comparison",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [],
+      "forgetting_rate": 0.08,
+      "difficulty": 0.1,
+      "description": "Comparing objects by length, height, and weight.",
+      "order": 10
+    },
+    "intro_to_addition_and_subtraction": {
+      "skill_id": "intro_to_addition_and_subtraction",
+      "name": "Introduction to addition and subtraction",
+      "grade_level": "JUNIOR_KINDERGARTEN",
+      "prerequisites": [
+        "counting_objects_up_to_10"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.25,
+      "description": "Understanding the basic concepts of adding and taking away with small numbers.",
+      "order": 11
+    },
+    "counting_review_up_to_20": {
+      "skill_id": "counting_review_up_to_20",
+      "name": "Counting review up to 20",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "counting_objects_up_to_10"
+      ],
+      "forgetting_rate": 0.1,
+      "difficulty": 0.2,
+      "description": "Review of counting skills up to 20.",
+      "order": 12
+    },
+    "counting_to_100": {
+      "skill_id": "counting_to_100",
+      "name": "Counting to 100",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "counting_review_up_to_20"
+      ],
+      "forgetting_rate": 0.1,
+      "difficulty": 0.2,
+      "description": "Counting forwards and backwards to 100.",
+      "order": 13
+    },
+    "skip_counting": {
+      "skill_id": "skip_counting",
+      "name": "Skip-counting",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "counting_to_100"
+      ],
+      "forgetting_rate": 0.12,
+      "difficulty": 0.25,
+      "description": "Counting by twos, fives, and tens.",
+      "order": 14
+    },
+    "place_value_tens_ones": {
+      "skill_id": "place_value_tens_ones",
+      "name": "Place value - tens and ones",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "counting_to_100"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.3,
+      "description": "Understanding the concept of tens and ones in two-digit numbers.",
+      "order": 15
+    },
+    "comparing_numbers_up_to_100": {
+      "skill_id": "comparing_numbers_up_to_100",
+      "name": "Comparing numbers up to 100",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "place_value_tens_ones"
+      ],
+      "forgetting_rate": 0.14,
+      "difficulty": 0.3,
+      "description": "Comparing two-digit numbers using greater than, less than, and equal to.",
+      "order": 16
+    },
+    "addition_subtraction_within_20": {
+      "skill_id": "addition_subtraction_within_20",
+      "name": "Addition and subtraction within 20",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "intro_to_addition_and_subtraction"
+      ],
+      "forgetting_rate": 0.1,
+      "difficulty": 0.25,
+      "description": "Adding and subtracting numbers with sums and minuends up to 20.",
+      "order": 17
+    },
+    "add_three_numbers": {
+      "skill_id": "add_three_numbers",
+      "name": "Add three numbers",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "addition_subtraction_within_20"
+      ],
+      "forgetting_rate": 0.16,
+      "difficulty": 0.35,
+      "description": "Adding three single-digit numbers.",
+      "order": 18
+    },
+    "geometry_2d_3d_shapes": {
+      "skill_id": "geometry_2d_3d_shapes",
+      "name": "2D and 3D shapes",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "solid_shape_recognition"
+      ],
+      "forgetting_rate": 0.1,
+      "difficulty": 0.2,
+      "description": "Identifying and distinguishing between 2D and 3D shapes, and understanding their attributes.",
+      "order": 19
+    },
+    "telling_time_hour_half_hour": {
+      "skill_id": "telling_time_hour_half_hour",
+      "name": "Telling time to the hour and half hour",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "counting_to_100"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.3,
+      "description": "Reading analog and digital clocks to the hour and half hour.",
+      "order": 20
+    },
+    "money_coins": {
+      "skill_id": "money_coins",
+      "name": "Counting money (coins)",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "skip_counting"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.35,
+      "description": "Identifying and counting the value of coins.",
+      "order": 21
+    },
+    "measurement_length": {
+      "skill_id": "measurement_length",
+      "name": "Measuring length",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "basic_measurement_comparison"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.25,
+      "description": "Measuring the length of objects using non-standard and standard units.",
+      "order": 22
+    },
+    "data_representation": {
+      "skill_id": "data_representation",
+      "name": "Data representation",
+      "grade_level": "GRADE_1",
+      "prerequisites": [
+        "counting_objects_up_to_10"
+      ],
+      "forgetting_rate": 0.17,
+      "difficulty": 0.3,
+      "description": "Creating and interpreting simple bar graphs, pictographs, and tally charts.",
+      "order": 23
+    },
+    "place_value_hundreds": {
+      "skill_id": "place_value_hundreds",
+      "name": "Place value up to hundreds",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "place_value_tens_ones"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.3,
+      "description": "Understanding the concept of hundreds, tens, and ones in three-digit numbers.",
+      "order": 24
+    },
+    "counting_to_1000": {
+      "skill_id": "counting_to_1000",
+      "name": "Counting to 1000",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "counting_to_100",
+        "place_value_hundreds"
+      ],
+      "forgetting_rate": 0.1,
+      "difficulty": 0.25,
+      "description": "Counting forwards and backwards to 1000.",
+      "order": 25
+    },
+    "comparing_numbers_up_to_1000": {
+      "skill_id": "comparing_numbers_up_to_1000",
+      "name": "Comparing numbers up to 1000",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "place_value_hundreds"
+      ],
+      "forgetting_rate": 0.14,
+      "difficulty": 0.3,
+      "description": "Comparing three-digit numbers using greater than, less than, and equal to.",
+      "order": 26
+    },
+    "addition_within_100": {
+      "skill_id": "addition_within_100",
+      "name": "Addition within 100",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "addition_subtraction_within_20",
+        "place_value_tens_ones"
+      ],
+      "forgetting_rate": 0.12,
+      "difficulty": 0.3,
+      "description": "Adding two-digit numbers, with and without regrouping.",
+      "order": 27
+    },
+    "subtraction_within_100": {
+      "skill_id": "subtraction_within_100",
+      "name": "Subtraction within 100",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "addition_subtraction_within_20",
+        "place_value_tens_ones"
+      ],
+      "forgetting_rate": 0.12,
+      "difficulty": 0.3,
+      "description": "Subtracting two-digit numbers, with and without regrouping.",
+      "order": 28
+    },
+    "addition_subtraction_word_problems_within_100": {
+      "skill_id": "addition_subtraction_word_problems_within_100",
+      "name": "Addition and subtraction word problems within 100",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "addition_within_100",
+        "subtraction_within_100"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.4,
+      "description": "Solving one- and two-step word problems involving addition and subtraction within 100.",
+      "order": 29
+    },
+    "intro_to_multiplication": {
+      "skill_id": "intro_to_multiplication",
+      "name": "Introduction to multiplication",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "skip_counting"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.3,
+      "description": "Understanding multiplication as repeated addition, using arrays and equal groups.",
+      "order": 30
+    },
+    "telling_time_to_5_minutes": {
+      "skill_id": "telling_time_to_5_minutes",
+      "name": "Telling time to the nearest 5 minutes",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "telling_time_hour_half_hour"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.35,
+      "description": "Reading analog and digital clocks to the nearest 5 minutes.",
+      "order": 31
+    },
+    "money_bills_and_coins": {
+      "skill_id": "money_bills_and_coins",
+      "name": "Counting money (bills and coins)",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "money_coins"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.35,
+      "description": "Counting combinations of bills and coins.",
+      "order": 32
+    },
+    "measurement_standard_units": {
+      "skill_id": "measurement_standard_units",
+      "name": "Measuring length with standard units",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "measurement_length"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.3,
+      "description": "Measuring length using inches, feet, centimeters, and meters.",
+      "order": 33
+    },
+    "data_line_plots": {
+      "skill_id": "data_line_plots",
+      "name": "Line plots",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "data_representation"
+      ],
+      "forgetting_rate": 0.17,
+      "difficulty": 0.35,
+      "description": "Creating and interpreting line plots.",
+      "order": 34
+    },
+    "geometry_fractions_of_shapes": {
+      "skill_id": "geometry_fractions_of_shapes",
+      "name": "Fractions of shapes",
+      "grade_level": "GRADE_2",
+      "prerequisites": [
+        "geometry_2d_3d_shapes"
+      ],
+      "forgetting_rate": 0.16,
+      "difficulty": 0.3,
+      "description": "Partitioning shapes into equal parts and describing the parts as fractions.",
+      "order": 35
+    },
+    "rounding_numbers": {
+      "skill_id": "rounding_numbers",
+      "name": "Rounding numbers",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "place_value_hundreds"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.3,
+      "description": "Rounding whole numbers to the nearest 10 or 100.",
+      "order": 36
+    },
+    "addition_within_1000": {
+      "skill_id": "addition_within_1000",
+      "name": "Addition within 1000",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "addition_within_100"
+      ],
+      "forgetting_rate": 0.12,
+      "difficulty": 0.35,
+      "description": "Adding three-digit numbers, with and without regrouping.",
+      "order": 37
+    },
+    "subtraction_within_1000": {
+      "skill_id": "subtraction_within_1000",
+      "name": "Subtraction within 1000",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "subtraction_within_100"
+      ],
+      "forgetting_rate": 0.12,
+      "difficulty": 0.35,
+      "description": "Subtracting three-digit numbers, with and without regrouping.",
+      "order": 38
+    },
+    "multiplication_facts": {
+      "skill_id": "multiplication_facts",
+      "name": "Multiplication facts",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "intro_to_multiplication"
+      ],
+      "forgetting_rate": 0.1,
+      "difficulty": 0.3,
+      "description": "Mastering multiplication facts up to 10x10.",
+      "order": 39
+    },
+    "properties_of_multiplication": {
+      "skill_id": "properties_of_multiplication",
+      "name": "Properties of multiplication",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "multiplication_facts"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.4,
+      "description": "Understanding the commutative, associative, and distributive properties of multiplication.",
+      "order": 40
+    },
+    "division_facts": {
+      "skill_id": "division_facts",
+      "name": "Division facts",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "multiplication_facts"
+      ],
+      "forgetting_rate": 0.1,
+      "difficulty": 0.3,
+      "description": "Mastering division facts corresponding to multiplication facts up to 10x10.",
+      "order": 41
+    },
+    "multiplication_division_word_problems": {
+      "skill_id": "multiplication_division_word_problems",
+      "name": "Multiplication and division word problems",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "multiplication_facts",
+        "division_facts"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.45,
+      "description": "Solving word problems involving multiplication and division.",
+      "order": 42
+    },
+    "understanding_fractions": {
+      "skill_id": "understanding_fractions",
+      "name": "Understanding fractions",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "geometry_fractions_of_shapes"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.35,
+      "description": "Representing fractions on a number line and understanding equivalent fractions.",
+      "order": 43
+    },
+    "comparing_fractions": {
+      "skill_id": "comparing_fractions",
+      "name": "Comparing fractions",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "understanding_fractions"
+      ],
+      "forgetting_rate": 0.16,
+      "difficulty": 0.4,
+      "description": "Comparing fractions with the same numerator or the same denominator.",
+      "order": 44
+    },
+    "area_and_perimeter": {
+      "skill_id": "area_and_perimeter",
+      "name": "Area and perimeter",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "measurement_standard_units"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.4,
+      "description": "Understanding the concepts of area and perimeter and calculating them for rectangles.",
+      "order": 45
+    },
+    "telling_time_to_the_minute": {
+      "skill_id": "telling_time_to_the_minute",
+      "name": "Telling time to the minute",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "telling_time_to_5_minutes"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.35,
+      "description": "Reading analog and digital clocks to the nearest minute.",
+      "order": 46
+    },
+    "measurement_mass_volume": {
+      "skill_id": "measurement_mass_volume",
+      "name": "Measurement of mass and volume",
+      "grade_level": "GRADE_3",
+      "prerequisites": [
+        "measurement_standard_units"
+      ],
+      "forgetting_rate": 0.16,
+      "difficulty": 0.3,
+      "description": "Measuring and estimating liquid volumes and masses of objects using standard units.",
+      "order": 47
+    },
+    "place_value_and_rounding": {
+      "skill_id": "place_value_and_rounding",
+      "name": "Place Value and Rounding",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "place_value_hundreds",
+        "rounding_numbers"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.3,
+      "description": "Understanding place value to millions and rounding multi-digit whole numbers.",
+      "order": 48
+    },
+    "multi_digit_arithmetic": {
+      "skill_id": "multi_digit_arithmetic",
+      "name": "Multi-Digit Arithmetic",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "addition_within_1000",
+        "subtraction_within_1000"
+      ],
+      "forgetting_rate": 0.12,
+      "difficulty": 0.35,
+      "description": "Adding and subtracting multi-digit whole numbers.",
+      "order": 49
+    },
+    "multiplication_of_multi_digit_numbers": {
+      "skill_id": "multiplication_of_multi_digit_numbers",
+      "name": "Multiplication of Multi-Digit Numbers",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "multiplication_facts",
+        "properties_of_multiplication",
+        "addition_within_1000"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.4,
+      "description": "Multiplying a whole number of up to four digits by a one-digit whole number, and multiplying two two-digit numbers.",
+      "order": 50
+    },
+    "division_of_multi_digit_numbers": {
+      "skill_id": "division_of_multi_digit_numbers",
+      "name": "Division of Multi-Digit Numbers",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "division_facts",
+        "multiplication_of_multi_digit_numbers",
+        "subtraction_within_1000"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.45,
+      "description": "Finding whole-number quotients and remainders with up to four-digit dividends and one-digit divisors.",
+      "order": 51
+    },
+    "prime_composite_numbers_and_factorization": {
+      "skill_id": "prime_composite_numbers_and_factorization",
+      "name": "Prime, Composite Numbers, and Factorization",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "multiplication_facts",
+        "division_facts"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.35,
+      "description": "Identifying prime and composite numbers and finding prime factorization.",
+      "order": 52
+    },
+    "factors_and_multiples": {
+      "skill_id": "factors_and_multiples",
+      "name": "Factors and Multiples",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "prime_composite_numbers_and_factorization"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.35,
+      "description": "Finding all factor pairs for a whole number in the range 1-100.",
+      "order": 53
+    },
+    "fraction_equivalence_and_ordering": {
+      "skill_id": "fraction_equivalence_and_ordering",
+      "name": "Fraction Equivalence and Ordering",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "comparing_fractions"
+      ],
+      "forgetting_rate": 0.16,
+      "difficulty": 0.4,
+      "description": "Recognizing and generating equivalent fractions, and comparing fractions with different numerators and denominators.",
+      "order": 54
+    },
+    "operations_with_fractions": {
+      "skill_id": "operations_with_fractions",
+      "name": "Operations with Fractions",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "fraction_equivalence_and_ordering"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Adding and subtracting fractions with like denominators, and multiplying a fraction by a whole number.",
+      "order": 55
+    },
+    "decimal_notation": {
+      "skill_id": "decimal_notation",
+      "name": "Decimal Notation",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "fraction_equivalence_and_ordering",
+        "place_value_and_rounding"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.4,
+      "description": "Understanding decimal notation for fractions, and comparing decimal fractions.",
+      "order": 56
+    },
+    "measurement_conversions": {
+      "skill_id": "measurement_conversions",
+      "name": "Measurement Conversions",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "measurement_mass_volume"
+      ],
+      "forgetting_rate": 0.17,
+      "difficulty": 0.35,
+      "description": "Converting measurements from a larger unit to a smaller unit.",
+      "order": 57
+    },
+    "geometry_angles_and_lines": {
+      "skill_id": "geometry_angles_and_lines",
+      "name": "Geometry - Angles and Lines",
+      "grade_level": "GRADE_4",
+      "prerequisites": [
+        "geometry_fractions_of_shapes"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.3,
+      "description": "Measuring angles in whole-number degrees using a protractor. Recognizing and drawing lines of symmetry.",
+      "order": 58
+    },
+    "order_of_operations": {
+      "skill_id": "order_of_operations",
+      "name": "Order of Operations",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "multi_digit_arithmetic",
+        "multiplication_of_multi_digit_numbers"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.4,
+      "description": "Understanding and applying the order of operations (PEMDAS/BODMAS) to evaluate expressions.",
+      "order": 59
+    },
+    "decimal_place_value": {
+      "skill_id": "decimal_place_value",
+      "name": "Decimal Place Value",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "place_value_and_rounding",
+        "decimal_notation"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.3,
+      "description": "Understanding place value to the thousandths place.",
+      "order": 60
+    },
+    "operations_with_decimals": {
+      "skill_id": "operations_with_decimals",
+      "name": "Operations with Decimals",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "decimal_place_value",
+        "multi_digit_arithmetic",
+        "order_of_operations"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.4,
+      "description": "Adding, subtracting, multiplying, and dividing decimals to hundredths.",
+      "order": 61
+    },
+    "add_subtract_fractions_unlike_denominators": {
+      "skill_id": "add_subtract_fractions_unlike_denominators",
+      "name": "Add and subtract fractions with unlike denominators",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "operations_with_fractions"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Adding and subtracting fractions with unlike denominators, including mixed numbers.",
+      "order": 62
+    },
+    "multiply_fractions": {
+      "skill_id": "multiply_fractions",
+      "name": "Multiply fractions",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "operations_with_fractions"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Multiplying fractions and mixed numbers.",
+      "order": 63
+    },
+    "divide_fractions": {
+      "skill_id": "divide_fractions",
+      "name": "Divide fractions",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "multiply_fractions"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.55,
+      "description": "Dividing unit fractions by whole numbers and whole numbers by unit fractions.",
+      "order": 64
+    },
+    "volume_of_rectangular_prisms": {
+      "skill_id": "volume_of_rectangular_prisms",
+      "name": "Volume of rectangular prisms",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "area_and_perimeter"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.4,
+      "description": "Understanding the concept of volume and finding the volume of rectangular prisms.",
+      "order": 65
+    },
+    "coordinate_plane": {
+      "skill_id": "coordinate_plane",
+      "name": "Coordinate plane",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "geometry_angles_and_lines"
+      ],
+      "forgetting_rate": 0.15,
+      "difficulty": 0.35,
+      "description": "Graphing points on the coordinate plane to solve real-world and mathematical problems.",
+      "order": 66
+    },
+    "classify_2d_figures": {
+      "skill_id": "classify_2d_figures",
+      "name": "Classify 2D figures",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "geometry_angles_and_lines"
+      ],
+      "forgetting_rate": 0.16,
+      "difficulty": 0.3,
+      "description": "Classifying two-dimensional figures into categories based on their properties.",
+      "order": 67
+    },
+    "numerical_expressions": {
+      "skill_id": "numerical_expressions",
+      "name": "Numerical expressions",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "order_of_operations"
+      ],
+      "forgetting_rate": 0.17,
+      "difficulty": 0.35,
+      "description": "Writing and interpreting numerical expressions.",
+      "order": 68
+    },
+    "patterns_and_relationships": {
+      "skill_id": "patterns_and_relationships",
+      "name": "Patterns and relationships",
+      "grade_level": "GRADE_5",
+      "prerequisites": [
+        "numerical_expressions"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.4,
+      "description": "Analyzing patterns and relationships between numbers.",
+      "order": 69
+    },
+    "integers_and_absolute_value": {
+      "skill_id": "integers_and_absolute_value",
+      "name": "Integers and Absolute Value",
+      "grade_level": "GRADE_6",
+      "prerequisites": [
+        "comparing_numbers_up_to_1000"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.35,
+      "description": "Understanding integers, the number line, opposites, and absolute value.",
+      "order": 70
+    },
+    "ratios_and_proportional_relationships": {
+      "skill_id": "ratios_and_proportional_relationships",
+      "name": "Ratios and Proportional Relationships",
+      "grade_level": "GRADE_6",
+      "prerequisites": [
+        "multiply_fractions",
+        "divide_fractions"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.45,
+      "description": "Understanding ratio concepts and using ratio reasoning to solve problems.",
+      "order": 71
+    },
+    "the_number_system": {
+      "skill_id": "the_number_system",
+      "name": "The Number System",
+      "grade_level": "GRADE_6",
+      "prerequisites": [
+        "divide_fractions",
+        "operations_with_decimals",
+        "integers_and_absolute_value"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.4,
+      "description": "Dividing fractions by fractions, fluently dividing multi-digit numbers, and understanding the system of rational numbers.",
+      "order": 72
+    },
+    "introduction_to_exponents": {
+      "skill_id": "introduction_to_exponents",
+      "name": "Introduction to Exponents",
+      "grade_level": "GRADE_6",
+      "prerequisites": [
+        "multiplication_of_multi_digit_numbers"
+      ],
+      "forgetting_rate": 0.19,
+      "difficulty": 0.4,
+      "description": "Understanding and evaluating numerical expressions involving whole-number exponents.",
+      "order": 73
+    },
+    "expressions_and_equations": {
+      "skill_id": "expressions_and_equations",
+      "name": "Expressions and Equations",
+      "grade_level": "GRADE_6",
+      "prerequisites": [
+        "numerical_expressions",
+        "introduction_to_exponents"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Applying and extending previous understandings of arithmetic to algebraic expressions and solving one-variable equations and inequalities.",
+      "order": 74
+    },
+    "geometry_area_volume": {
+      "skill_id": "geometry_area_volume",
+      "name": "Geometry - Area and Volume",
+      "grade_level": "GRADE_6",
+      "prerequisites": [
+        "volume_of_rectangular_prisms",
+        "classify_2d_figures"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.45,
+      "description": "Solving real-world and mathematical problems involving area, surface area, and volume.",
+      "order": 75
+    },
+    "statistics_and_probability": {
+      "skill_id": "statistics_and_probability",
+      "name": "Statistics and Probability",
+      "grade_level": "GRADE_6",
+      "prerequisites": [
+        "data_line_plots"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.4,
+      "description": "Developing understanding of statistical variability and summarizing and describing distributions.",
+      "order": 76
+    },
+    "operations_with_rational_numbers": {
+      "skill_id": "operations_with_rational_numbers",
+      "name": "Operations with Rational Numbers",
+      "grade_level": "GRADE_7",
+      "prerequisites": [
+        "the_number_system"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.45,
+      "description": "Applying and extending previous understandings of operations with fractions to add, subtract, multiply, and divide rational numbers.",
+      "order": 77
+    },
+    "expressions_and_equations_with_rational_numbers": {
+      "skill_id": "expressions_and_equations_with_rational_numbers",
+      "name": "Expressions and Equations with Rational Numbers",
+      "grade_level": "GRADE_7",
+      "prerequisites": [
+        "expressions_and_equations",
+        "operations_with_rational_numbers"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.5,
+      "description": "Using properties of operations to generate equivalent expressions and solve real-life and mathematical problems using numerical and algebraic expressions and equations.",
+      "order": 78
+    },
+    "ratios_and_proportional_relationships_analysis": {
+      "skill_id": "ratios_and_proportional_relationships_analysis",
+      "name": "Analysis of Ratios and Proportional Relationships",
+      "grade_level": "GRADE_7",
+      "prerequisites": [
+        "ratios_and_proportional_relationships"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Analyzing proportional relationships and using them to solve real-world and mathematical problems.",
+      "order": 79
+    },
+    "area_of_circles_and_circumference": {
+      "skill_id": "area_of_circles_and_circumference",
+      "name": "Area of Circles and Circumference",
+      "grade_level": "GRADE_7",
+      "prerequisites": [
+        "geometry_area_volume"
+      ],
+      "forgetting_rate": 0.19,
+      "difficulty": 0.45,
+      "description": "Understanding the formulas for the area and circumference of a circle and using them to solve problems.",
+      "order": 80
+    },
+    "geometry_scale_drawings_and_constructions": {
+      "skill_id": "geometry_scale_drawings_and_constructions",
+      "name": "Geometry - Scale Drawings and Constructions",
+      "grade_level": "GRADE_7",
+      "prerequisites": [
+        "geometry_area_volume"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.45,
+      "description": "Drawing, constructing, and describing geometrical figures and describing the relationships between them.",
+      "order": 81
+    },
+    "statistics_and_probability_inferences": {
+      "skill_id": "statistics_and_probability_inferences",
+      "name": "Statistics and Probability - Inferences",
+      "grade_level": "GRADE_7",
+      "prerequisites": [
+        "statistics_and_probability"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.45,
+      "description": "Using random sampling to draw inferences about a population and drawing informal comparative inferences about two populations.",
+      "order": 82
+    },
+    "probability_of_events": {
+      "skill_id": "probability_of_events",
+      "name": "Probability of Events",
+      "grade_level": "GRADE_7",
+      "prerequisites": [
+        "statistics_and_probability_inferences"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.5,
+      "description": "Investigating chance processes and developing, using, and evaluating probability models.",
+      "order": 83
+    },
+    "the_number_system_irrational_numbers": {
+      "skill_id": "the_number_system_irrational_numbers",
+      "name": "The Number System - Irrational Numbers",
+      "grade_level": "GRADE_8",
+      "prerequisites": [
+        "the_number_system"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.45,
+      "description": "Understanding that there are numbers that are not rational, and approximating them by rational numbers.",
+      "order": 84
+    },
+    "expressions_and_equations_exponents_and_radicals": {
+      "skill_id": "expressions_and_equations_exponents_and_radicals",
+      "name": "Expressions and Equations - Exponents and Radicals",
+      "grade_level": "GRADE_8",
+      "prerequisites": [
+        "expressions_and_equations_with_rational_numbers",
+        "introduction_to_exponents"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.5,
+      "description": "Working with radicals and integer exponents.",
+      "order": 85
+    },
+    "proportional_relationships_lines_and_linear_equations": {
+      "skill_id": "proportional_relationships_lines_and_linear_equations",
+      "name": "Proportional Relationships, Lines, and Linear Equations",
+      "grade_level": "GRADE_8",
+      "prerequisites": [
+        "ratios_and_proportional_relationships_analysis"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Understanding the connections between proportional relationships, lines, and linear equations.",
+      "order": 86
+    },
+    "functions": {
+      "skill_id": "functions",
+      "name": "Functions",
+      "grade_level": "GRADE_8",
+      "prerequisites": [
+        "proportional_relationships_lines_and_linear_equations"
+      ],
+      "forgetting_rate": 0.25,
+      "difficulty": 0.55,
+      "description": "Defining, evaluating, and comparing functions.",
+      "order": 87
+    },
+    "geometry_congruence_and_similarity": {
+      "skill_id": "geometry_congruence_and_similarity",
+      "name": "Geometry - Congruence and Similarity",
+      "grade_level": "GRADE_8",
+      "prerequisites": [
+        "geometry_scale_drawings_and_constructions"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Understanding congruence and similarity using physical models, transparencies, or geometry software.",
+      "order": 88
+    },
+    "pythagorean_theorem": {
+      "skill_id": "pythagorean_theorem",
+      "name": "Pythagorean Theorem",
+      "grade_level": "GRADE_8",
+      "prerequisites": [
+        "geometry_congruence_and_similarity"
+      ],
+      "forgetting_rate": 0.18,
+      "difficulty": 0.45,
+      "description": "Understanding and applying the Pythagorean Theorem.",
+      "order": 89
+    },
+    "volume_of_cones_cylinders_and_spheres": {
+      "skill_id": "volume_of_cones_cylinders_and_spheres",
+      "name": "Volume of Cones, Cylinders, and Spheres",
+      "grade_level": "GRADE_8",
+      "prerequisites": [
+        "area_of_circles_and_circumference"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Solving real-world and mathematical problems involving volume of cylinders, cones, and spheres.",
+      "order": 90
+    },
+    "statistics_and_probability_bivariate_data": {
+      "skill_id": "statistics_and_probability_bivariate_data",
+      "name": "Statistics and Probability - Bivariate Data",
+      "grade_level": "GRADE_8",
+      "prerequisites": [
+        "statistics_and_probability_inferences"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.5,
+      "description": "Investigating patterns of association in bivariate data.",
+      "order": 91
+    },
+    "expressions_and_equations_algebraic": {
+      "skill_id": "expressions_and_equations_algebraic",
+      "name": "Algebraic Expressions and Equations",
+      "grade_level": "GRADE_9",
+      "prerequisites": [
+        "expressions_and_equations_exponents_and_radicals"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Interpreting the structure of expressions and writing expressions in equivalent forms to solve problems.",
+      "order": 92
+    },
+    "arithmetic_with_polynomials_and_rational_expressions": {
+      "skill_id": "arithmetic_with_polynomials_and_rational_expressions",
+      "name": "Arithmetic with Polynomials and Rational Expressions",
+      "grade_level": "GRADE_9",
+      "prerequisites": [
+        "expressions_and_equations_algebraic"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.55,
+      "description": "Performing arithmetic operations on polynomials.",
+      "order": 93
+    },
+    "creating_equations": {
+      "skill_id": "creating_equations",
+      "name": "Creating Equations",
+      "grade_level": "GRADE_9",
+      "prerequisites": [
+        "expressions_and_equations_algebraic"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Creating equations that describe numbers or relationships.",
+      "order": 94
+    },
+    "reasoning_with_equations_and_inequalities": {
+      "skill_id": "reasoning_with_equations_and_inequalities",
+      "name": "Reasoning with Equations and Inequalities",
+      "grade_level": "GRADE_9",
+      "prerequisites": [
+        "creating_equations"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.55,
+      "description": "Understanding solving equations as a process of reasoning and explaining the reasoning. Solving equations and inequalities in one variable.",
+      "order": 95
+    },
+    "systems_of_equations": {
+      "skill_id": "systems_of_equations",
+      "name": "Systems of Equations",
+      "grade_level": "GRADE_9",
+      "prerequisites": [
+        "reasoning_with_equations_and_inequalities"
+      ],
+      "forgetting_rate": 0.25,
+      "difficulty": 0.6,
+      "description": "Solving systems of linear equations.",
+      "order": 96
+    },
+    "representing_functions": {
+      "skill_id": "representing_functions",
+      "name": "Representing Functions",
+      "grade_level": "GRADE_9",
+      "prerequisites": [
+        "functions"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Understanding the concept of a function and using function notation. Interpreting functions that arise in applications in terms of the context.",
+      "order": 97
+    },
+    "linear_and_exponential_models": {
+      "skill_id": "linear_and_exponential_models",
+      "name": "Linear and Exponential Models",
+      "grade_level": "GRADE_9",
+      "prerequisites": [
+        "representing_functions"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.55,
+      "description": "Constructing and comparing linear and exponential models and solving problems.",
+      "order": 98
+    },
+    "statistics_interpreting_data": {
+      "skill_id": "statistics_interpreting_data",
+      "name": "Statistics - Interpreting Data",
+      "grade_level": "GRADE_9",
+      "prerequisites": [
+        "statistics_and_probability_bivariate_data"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.45,
+      "description": "Summarizing, representing, and interpreting data on a single count or measurement variable and on two categorical and quantitative variables.",
+      "order": 99
+    },
+    "congruence_and_similarity": {
+      "skill_id": "congruence_and_similarity",
+      "name": "Congruence and Similarity",
+      "grade_level": "GRADE_10",
+      "prerequisites": [
+        "geometry_congruence_and_similarity"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Experimenting with transformations in the plane and understanding congruence and similarity in terms of rigid motions and transformations.",
+      "order": 100
+    },
+    "right_triangles_and_trigonometry": {
+      "skill_id": "right_triangles_and_trigonometry",
+      "name": "Right Triangles and Trigonometry",
+      "grade_level": "GRADE_10",
+      "prerequisites": [
+        "pythagorean_theorem"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.55,
+      "description": "Defining trigonometric ratios and solving problems involving right triangles.",
+      "order": 101
+    },
+    "circles": {
+      "skill_id": "circles",
+      "name": "Circles",
+      "grade_level": "GRADE_10",
+      "prerequisites": [
+        "geometry_congruence_and_similarity",
+        "pythagorean_theorem",
+        "area_of_circles_and_circumference"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Understanding and applying theorems about circles.",
+      "order": 102
+    },
+    "expressing_geometric_properties_with_equations": {
+      "skill_id": "expressing_geometric_properties_with_equations",
+      "name": "Expressing Geometric Properties with Equations",
+      "grade_level": "GRADE_10",
+      "prerequisites": [
+        "coordinate_plane",
+        "reasoning_with_equations_and_inequalities"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.55,
+      "description": "Using coordinates to prove simple geometric theorems algebraically.",
+      "order": 103
+    },
+    "geometric_measurement_and_dimension": {
+      "skill_id": "geometric_measurement_and_dimension",
+      "name": "Geometric Measurement and Dimension",
+      "grade_level": "GRADE_10",
+      "prerequisites": [
+        "volume_of_cones_cylinders_and_spheres"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Explaining and applying volume formulas for various 3D shapes to solve problems.",
+      "order": 104
+    },
+    "modeling_with_geometry": {
+      "skill_id": "modeling_with_geometry",
+      "name": "Modeling with Geometry",
+      "grade_level": "GRADE_10",
+      "prerequisites": [
+        "geometric_measurement_and_dimension"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.55,
+      "description": "Applying geometric concepts in modeling situations.",
+      "order": 105
+    },
+    "conditional_probability_and_the_rules_of_probability": {
+      "skill_id": "conditional_probability_and_the_rules_of_probability",
+      "name": "Conditional Probability and the Rules of Probability",
+      "grade_level": "GRADE_10",
+      "prerequisites": [
+        "probability_of_events"
+      ],
+      "forgetting_rate": 0.25,
+      "difficulty": 0.6,
+      "description": "Understanding independence and conditional probability and using them to interpret data.",
+      "order": 106
+    },
+    "algebra_seeing_structure_in_expressions": {
+      "skill_id": "algebra_seeing_structure_in_expressions",
+      "name": "Algebra - Seeing Structure in Expressions",
+      "grade_level": "GRADE_11",
+      "prerequisites": [
+        "arithmetic_with_polynomials_and_rational_expressions"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.55,
+      "description": "Interpreting the structure of expressions and writing expressions in equivalent forms to solve problems.",
+      "order": 107
+    },
+    "arithmetic_with_polynomials_and_rational_expressions_advanced": {
+      "skill_id": "arithmetic_with_polynomials_and_rational_expressions_advanced",
+      "name": "Arithmetic with Polynomials and Rational Expressions (Advanced)",
+      "grade_level": "GRADE_11",
+      "prerequisites": [
+        "arithmetic_with_polynomials_and_rational_expressions"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.6,
+      "description": "Understanding the relationship between zeros and factors of polynomials.",
+      "order": 108
+    },
+    "creating_equations_advanced": {
+      "skill_id": "creating_equations_advanced",
+      "name": "Creating Equations (Advanced)",
+      "grade_level": "GRADE_11",
+      "prerequisites": [
+        "creating_equations"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.55,
+      "description": "Creating equations that describe numbers or relationships, including more complex scenarios.",
+      "order": 109
+    },
+    "reasoning_with_equations_and_inequalities_advanced": {
+      "skill_id": "reasoning_with_equations_and_inequalities_advanced",
+      "name": "Reasoning with Equations and Inequalities (Advanced)",
+      "grade_level": "GRADE_11",
+      "prerequisites": [
+        "reasoning_with_equations_and_inequalities"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.6,
+      "description": "Solving equations and inequalities in one variable, and solving systems of equations.",
+      "order": 110
+    },
+    "interpreting_functions": {
+      "skill_id": "interpreting_functions",
+      "name": "Interpreting Functions",
+      "grade_level": "GRADE_11",
+      "prerequisites": [
+        "representing_functions"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.55,
+      "description": "Interpreting functions that arise in applications in terms of the context and analyzing functions using different representations.",
+      "order": 111
+    },
+    "building_functions": {
+      "skill_id": "building_functions",
+      "name": "Building Functions",
+      "grade_level": "GRADE_11",
+      "prerequisites": [
+        "interpreting_functions"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.6,
+      "description": "Building a function that models a relationship between two quantities.",
+      "order": 112
+    },
+    "linear_quadratic_and_exponential_models": {
+      "skill_id": "linear_quadratic_and_exponential_models",
+      "name": "Linear, Quadratic, and Exponential Models",
+      "grade_level": "GRADE_11",
+      "prerequisites": [
+        "linear_and_exponential_models",
+        "building_functions"
+      ],
+      "forgetting_rate": 0.25,
+      "difficulty": 0.65,
+      "description": "Constructing and comparing linear, quadratic, and exponential models and solving problems.",
+      "order": 113
+    },
+    "trigonometric_functions": {
+      "skill_id": "trigonometric_functions",
+      "name": "Trigonometric Functions",
+      "grade_level": "GRADE_11",
+      "prerequisites": [
+        "right_triangles_and_trigonometry"
+      ],
+      "forgetting_rate": 0.25,
+      "difficulty": 0.65,
+      "description": "Extending the domain of trigonometric functions using the unit circle and modeling periodic phenomena with trigonometric functions.",
+      "order": 114
+    },
+    "statistics_and_probability_interpreting_categorical_and_quantitative_data": {
+      "skill_id": "statistics_and_probability_interpreting_categorical_and_quantitative_data",
+      "name": "Statistics and Probability - Interpreting Categorical and Quantitative Data",
+      "grade_level": "GRADE_11",
+      "prerequisites": [
+        "statistics_interpreting_data"
+      ],
+      "forgetting_rate": 0.2,
+      "difficulty": 0.5,
+      "description": "Summarizing, representing, and interpreting data on a single count or measurement variable and on two categorical and quantitative variables.",
+      "order": 115
+    },
+    "functions_advanced": {
+      "skill_id": "functions_advanced",
+      "name": "Functions (Advanced)",
+      "grade_level": "GRADE_12",
+      "prerequisites": [
+        "building_functions",
+        "linear_quadratic_and_exponential_models"
+      ],
+      "forgetting_rate": 0.25,
+      "difficulty": 0.65,
+      "description": "Analyzing functions using different representations, building new functions from existing functions, and understanding inverse functions.",
+      "order": 116
+    },
+    "trigonometry_advanced": {
+      "skill_id": "trigonometry_advanced",
+      "name": "Trigonometry (Advanced)",
+      "grade_level": "GRADE_12",
+      "prerequisites": [
+        "trigonometric_functions"
+      ],
+      "forgetting_rate": 0.28,
+      "difficulty": 0.7,
+      "description": "Applying trigonometry to general triangles (Law of Sines, Law of Cosines) and understanding and applying trigonometric identities.",
+      "order": 117
+    },
+    "vectors_and_matrices": {
+      "skill_id": "vectors_and_matrices",
+      "name": "Vectors and Matrices",
+      "grade_level": "GRADE_12",
+      "prerequisites": [
+        "reasoning_with_equations_and_inequalities_advanced"
+      ],
+      "forgetting_rate": 0.25,
+      "difficulty": 0.65,
+      "description": "Representing and manipulating vectors, and performing operations on matrices.",
+      "order": 118
+    },
+    "conic_sections": {
+      "skill_id": "conic_sections",
+      "name": "Conic Sections",
+      "grade_level": "GRADE_12",
+      "prerequisites": [
+        "expressing_geometric_properties_with_equations"
+      ],
+      "forgetting_rate": 0.22,
+      "difficulty": 0.6,
+      "description": "Translating between the geometric description and the equation for a conic section.",
+      "order": 119
+    },
+    "complex_numbers": {
+      "skill_id": "complex_numbers",
+      "name": "Complex Numbers",
+      "grade_level": "GRADE_12",
+      "prerequisites": [
+        "arithmetic_with_polynomials_and_rational_expressions_advanced"
+      ],
+      "forgetting_rate": 0.25,
+      "difficulty": 0.6,
+      "description": "Performing arithmetic operations with complex numbers and representing complex numbers and their operations on the complex plane.",
+      "order": 120
+    },
+    "probability_and_statistics_advanced": {
+      "skill_id": "probability_and_statistics_advanced",
+      "name": "Probability and Statistics (Advanced)",
+      "grade_level": "GRADE_12",
+      "prerequisites": [
+        "conditional_probability_and_the_rules_of_probability",
+        "statistics_and_probability_interpreting_categorical_and_quantitative_data"
+      ],
+      "forgetting_rate": 0.28,
+      "difficulty": 0.7,
+      "description": "Using probability to evaluate outcomes of decisions and understanding and evaluating random processes underlying statistical experiments.",
+      "order": 121
+    },
+    "limits_and_continuity": {
+      "skill_id": "limits_and_continuity",
+      "name": "Limits and Continuity",
+      "grade_level": "CALCULUS",
+      "prerequisites": [
+        "functions_advanced"
+      ],
+      "forgetting_rate": 0.25,
+      "difficulty": 0.65,
+      "description": "Understanding the concept of a limit and evaluating limits graphically and algebraically. Understanding continuity in terms of limits.",
+      "order": 122
+    },
+    "differentiation_definition_and_basic_rules": {
+      "skill_id": "differentiation_definition_and_basic_rules",
+      "name": "Differentiation: Definition and Basic Derivative Rules",
+      "grade_level": "CALCULUS",
+      "prerequisites": [
+        "limits_and_continuity"
+      ],
+      "forgetting_rate": 0.28,
+      "difficulty": 0.7,
+      "description": "Defining the derivative of a function and using basic rules to find derivatives of functions.",
+      "order": 123
+    },
+    "differentiation_composite_implicit_and_inverse_functions": {
+      "skill_id": "differentiation_composite_implicit_and_inverse_functions",
+      "name": "Differentiation: Composite, Implicit, and Inverse Functions",
+      "grade_level": "CALCULUS",
+      "prerequisites": [
+        "differentiation_definition_and_basic_rules"
+      ],
+      "forgetting_rate": 0.3,
+      "difficulty": 0.75,
+      "description": "Applying the chain rule to find the derivative of composite functions, and using implicit differentiation.",
+      "order": 124
+    },
+    "contextual_applications_of_differentiation": {
+      "skill_id": "contextual_applications_of_differentiation",
+      "name": "Contextual Applications of Differentiation",
+      "grade_level": "CALCULUS",
+      "prerequisites": [
+        "differentiation_composite_implicit_and_inverse_functions"
+      ],
+      "forgetting_rate": 0.3,
+      "difficulty": 0.75,
+      "description": "Interpreting the meaning of the derivative in context, including related rates, optimization, and motion problems.",
+      "order": 125
+    },
+    "analytical_applications_of_differentiation": {
+      "skill_id": "analytical_applications_of_differentiation",
+      "name": "Analytical Applications of Differentiation",
+      "grade_level": "CALCULUS",
+      "prerequisites": [
+        "contextual_applications_of_differentiation"
+      ],
+      "forgetting_rate": 0.3,
+      "difficulty": 0.75,
+      "description": "Using derivatives to analyze functions, including finding critical points, intervals of increase and decrease, and concavity.",
+      "order": 126
+    },
+    "integration_and_accumulation_of_change": {
+      "skill_id": "integration_and_accumulation_of_change",
+      "name": "Integration and Accumulation of Change",
+      "grade_level": "CALCULUS",
+      "prerequisites": [
+        "analytical_applications_of_differentiation"
+      ],
+      "forgetting_rate": 0.28,
+      "difficulty": 0.7,
+      "description": "Understanding the definite integral as a limit of Riemann sums and as a net accumulation of change.",
+      "order": 127
+    },
+    "differential_equations": {
+      "skill_id": "differential_equations",
+      "name": "Differential Equations",
+      "grade_level": "CALCULUS",
+      "prerequisites": [
+        "integration_and_accumulation_of_change"
+      ],
+      "forgetting_rate": 0.3,
+      "difficulty": 0.8,
+      "description": "Solving simple differential equations.",
+      "order": 128
+    },
+    "applications_of_integration": {
+      "skill_id": "applications_of_integration",
+      "name": "Applications of Integration",
+      "grade_level": "CALCULUS",
+      "prerequisites": [
+        "differential_equations"
+      ],
+      "forgetting_rate": 0.3,
+      "difficulty": 0.8,
+      "description": "Finding the area of a region, volume of a solid, and the average value of a function.",
+      "order": 129
+    }
   }
 }
