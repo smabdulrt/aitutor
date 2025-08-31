@@ -9,7 +9,7 @@ lets look at the file for our To-dos and wrap then up one by one. Keep making th
 
     Here is the detailed to-do list, in the order I will perform the work:
         
-        Phase 1: Build and Test the Core Widget & Skill System
+        [DONE]Phase 1: Build and Test the Core Widget & Skill System
             * Goal: To build a robust, reusable system for rendering basic interactive questions and processing their answers to update user skills. This phase will deliver a complete, end-to-end product for our three core
                 question types.
             1. Architect the Backend for Multiple Widget Types:[DONE]
@@ -27,10 +27,15 @@ lets look at the file for our To-dos and wrap then up one by one. Keep making th
             5. Develop the Initial Set of Core Widgets: [DONE]
                 * Action: I will build the first three fundamental interactive widgets: MultipleChoiceDisplay.tsx, FreeResponseDisplay.tsx, and NumericInputDisplay.tsx.
                 * Action: I will implement the full user interaction loop within SherlockED, handling answer submission to the API and displaying "Correct" or "Incorrect" feedback.
-            6. Integrate and Verify the Core System:
+            6. Integrate and Verify the Core System:[DONE]
                 * Action: I will replace the old question display component with the new SherlockED component in the main app layout.
                 * Action: I will ask you to perform a full manual test of the core system with our three initial widget types to ensure the entire loop is working perfectly.
 
+2. IXL Skill Expansion:
+
+3. Curriculum Builder:
+
+4. SherlockED Template Expansion
         Phase 2: Iterative Expansion with Advanced Widgets
             * Goal: To iteratively build out the full suite of advanced, Perseus-style widgets, leveraging the proven foundation from Phase 1.
             Sprint 1: Classification and Ordering Widgets (categorizer, sorter, orderer, matcher)
