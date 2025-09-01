@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 from user_manager import UserManager, UserProfile, SkillState
-from QuestionGeneratorAgent.question_generator_agent import QuestionGeneratorAgent
+# from QuestionGeneratorAgent.question_generator_agent import QuestionGeneratorAgent
 
 class GradeLevel(Enum):
     K = 0
@@ -64,13 +64,13 @@ class DASHSystem:
         self.user_manager = UserManager(users_folder="Users")
         
         # Initialize the Question Generator Agent
-        try:
-            qg_curriculum_path = "QuestionsBank/curriculum.json"
-            self.question_generator = QuestionGeneratorAgent(curriculum_file=qg_curriculum_path)
-            print("✅ Question Generator Agent initialized.")
-        except Exception as e:
-            self.question_generator = None
-            print(f"⚠️ Could not initialize Question Generator Agent: {e}")
+        # try:
+        #     qg_curriculum_path = "QuestionsBank/curriculum.json"
+        #     self.question_generator = QuestionGeneratorAgent(curriculum_file=qg_curriculum_path)
+        #     print("✅ Question Generator Agent initialized.")
+        # except Exception as e:
+        #     self.question_generator = None
+        #     print(f"⚠️ Could not initialize Question Generator Agent: {e}")
 
         self._load_from_files(self.skills_file_path, self.curriculum_file_path)
     
@@ -439,46 +439,47 @@ class DASHSystem:
                 return candidate_questions[0]
 
         # If we're here, no unanswered questions were found. Time to generate one.
-        if is_retry or self.question_generator is None:
-            print("No unanswered questions found and cannot generate new ones.")
-            return None
+        # if is_retry or self.question_generator is None:
+        #     print("No unanswered questions found and cannot generate new ones.")
+        #     return None
 
-        print("🤔 No unanswered questions available. Attempting to generate a new one...")
+        # print("🤔 No unanswered questions available. Attempting to generate a new one...")
         
-        top_skill_id = recommended_skills[0]
+        # top_skill_id = recommended_skills[0]
         
-        source_question_id = None
-        # Find the most recently answered question for this skill to use as a template
-        for attempt in reversed(user_profile.question_history):
-            if top_skill_id in attempt.skill_ids:
-                source_question_id = attempt.question_id
-                break
+        # source_question_id = None
+        # # Find the most recently answered question for this skill to use as a template
+        # for attempt in reversed(user_profile.question_history):
+        #     if top_skill_id in attempt.skill_ids:
+        #         source_question_id = attempt.question_id
+        #         break
         
-        if not source_question_id:
-            # Fallback: find any question for the skill
-            all_skill_questions = [q.question_id for q in self.questions.values() if top_skill_id in q.skill_ids]
-            if all_skill_questions:
-                source_question_id = all_skill_questions[0]
+        # if not source_question_id:
+        #     # Fallback: find any question for the skill
+        #     all_skill_questions = [q.question_id for q in self.questions.values() if top_skill_id in q.skill_ids]
+        #     if all_skill_questions:
+        #         source_question_id = all_skill_questions[0]
 
-        if not source_question_id:
-            print(f"Could not find any source question for skill {top_skill_id} to generate a variation.")
-            return None
+        # if not source_question_id:
+        #     print(f"Could not find any source question for skill {top_skill_id} to generate a variation.")
+        #     return None
 
-        try:
-            print(f"🧬 Generating variation based on question {source_question_id} for skill {top_skill_id}...")
-            generated_ids = self.question_generator.generate_variations(source_question_id, num_variations=1)
+        # try:
+        #     print(f"🧬 Generating variation based on question {source_question_id} for skill {top_skill_id}...")
+        #     generated_ids = self.question_generator.generate_variations(source_question_id, num_variations=1)
             
-            if generated_ids:
-                print(f"✅ Successfully generated {len(generated_ids)} new question(s).")
-                self._reload_questions()
-                # Retry finding a question
-                return self.get_next_question(student_id, current_time, is_retry=True)
-            else:
-                print("⚠️  Question generation did not produce any new questions.")
-                return None
-        except Exception as e:
-            print(f"❌ Error during question generation: {e}")
-            return None
+        #     if generated_ids:
+        #         print(f"✅ Successfully generated {len(generated_ids)} new question(s).")
+        #         self._reload_questions()
+        #         # Retry finding a question
+        #         return self.get_next_question(student_id, current_time, is_retry=True)
+        #     else:
+        #         print("⚠️  Question generation did not produce any new questions.")
+        #         return None
+        # except Exception as e:
+        #     print(f"❌ Error during question generation: {e}")
+        #     return None
+        return None
 
     def check_answer(self, question_id: str, user_answer: any) -> bool:
         """

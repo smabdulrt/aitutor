@@ -1,7 +1,7 @@
 {
   "user_id": "test_student",
   "created_at": 1756591968.1632261,
-  "last_updated": 1756592352.671422,
+  "last_updated": 1756687638.757965,
   "skill_states": {
     "counting_1_10": {
       "memory_strength": 1.0930217776663602,
@@ -10,10 +10,10 @@
       "correct_count": 2
     },
     "number_recognition": {
-      "memory_strength": 0.9090909090909091,
-      "last_practice_time": 1756592352.670051,
-      "practice_count": 1,
-      "correct_count": 1
+      "memory_strength": 0.8333333333333334,
+      "last_practice_time": 1756687638.7561128,
+      "practice_count": 2,
+      "correct_count": 2
     },
     "basic_shapes": {
       "memory_strength": 0.0,
@@ -223,6 +223,16 @@
       "is_correct": true,
       "response_time_seconds": 5.0,
       "timestamp": 1756592352.6714098,
+      "time_penalty_applied": false
+    },
+    {
+      "question_id": "k_num_mc_1",
+      "skill_ids": [
+        "number_recognition"
+      ],
+      "is_correct": true,
+      "response_time_seconds": 5.0,
+      "timestamp": 1756687638.757962,
       "time_penalty_applied": false
     }
   ],
