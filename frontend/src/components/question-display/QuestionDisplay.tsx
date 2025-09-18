@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './question-display.scss';
+import RendererComponent from "../RendererComponent";
+import { ExamProvider } from '../../contexts/ExamContext';
 
 interface Question {
   question_id: string;
@@ -46,8 +48,9 @@ const QuestionDisplay: React.FC = () => {
 
   return (
     <div className="question-display">
-      <h2 className="question-title">Here's your next question:</h2>
-      {question && <p className="question-text">{question.content}</p>}
+      <h2 className="question-title">Here's your next questionsdsf:</h2>
+      {/* {question && <p className="question-text">{question.content}</p>} */}
+      <RendererComponent />
     </div>
   );
 };
