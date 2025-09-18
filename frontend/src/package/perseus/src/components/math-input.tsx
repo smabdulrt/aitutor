@@ -96,10 +96,9 @@ type State = {
 // A WYSIWYG math input that calls `onChange(LaTeX-string)`
 class InnerMathInput extends React.Component<InnerProps, State> {
     static contextType = PerseusI18nContext;
-    declare context: React.ContextType<typeof PerseusI18nContext>;
+    context!: React.ContextType<typeof PerseusI18nContext>;
 
-    // @ts-expect-error - TS2564 - Property 'mouseDown' has no initializer and is not definitely assigned in the constructor.
-    mouseDown: boolean;
+    mouseDown!: boolean;
     __mathFieldWrapperRef: HTMLSpanElement | null = null;
     __mathField: MathFieldInterface | null = null;
 
@@ -419,7 +418,7 @@ class InnerMathInput extends React.Component<InnerProps, State> {
 // to it.
 class MathInput extends React.Component<Props, State> {
     static contextType = MathInputI18nContext;
-    declare context: React.ContextType<typeof MathInputI18nContext>;
+    context!: React.ContextType<typeof MathInputI18nContext>;
     inputRef = React.createRef<InnerMathInput>();
 
     static defaultProps: Pick<Props, "ariaLabel"> = {

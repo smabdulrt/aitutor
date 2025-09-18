@@ -68,7 +68,7 @@ const RendererComponent = () => {
                 {loading && <p>Loading questions...</p>}
                 {!loading && perseusItems.length >= 1 &&
                     <ServerItemRenderer
-                        ref={rendererRef}
+                        // ref={rendererRef}
                         problemNum={0}
                         item={perseusItem}
                         dependencies={storybookDependenciesV2}

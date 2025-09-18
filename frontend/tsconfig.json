@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["node", "react", "react-dom", "jest", "lodash", "react-syntax-highlighter"],
     "target": "es2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -14,7 +15,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src", "src/**/*"],
   "ts-node": {
