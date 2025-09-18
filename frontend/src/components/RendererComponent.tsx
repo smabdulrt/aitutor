@@ -72,7 +72,11 @@ const RendererComponent = () => {
                         problemNum={0}
                         item={perseusItem}
                         dependencies={storybookDependenciesV2}
-                        apiOptions={{}}
+                        apiOptions={(() => {
+                            const options = {};
+                            console.log("[DEBUG] RendererComponent apiOptions:", options);
+                            return options;
+                        })()}
                         linterContext={{
                             contentType: "",
                             highlightLint: true,

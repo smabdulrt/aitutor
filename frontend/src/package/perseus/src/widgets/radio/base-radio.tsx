@@ -163,6 +163,7 @@ const BaseRadio = function ({
     // So, given the new values for a particular choice, compute the new values
     // for all choices, and pass them to `onChange`.
     function updateChoice(choiceId: string, checked: boolean): void {
+        console.log("[DEBUG] BaseRadio updateChoice called:", { choiceId, checked, multipleSelect });
         const checkedChoiceIds: string[] = [];
 
         if (checked && !multipleSelect) {

@@ -54,10 +54,12 @@ class Radio extends RadioOld {
     constructor(props: Props) {
         super(props);
         this.ffIsOn = props.apiOptions.flags?.["new-radio-widget"] ?? false;
+        console.log("[DEBUG] Radio constructor - Feature flag 'new-radio-widget':", this.ffIsOn);
 
         this.state = {
             choiceStates: initChoiceStates(props.choices),
         };
+        console.log("[DEBUG] Radio constructor - initial choiceStates:", this.state.choiceStates);
     }
 
     // HACK: this really should be componentDidUpdate,
@@ -93,6 +95,7 @@ class Radio extends RadioOld {
 
     _handleChange(arg: {choiceStates?: ChoiceState[]}) {
         const newChoiceStates = arg.choiceStates;
+        console.log("[DEBUG] Radio _handleChange called with:", arg);
         if (newChoiceStates) {
             /**
              * Inside the Radio component(s) we use ChoiceState
@@ -109,40 +112,38 @@ class Radio extends RadioOld {
              * (ChoiceStateWithoutSelected). To do that we convert ChoiceState
              * into those two chunks of data.
              */
-            this.setState(
-                {
-                    choiceStates: newChoiceStates.map((choiceState) => {
-                        const {selected: _, ...rest} = choiceState;
-                        return {
-                            ...rest,
-                        };
-                    }),
-                },
-                () => {
-                    // Restructure the data in a format that
-                    // getUserInputFromSerializedState will understand
-                    const props = this._mergePropsAndState();
-
-                    // creating a shallow copy of props and cloning choiceStates
-                    // to minimize the chance of mutating choiceStates
-                    const mergedProps = {
-                        ...props,
-                        choiceStates: deepClone(props.choiceStates || []).map(
-                            (choiceState, index) => {
-                                return {
-                                    ...choiceState,
-                                    selected: newChoiceStates[index].selected,
-                                };
-                            },
-                        ),
+            this.setState({
+                choiceStates: newChoiceStates.map((choiceState) => {
+                    const {selected: _, ...rest} = choiceState;
+                    return {
+                        ...rest,
                     };
-                    // Use getUserInputFromSerializedState to get
-                    // unshuffled user input so that we can score with it
-                    const unshuffledUserInput =
-                        getUserInputFromSerializedState(mergedProps);
-                    this.props.handleUserInput(unshuffledUserInput);
-                },
-            );
+                }),
+            }, () => {
+                console.log("[DEBUG] Radio _handleChange - state updated, new choiceStates:", this.state.choiceStates);
+                // Restructure the data in a format that
+                // getUserInputFromSerializedState will understand
+                const props = this._mergePropsAndState();
+
+                // creating a shallow copy of props and cloning choiceStates
+                // to minimize the chance of mutating choiceStates
+                const mergedProps = {
+                    ...props,
+                    choiceStates: deepClone(props.choiceStates || []).map(
+                        (choiceState, index) => {
+                            return {
+                                ...choiceState,
+                                selected: newChoiceStates[index].selected,
+                            };
+                        },
+                    ),
+                };
+                // Use getUserInputFromSerializedState to get
+                // unshuffled user input so that we can score with it
+                const unshuffledUserInput =
+                    getUserInputFromSerializedState(mergedProps);
+                this.props.handleUserInput(unshuffledUserInput);
+            });
         } else {
             throw new Error("unhandled onChange call in Radio!");
         }
@@ -179,17 +180,34 @@ class Radio extends RadioOld {
         return {
             ...this.props,
             choices,
-            choiceStates: this.state.choiceStates?.map((choiceState, index) => {
-                const choice = choices[index];
-                const selected =
-                    this.props.userInput?.selectedChoiceIds.includes(
-                        choice.id,
-                    ) ?? false;
-                return {
-                    ...choiceState,
-                    selected,
-                };
-            }),
+            choiceStates: this.state.choiceStates && this.state.choiceStates.length === choices.length
+                ? this.state.choiceStates.map((choiceState, index) => {
+                    const choice = choices[index];
+                    // Use the selected state from userInput to ensure synchronization
+                    const selected =
+                        this.props.userInput?.selectedChoiceIds.includes(
+                            choice.id,
+                        ) ?? false;
+                    return {
+                        ...choiceState,
+                        selected,
+                    } as ChoiceState;
+                })
+                : choices.map((choice, index) => {
+                    // Fallback: initialize choiceStates if not properly set
+                    const selected =
+                        this.props.userInput?.selectedChoiceIds.includes(
+                            choice.id,
+                        ) ?? false;
+                    return {
+                        selected,
+                        highlighted: false,
+                        rationaleShown: false,
+                        correctnessShown: false,
+                        previouslyAnswered: false,
+                        readOnly: false,
+                    };
+                }),
             onChange: (arg: any) => this._handleChange(arg),
         };
     }

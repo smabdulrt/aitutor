@@ -160,6 +160,7 @@ class Radio extends React.Component<Props> implements Widget {
     updateChoices: (checkedChoiceIds: ReadonlyArray<string>) => void = (
         checkedChoiceIds,
     ) => {
+        console.log("[DEBUG] RadioComponent updateChoices called with checkedChoiceIds:", checkedChoiceIds);
         const {choiceStates, choices} = this.props;
 
         // Construct the baseline `choiceStates` objects. If this is the user's
