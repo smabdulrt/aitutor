@@ -66,9 +66,18 @@ const RendererComponent = () => {
         >
             <div style={{ padding: "20px" }}>
                 {loading && <p>Loading questions...</p>}
+                <button
+                    onClick={() => {
+                        const index = (item === perseusItems.length - 1) ? 0 : (item + 1);
+                        console.log(`Item: ${index}`)
+                        setItem(index)}
+                    }
+                    className="absolute bg-black rounded text-white p-2 right-8">
+                        Next
+                </button>
                 {!loading && perseusItems.length >= 1 &&
                     <ServerItemRenderer
-                        // ref={rendererRef}
+                        ref={rendererRef}
                         problemNum={0}
                         item={perseusItem}
                         dependencies={storybookDependenciesV2}
@@ -93,16 +102,6 @@ const RendererComponent = () => {
                     className="absolute bg-blue-500 rounded text-white p-2 bottom-8 right-40">
                     Submit
                 </button> */}
-                <button
-                    onClick={() => {
-                        const index = (item === perseusItems.length - 1) ? 0 : (item + 1);
-                        console.log(`Item: ${index}`)
-                        setItem(index)}
-                    }
-                    className="absolute bg-black rounded text-white p-2 bottom-8
-                    right-8">
-                        Next
-                </button>
             </div>
         </PerseusI18nProvider>
     );
