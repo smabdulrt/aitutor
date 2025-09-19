@@ -73,7 +73,7 @@ const RendererComponent = () => {
                         console.log(`Item: ${index}`)
                         setItem(index)}
                     }
-                    className="absolute top-22 right-8 bg-black rounded 
+                    className="absolute top-19 right-8 bg-black rounded 
                         text-white p-2">Next</button>
                         
                  {perseusItems.length > 0 ? (
