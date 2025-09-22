@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './question-display.scss';
-import RendererComponent from "../RendererComponent";
+import RendererComponent from "../QuestionWidget/RendererComponent";
 
 // interface Question {
 //   question_id: string;

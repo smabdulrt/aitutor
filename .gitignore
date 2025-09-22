@@ -36,3 +36,5 @@ ehthumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+*/frontend/src/architecture.md

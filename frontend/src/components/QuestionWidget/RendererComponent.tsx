@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
+import { I18nContextType } from "@khanacademy/perseus/src/components/i18n-context";
 import { ServerItemRenderer, PerseusI18nContextProvider } from "@khanacademy/perseus";
 import { type PerseusItem } from "@khanacademy/perseus-core";
-import {  } from "../contexts/perseusI18nContext";
-import { ExamContext } from "../contexts/ExamContext";
-import { DependenciesV2 } from "../perseus-init";
+import { ExamContext } from "../../contexts/ExamContext";
+import { DependenciesV2 } from "../../perseus-init";
 import { string } from "./perseus-string";
 
 const RendererComponent = () => {
@@ -43,7 +43,7 @@ const RendererComponent = () => {
                     className="absolute top-18 bg-black rounded text-white p-2 right-8">
                         Next
                 </button>
-                {!loading && perseusItems.length >= 1 &&
+                {!loading && perseusItems.length >= 1 ? (
                     <ServerItemRenderer
                         problemNum={0}
                         item={perseusItem}
@@ -62,16 +62,10 @@ const RendererComponent = () => {
                         showSolutions="none"
                         hintsVisible={0}
                         reviewMode={false}
-                        />
-                    ) : (
-                        <p>Loading...</p>
-                    )}
-                
-                {/* <button
-                    onClick={handleSubmit}
-                    className="absolute bg-blue-500 rounded text-white p-2 bottom-8 right-40">
-                    Submit
-                </button> */}
+                    />
+                ) : (
+                    <p>Loading...</p>
+                )}
             </div>
         </PerseusI18nContextProvider>
     );
