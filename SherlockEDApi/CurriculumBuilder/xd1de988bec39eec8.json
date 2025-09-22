@@ -8,7 +8,7 @@
     },
     "hints": [
         {
-            "content": "There are $\\blueE3$ rows with $\\purpleD3$ circles in each row.\n\n![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/8a525cb0d0d53ccdfc8c6712ed213c5043235e02)",
+            "content": "There are $\\blueE3$ rows with $\\purpleD3$ circles in each row.\n\n![Array of circles in 3 rows with 3 in each row](web+graphie://cdn.kastatic.org/ka-perseus-graphie/8a525cb0d0d53ccdfc8c6712ed213c5043235e02)",
             "images": {
                 "web+graphie://cdn.kastatic.org/ka-perseus-graphie/8a525cb0d0d53ccdfc8c6712ed213c5043235e02": {
                     "height": 130,
@@ -36,7 +36,7 @@
         "minor": 1
     },
     "question": {
-        "content": "**Which choice describes the number of circles?**\n\n![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/20c928c40b1532e6b9fa1a7b1f18bbe4dc34deda)\n\n[[☃ radio 2]] ",
+        "content": "**Which choice describes the number of circles?**\n\n![Array of circles in 3 rows with 3 in each row](web+graphie://cdn.kastatic.org/ka-perseus-graphie/20c928c40b1532e6b9fa1a7b1f18bbe4dc34deda)\n\n[[☃ radio 2]] ",
         "images": {
             "web+graphie://cdn.kastatic.org/ka-perseus-graphie/20c928c40b1532e6b9fa1a7b1f18bbe4dc34deda": {
                 "height": 110,
@@ -50,14 +50,17 @@
                 "options": {
                     "choices": [
                         {
+                            "id": "radio-choice-test-id-0",
                             "content": "$2+2+2+2$",
                             "correct": false
                         },
                         {
+                            "id": "radio-choice-test-id-1",
                             "content": "$3+3+3+3$",
                             "correct": false
                         },
                         {
+                            "id": "radio-choice-test-id-2",
                             "content": "$3+3+3$",
                             "correct": true
                         }
@@ -72,7 +75,7 @@
                 "static": false,
                 "type": "radio",
                 "version": {
-                    "major": 1,
+                    "major": 2,
                     "minor": 0
                 }
             }

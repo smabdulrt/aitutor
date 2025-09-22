@@ -46,18 +46,22 @@
                 "options": {
                     "choices": [
                         {
+                            "id": "radio-choice-test-id-0",
                             "content": "$7+6$",
                             "correct": false
                         },
                         {
+                            "id": "radio-choice-test-id-1",
                             "content": "$7\\times6$",
                             "correct": true
                         },
                         {
+                            "id": "radio-choice-test-id-2",
                             "content": "$6\\times 6$",
                             "isNoneOfTheAbove": false
                         },
                         {
+                            "id": "radio-choice-test-id-3",
                             "content": "$6+6+6+6+6+6+6$",
                             "correct": true,
                             "isNoneOfTheAbove": false
@@ -73,7 +77,7 @@
                 "static": false,
                 "type": "radio",
                 "version": {
-                    "major": 1,
+                    "major": 2,
                     "minor": 0
                 }
             }

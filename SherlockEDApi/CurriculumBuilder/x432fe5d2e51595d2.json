@@ -8,7 +8,7 @@
     },
     "hints": [
         {
-            "content": "There are $\\blueE2$ rows with $\\purpleD3$ marshmallows in each row.  \n\n![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/107a2e4bc85de0eabe877290bd94b5ff00afbb1b)",
+            "content": "There are $\\blueE2$ rows with $\\purpleD3$ marshmallows in each row.  \n\n![Array of marshmallows in 2 rows with 3 in each row](web+graphie://cdn.kastatic.org/ka-perseus-graphie/107a2e4bc85de0eabe877290bd94b5ff00afbb1b)",
             "images": {
                 "web+graphie://cdn.kastatic.org/ka-perseus-graphie/107a2e4bc85de0eabe877290bd94b5ff00afbb1b": {
                     "height": 98,
@@ -36,7 +36,7 @@
         "minor": 1
     },
     "question": {
-        "content": "Abe was making s'mores. He put his marshmallows on a plate in $2$ rows with $3$ marshmallows in each row.\n\n![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/9645db4e27a7084d9712ad940aa0ef1d564446b9)\n\n **Which expression could we use to find the total number of marshmallows Abe has for making s'mores?**\n\n[[☃ radio 1]]",
+        "content": "Abe was making s'mores. He put his marshmallows on a plate in $2$ rows with $3$ marshmallows in each row.\n\n![Array of marshmallows in 2 rows with 3 in each row](web+graphie://cdn.kastatic.org/ka-perseus-graphie/9645db4e27a7084d9712ad940aa0ef1d564446b9)\n\n **Which expression could we use to find the total number of marshmallows Abe has for making s'mores?**\n\n[[☃ radio 1]]",
         "images": {
             "web+graphie://cdn.kastatic.org/ka-perseus-graphie/9645db4e27a7084d9712ad940aa0ef1d564446b9": {
                 "height": 68,
@@ -50,14 +50,17 @@
                 "options": {
                     "choices": [
                         {
+                            "id": "radio-choice-test-id-0",
                             "content": "$2 + 2 + 2 + 2$",
                             "correct": false
                         },
                         {
+                            "id": "radio-choice-test-id-1",
                             "content": "$3 + 3$",
                             "correct": true
                         },
                         {
+                            "id": "radio-choice-test-id-2",
                             "content": "$3 + 3 + 3$",
                             "correct": false
                         }
@@ -72,7 +75,7 @@
                 "static": false,
                 "type": "radio",
                 "version": {
-                    "major": 1,
+                    "major": 2,
                     "minor": 0
                 }
             }

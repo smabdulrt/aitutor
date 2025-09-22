@@ -50,14 +50,17 @@
                 "options": {
                     "choices": [
                         {
+                            "id": "radio-choice-test-id-0",
                             "content": "![5 rows of squares. 4 squares in each row.](web+graphie://cdn.kastatic.org/ka-perseus-graphie/dfe7176e1a3a419a561eb70345cede2693a9b67d)",
                             "correct": true
                         },
                         {
+                            "id": "radio-choice-test-id-1",
                             "content": "![5 rows of squares. 3 squares in each row.](web+graphie://cdn.kastatic.org/ka-perseus-graphie/73f6b70ff5954a884fecd2d37757d93d5981d5d8)",
                             "correct": false
                         },
                         {
+                            "id": "radio-choice-test-id-2",
                             "content": "![3 rows of squares. 5 squares in each row.](web+graphie://cdn.kastatic.org/ka-perseus-graphie/28b93f2688d0b17731dc8280be3f50c6e4afe5f2)",
                             "correct": false
                         }

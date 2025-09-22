@@ -46,18 +46,22 @@
                 "options": {
                     "choices": [
                         {
+                            "id": "radio-choice-test-id-0",
                             "content": "$3+3+3+3+3$",
                             "correct": true
                         },
                         {
+                            "id": "radio-choice-test-id-1",
                             "content": "$5\\times3$",
                             "correct": true
                         },
                         {
+                            "id": "radio-choice-test-id-2",
                             "content": "$5+3$",
                             "isNoneOfTheAbove": false
                         },
                         {
+                            "id": "radio-choice-test-id-3",
                             "content": "$5\\times5\\times5$",
                             "isNoneOfTheAbove": false
                         }
@@ -72,7 +76,7 @@
                 "static": false,
                 "type": "radio",
                 "version": {
-                    "major": 1,
+                    "major": 2,
                     "minor": 0
                 }
             }
