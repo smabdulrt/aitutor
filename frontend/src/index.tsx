@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import "./package/perseus/testing/perseus-init";
+import "./perseus-init";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

@@ -115,5 +115,5 @@ export const DependenciesV2: PerseusDependenciesV2 = {
 };
 
 // Initialize Perseus
-registerAllWidgetsForTesting();
 Dependencies.setDependencies(TestDependencies);
+registerAllWidgetsForTesting();

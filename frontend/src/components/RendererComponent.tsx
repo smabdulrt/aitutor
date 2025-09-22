@@ -1,22 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
-import { ServerItemRenderer } from "@khanacademy/perseus";
-import type { PerseusItem } from "@khanacademy/perseus-core";
-import {ServerItemRenderer} from "../package/perseus/src/server-item-renderer";
-import type { PerseusItem } from "@khanacademy/perseus-core";
-// import {type PerseusDependenciesV2  } from "@khanacademy/perseus";
-import { storybookDependenciesV2 } from "../package/perseus/testing/test-dependencies";
-import { PerseusI18nProvider } from "../contexts/perseusI18nContext";
+import { ServerItemRenderer, PerseusI18nContextProvider } from "@khanacademy/perseus";
+import { type PerseusItem } from "@khanacademy/perseus-core";
+import {  } from "../contexts/perseusI18nContext";
 import { ExamContext } from "../contexts/ExamContext";
-// import { scorePerseusItem, keScoreFromPerseusScore, } from "@khanacademy/perseus-score";
-// import { testDependenciesV2 } from "../perseus-init";
-import { storybookDependenciesV2 } from "../package/perseus/testing/test-dependencies";
+import { DependenciesV2 } from "../perseus-init";
+import { string } from "./perseus-string";
 
 const RendererComponent = () => {
     const [perseusItems, setPerseusItems] = useState<PerseusItem[]>([]);
     const [item, setItem] = useState(0);
     const [loading, setLoading] = useState(true);
     const { dispatch } = React.useContext(ExamContext);
-    // const rendererRef = useRef<ServerItemRenderer>(null);
 
     useEffect(() => {
         fetch("http://localhost:8001/api/questions")
@@ -35,13 +29,8 @@ const RendererComponent = () => {
     const perseusItem = perseusItems[item] || {};
 
     return (
-        <PerseusI18nProvider
-            strings={{
-                chooseNumAnswers: ({numCorrect}) => 
-                    `Select ${numCorrect} correct answer${numCorrect !== "1" ? "s" : ""}`,
-                chooseAllAnswers: "Select all correct answers",
-                chooseOneAnswer: "Select one answer",
-            }}
+        <PerseusI18nContextProvider
+            strings={string}
         >
 
             <div style={{ padding: "20px" }}>
@@ -51,16 +40,19 @@ const RendererComponent = () => {
                         console.log(`Item: ${index}`)
                         setItem(index)}
                     }
-                    className="absolute top-19 right-8 bg-black rounded 
-                        text-white p-2">Next</button>
-                        
-                 {perseusItems.length > 0 ? (
+                    className="absolute top-18 bg-black rounded text-white p-2 right-8">
+                        Next
+                </button>
+                {!loading && perseusItems.length >= 1 &&
                     <ServerItemRenderer
-                        // ref={rendererRef}
                         problemNum={0}
                         item={perseusItem}
-                        dependencies={storybookDependenciesV2}
-                        apiOptions={{}}
+                        dependencies={DependenciesV2}
+                        apiOptions={(() => {
+                            const options = {};
+                            console.log("[DEBUG] RendererComponent apiOptions:", options);
+                            return options;
+                        })()}
                         linterContext={{
                             contentType: "",
                             highlightLint: true,
@@ -81,9 +73,7 @@ const RendererComponent = () => {
                     Submit
                 </button> */}
             </div>
-
-        </PerseusI18nProvider>
-        
+        </PerseusI18nContextProvider>
     );
 };
 
