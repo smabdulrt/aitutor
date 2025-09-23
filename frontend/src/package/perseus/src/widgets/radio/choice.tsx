@@ -86,7 +86,7 @@ const Choice = function (props: ChoicePropsWithForwardRef): React.ReactElement {
     // maintaining a consistent API for the parent.
     function sendChange(newValues: {checked?: boolean}) {
         const updatedChecked = newValues.checked ?? checked;
-        console.log("[DEBUG] Choice sendChange called:", { pos, checked, updatedChecked, newValues });
+        
         onChange({checked: updatedChecked});
     }
 

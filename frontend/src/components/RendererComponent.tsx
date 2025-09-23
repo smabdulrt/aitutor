@@ -6,6 +6,8 @@ import { PerseusI18nProvider } from "../contexts/perseusI18nContext";
 import { scorePerseusItem } from "@khanacademy/perseus-score";
 import { keScoreFromPerseusScore } from "../package/perseus/src/util/scoring";
 import { RenderStateRoot } from "@khanacademy/wonder-blocks-core";
+import { PerseusI18nContextProvider } from "../package/perseus/src/components/i18n-context";
+import { mockStrings } from "../package/perseus/src/strings";
 
 const RendererComponent = () => {
     const [perseusItems, setPerseusItems] = useState<PerseusItem[]>([]);
@@ -15,7 +17,7 @@ const RendererComponent = () => {
     const rendererRef = useRef<ServerItemRenderer>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8001/api/questions")
+        fetch("http://localhost:8001/api/questions/16")
             .then((response) => response.json())
             .then((data) => {
                 console.log("API response:", data);
@@ -65,15 +67,6 @@ const RendererComponent = () => {
     const perseusItem = perseusItems[item] || {};
 
     return (
-        <PerseusI18nProvider
-            strings={{
-                chooseNumAnswers: ({numCorrect}) => 
-                    `Select ${numCorrect} correct answer${numCorrect !== "1" ? "s" : ""}`,
-                chooseAllAnswers: "Select all correct answers",
-                chooseOneAnswer: "Select one answer",
-            }}
-        >
-
             <div className="framework-perseus">
                 <div style={{ padding: "20px" }}>
                     <button
@@ -85,24 +78,26 @@ const RendererComponent = () => {
                         <p>You've successfully completed your test!</p>
                     ): (
                         perseusItems.length > 0 ? (
-                        <RenderStateRoot>
-                            <ServerItemRenderer
-                                ref={rendererRef}
-                                problemNum={0}
-                                item={perseusItem}
-                                dependencies={storybookDependenciesV2}
-                                apiOptions={{}}
-                                linterContext={{
-                                    contentType: "",
-                                    highlightLint: true,
-                                    paths: [],
-                                    stack: [],
-                                }}
-                                showSolutions="none"
-                                hintsVisible={0}
-                                reviewMode={false}
-                                />
-                        </RenderStateRoot>
+                        <PerseusI18nContextProvider locale="en" strings={mockStrings}>
+                            <RenderStateRoot>
+                                <ServerItemRenderer
+                                    ref={rendererRef}
+                                    problemNum={0}
+                                    item={perseusItem}
+                                    dependencies={storybookDependenciesV2}
+                                    apiOptions={{}}
+                                    linterContext={{
+                                        contentType: "",
+                                        highlightLint: true,
+                                        paths: [],
+                                        stack: [],
+                                    }}
+                                    showSolutions="none"
+                                    hintsVisible={0}
+                                    reviewMode={false}
+                                    />
+                            </RenderStateRoot>
+                        </PerseusI18nContextProvider>
                         ) : (
                             <p>Loading...</p>
                         )
@@ -114,9 +109,6 @@ const RendererComponent = () => {
                     </button>
                 </div>
             </div>
-
-        </PerseusI18nProvider>
-        
     );
 };
 

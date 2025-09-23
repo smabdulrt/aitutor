@@ -27,12 +27,13 @@ def load_json_objects_from_dir(directory: str, pattern: str = "*.json") -> list:
             print(f"⚠️ Failed to load {file_path}: {e}")
     return all_objects
 
-def load_questions(sample_size: int = 20):
+def load_questions(sample_size: int = 14):
     all_questions = load_json_objects_from_dir(path)
     return random.sample(all_questions, sample_size)
 
 if __name__ == "__main__":
+    # print(f"Loading questions from" )
     questions = load_questions()
     print(f"Loaded {len(questions)} questions.")
-    for q in questions:
-        print(json.dumps(q, indent=2))  # Pretty-print each question
+    # for q in questions:
+    #     print(json.dumps(q, indent=2))  # Pretty-print each question

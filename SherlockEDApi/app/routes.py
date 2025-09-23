@@ -12,7 +12,7 @@ class Question(BaseModel):
     answerArea: dict
     hints: List
 
-@router.get("/questions")
-def get_questions(sample_size: int = 5):
+@router.get("/questions/{sample_size}", response_model=List[Question])
+def get_questions(sample_size: int = 14):
     data = load_questions(sample_size=sample_size)
     return data

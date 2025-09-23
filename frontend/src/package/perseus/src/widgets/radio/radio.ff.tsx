@@ -54,12 +54,12 @@ class Radio extends RadioOld {
     constructor(props: Props) {
         super(props);
         this.ffIsOn = props.apiOptions.flags?.["new-radio-widget"] ?? false;
-        console.log("[DEBUG] Radio constructor - Feature flag 'new-radio-widget':", this.ffIsOn);
+
 
         this.state = {
             choiceStates: initChoiceStates(props.choices),
         };
-        console.log("[DEBUG] Radio constructor - initial choiceStates:", this.state.choiceStates);
+        
     }
 
     // HACK: this really should be componentDidUpdate,
@@ -95,7 +95,7 @@ class Radio extends RadioOld {
 
     _handleChange(arg: {choiceStates?: ChoiceState[]}) {
         const newChoiceStates = arg.choiceStates;
-        console.log("[DEBUG] Radio _handleChange called with:", arg);
+        
         if (newChoiceStates) {
             /**
              * Inside the Radio component(s) we use ChoiceState
@@ -120,7 +120,7 @@ class Radio extends RadioOld {
                     };
                 }),
             }, () => {
-                console.log("[DEBUG] Radio _handleChange - state updated, new choiceStates:", this.state.choiceStates);
+                
                 // Restructure the data in a format that
                 // getUserInputFromSerializedState will understand
                 const props = this._mergePropsAndState();
