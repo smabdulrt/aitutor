@@ -11,9 +11,7 @@ path = pathlib.Path(__file__).parent.parent.resolve() / "CurriculumBuilder"
 def load_json_objects_from_dir(directory: str, pattern: str = "*.json") -> list:
     """Load all JSON objects from files in a directory matching a pattern."""
     all_objects = []
-    # Build file pattern
     file_pattern = os.path.join(directory, pattern)
-    # Iterate through matching files
     for file_path in glob.glob(file_pattern):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -27,13 +25,12 @@ def load_json_objects_from_dir(directory: str, pattern: str = "*.json") -> list:
             print(f"⚠️ Failed to load {file_path}: {e}")
     return all_objects
 
-def load_questions(sample_size: int = 14):
+def load_questions(sample_size: int = 10):
+    """Loads the requested number of questions"""
     all_questions = load_json_objects_from_dir(path)
-    return random.sample(all_questions, sample_size)
-
-if __name__ == "__main__":
-    # print(f"Loading questions from" )
-    questions = load_questions()
-    print(f"Loaded {len(questions)} questions.")
-    # for q in questions:
-    #     print(json.dumps(q, indent=2))  # Pretty-print each question
+    if all_questions and sample_size <= len(all_questions):
+        try:
+            sample = random.sample(all_questions,sample_size)
+            return sample
+        except Exception as e:
+            print(f"Failed to load questions: {e}")

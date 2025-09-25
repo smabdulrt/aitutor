@@ -1,19 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
-import {ServerItemRenderer} from "../package/perseus/src/server-item-renderer";
+import {ServerItemRenderer} from "../../package/perseus/src/server-item-renderer";
 import type { PerseusItem } from "@khanacademy/perseus-core";
-import { storybookDependenciesV2 } from "../package/perseus/testing/test-dependencies";
-import { PerseusI18nProvider } from "../contexts/perseusI18nContext";
+import { storybookDependenciesV2 } from "../../package/perseus/testing/test-dependencies";
 import { scorePerseusItem } from "@khanacademy/perseus-score";
-import { keScoreFromPerseusScore } from "../package/perseus/src/util/scoring";
+import { keScoreFromPerseusScore } from "../../package/perseus/src/util/scoring";
 import { RenderStateRoot } from "@khanacademy/wonder-blocks-core";
-import { PerseusI18nContextProvider } from "../package/perseus/src/components/i18n-context";
-import { mockStrings } from "../package/perseus/src/strings";
+import { PerseusI18nContextProvider } from "../../package/perseus/src/components/i18n-context";
+import { mockStrings } from "../../package/perseus/src/strings";
+import { KEScore } from "@khanacademy/perseus-core";
 
 const RendererComponent = () => {
     const [perseusItems, setPerseusItems] = useState<PerseusItem[]>([]);
     const [item, setItem] = useState(0);
     const [loading, setLoading] = useState(true);
     const [endOfTest, setEndOfTest] = useState(false);
+    const [score, setScore] = useState<KEScore>();
+    const [isAnswered, setIsAnswered] = useState(false);
     const rendererRef = useRef<ServerItemRenderer>(null);
 
     useEffect(() => {
@@ -43,6 +45,7 @@ const RendererComponent = () => {
                 setEndOfTest(true);
             }
 
+            setIsAnswered(false);
             return index;
         });
     };
@@ -58,8 +61,9 @@ const RendererComponent = () => {
             const maxCompatGuess = [rendererRef.current.getUserInputLegacy(), []];
             const keScore = keScoreFromPerseusScore(score, maxCompatGuess, rendererRef.current.getSerializedState().question);
 
-            // Optionally, grade the exam if this is the last question
-            // For now, just log the score
+            // return score for the given question 
+            setIsAnswered(true);
+            setScore(keScore);
             console.log("Score:", keScore);
         }
     };
@@ -78,26 +82,34 @@ const RendererComponent = () => {
                         <p>You've successfully completed your test!</p>
                     ): (
                         perseusItems.length > 0 ? (
-                        <PerseusI18nContextProvider locale="en" strings={mockStrings}>
-                            <RenderStateRoot>
-                                <ServerItemRenderer
-                                    ref={rendererRef}
-                                    problemNum={0}
-                                    item={perseusItem}
-                                    dependencies={storybookDependenciesV2}
-                                    apiOptions={{}}
-                                    linterContext={{
-                                        contentType: "",
-                                        highlightLint: true,
-                                        paths: [],
-                                        stack: [],
-                                    }}
-                                    showSolutions="none"
-                                    hintsVisible={0}
-                                    reviewMode={false}
-                                    />
-                            </RenderStateRoot>
-                        </PerseusI18nContextProvider>
+                        <div>
+                            <PerseusI18nContextProvider locale="en" strings={mockStrings}>
+                                <RenderStateRoot>
+                                    <ServerItemRenderer
+                                        ref={rendererRef}
+                                        problemNum={0}
+                                        item={perseusItem}
+                                        dependencies={storybookDependenciesV2}
+                                        apiOptions={{}}
+                                        linterContext={{
+                                            contentType: "",
+                                            highlightLint: true,
+                                            paths: [],
+                                            stack: [],
+                                        }}
+                                        showSolutions="none"
+                                        hintsVisible={0}
+                                        reviewMode={false}
+                                        />
+                                </RenderStateRoot>
+                            </PerseusI18nContextProvider>
+                            {isAnswered && <div 
+                                className="flex justify-between mt-9">
+                                    <span className={score?.correct ? "text-green-400 italic" : "text-red-400 italic"}>
+                                        {score?.correct ?(<p>Correct Answer!</p>):(<p>Wrong Answer.</p>)}
+                                    </span>
+                            </div>}
+                        </div>
                         ) : (
                             <p>Loading...</p>
                         )
