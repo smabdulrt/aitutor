@@ -1,6 +1,7 @@
 import React, { useEffect, useState, RefObject } from 'react';
 import cn from 'classnames';
 import { RiSidebarFoldLine, RiSidebarUnfoldLine } from "react-icons/ri";
+import { useMediaMixer } from '../../hooks/use-media-mixer';
 import './media-mixer-display.scss';
 
 interface MediaMixerDisplayProps {
@@ -13,6 +14,7 @@ const MediaMixerDisplay: React.FC<MediaMixerDisplayProps> = ({ socket, renderCan
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { toggleCamera, toggleScreen } = useMediaMixer({ socket });
 
   useEffect(() => {
     if (!socket) return;
@@ -34,6 +36,10 @@ const MediaMixerDisplay: React.FC<MediaMixerDisplayProps> = ({ socket, renderCan
       console.log('Connected to MediaMixer WebSocket');
       setIsConnected(true);
       setError(null);
+
+      // Send initial commands to match the behavior of the HTML file
+      toggleCamera(true);
+      toggleScreen(true);
     };
 
     socket.onmessage = (event) => {
@@ -53,7 +59,7 @@ const MediaMixerDisplay: React.FC<MediaMixerDisplayProps> = ({ socket, renderCan
       console.log('Disconnected from MediaMixer WebSocket');
       setIsConnected(false);
     };
-  }, [socket, renderCanvasRef]);
+  }, [socket, renderCanvasRef, toggleCamera, toggleScreen]);
 
   return (
     <div className={cn("media-mixer-display", { "collapsed": isCollapsed })}>

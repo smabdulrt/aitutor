@@ -50,7 +50,7 @@ function ControlTray({
   enableEditingSettings,
 }: ControlTrayProps) {
   const { client, connected, connect, disconnect, volume } = useLiveAPIContext();
-  const { sendCommand } = useMediaMixer({ socket });
+  const { toggleCamera, toggleScreen } = useMediaMixer({ socket });
   const [activeVideoStream, setActiveVideoStream] = useState<MediaStream | null>(null);
   const [inVolume, setInVolume] = useState(0);
   const [audioRecorder] = useState(() => new AudioRecorder());
@@ -125,14 +125,14 @@ function ControlTray({
   const toggleWebcam = async () => {
     const newIsWebcamOn = !isWebcamOn;
     console.log(`Toggling webcam. New state: ${newIsWebcamOn ? 'ON' : 'OFF'}`);
-    sendCommand(newIsWebcamOn ? 'start_camera' : 'stop_camera');
+    toggleCamera(newIsWebcamOn);
     setIsWebcamOn(newIsWebcamOn);
   };
 
   const toggleScreenShare = async () => {
     const newIsScreenShareOn = !isScreenShareOn;
     console.log(`Toggling screen share. New state: ${newIsScreenShareOn ? 'ON' : 'OFF'}`);
-    sendCommand(newIsScreenShareOn ? 'start_screen' : 'stop_screen');
+    toggleScreen(newIsScreenShareOn);
     setIsScreenShareOn(newIsScreenShareOn);
   };
 
