@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Media Mixer Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .slider {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background-color: #ccc;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .slider.active {
+            background-color: #4CAF50;
+        }
+        .slider-button {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .slider.active .slider-button {
+            transform: translateX(30px);
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Media Mixer WebSocket Test</h1>
+
+    <div class="controls">
+        <div class="toggle">
+            <label>Camera:</label>
+            <div class="slider" id="cameraSlider">
+                <div class="slider-button"></div>
+            </div>
+        </div>
+        <div class="toggle">
+            <label>Screen Share:</label>
+            <div class="slider" id="screenSlider">
+                <div class="slider-button"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status" id="status">
+        WebSocket: Disconnected | Camera: Off | Screen Share: Off
+    </div>
+
+    <img id="stream" alt="WebSocket Stream" width="300" height="600" style="border: 1px solid black;"/>
+
+    <script>
+        const img = document.getElementById('stream');
+        const cameraSlider = document.getElementById('cameraSlider');
+        const screenSlider = document.getElementById('screenSlider');
+        const statusDiv = document.getElementById('status');
+        const ws = new WebSocket('ws://localhost:8765');
+
+        let cameraEnabled = true;
+        let screenEnabled = true;
+        let wsConnected = false;
+
+        function updateStatus() {
+            const wsStatus = wsConnected ? 'Connected' : 'Disconnected';
+            const cameraStatus = cameraEnabled ? 'On' : 'Off';
+            const screenStatus = screenEnabled ? 'On' : 'Off';
+            statusDiv.textContent = `WebSocket: ${wsStatus} | Camera: ${cameraStatus} | Screen Share: ${screenStatus}`;
+        }
+
+        function sendCommand(command) {
+            if (wsConnected) {
+                ws.send(JSON.stringify(command));
+                console.log('Sent command:', command);
+            } else {
+                console.log('WebSocket not connected, cannot send command:', command);
+            }
+        }
+
+        cameraSlider.addEventListener('click', () => {
+            cameraEnabled = !cameraEnabled;
+            cameraSlider.classList.toggle('active', cameraEnabled);
+            sendCommand({ type: 'toggle_camera', data: { enabled: cameraEnabled } });
+            updateStatus();
+        });
+
+        screenSlider.addEventListener('click', () => {
+            screenEnabled = !screenEnabled;
+            screenSlider.classList.toggle('active', screenEnabled);
+            sendCommand({ type: 'toggle_screen', data: { enabled: screenEnabled } });
+            updateStatus();
+        });
+
+        // Initialize toggle states on load
+        cameraSlider.classList.toggle('active', cameraEnabled);
+        screenSlider.classList.toggle('active', screenEnabled);
+
+        ws.onopen = () => {
+            console.log('WebSocket connection established');
+            wsConnected = true;
+            updateStatus();
+
+            // Send initial commands to set backend state
+            sendCommand({ type: 'toggle_camera', data: { enabled: cameraEnabled } });
+            sendCommand({ type: 'toggle_screen', data: { enabled: screenEnabled } });
+        };
+
+        ws.onmessage = (event) => {
+            console.log('Received frame');
+            img.src = 'data:image/jpeg;base64,' + event.data;
+        };
+
+        ws.onclose = (event) => {
+            console.log('WebSocket connection closed', event);
+            wsConnected = false;
+            updateStatus();
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            wsConnected = false;
+            updateStatus();
+        };
+
+        updateStatus();
+    </script>
+</body>
+</html>
