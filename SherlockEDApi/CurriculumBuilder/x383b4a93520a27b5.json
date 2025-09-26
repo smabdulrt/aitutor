@@ -27,8 +27,8 @@
     }
   ],
   "itemDataVersion": {
-    "major": 0,
-    "minor": 1
+    "major": 2,
+    "minor": 0
   },
   "question": {
     "content": "**What value does the  $\\tealD6$ represent in the number $485{,}\\tealD671$ ?**\n\n[[☃ input-number 1]]",
@@ -48,7 +48,7 @@
         "static": false,
         "type": "input-number",
         "version": {
-          "major": 0,
+          "major": 2,
           "minor": 0
         }
       }

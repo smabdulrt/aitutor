@@ -27,8 +27,8 @@
     }
   ],
   "itemDataVersion": {
-    "major": 0,
-    "minor": 1
+    "major": 2,
+    "minor": 0
   },
   "question": {
     "content": "**The digit $\\greenD4$ in which number  represents a value of  $400$?**\n\n[[☃ radio 1]]\n",
@@ -41,16 +41,19 @@
           "choices": [
             {
               "content": "$\\greenD{4}00{,}895$",
-              "correct": false
+              "correct": false,
+              "id": "radio-choice-bccf09e3a41a58a2-0"
             },
             {
               "content": "$2{,}\\greenD466$",
-              "correct": true
+              "correct": true,
+              "id": "radio-choice-bccf09e3a41a58a2-1"
             },
             {
               "content": "$3\\greenD41$",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-bccf09e3a41a58a2-2"
             }
           ],
           "deselectEnabled": false,
@@ -63,7 +66,7 @@
         "static": false,
         "type": "radio",
         "version": {
-          "major": 1,
+          "major": 2,
           "minor": 0
         }
       }

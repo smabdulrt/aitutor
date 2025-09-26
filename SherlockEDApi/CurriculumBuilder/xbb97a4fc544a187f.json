@@ -27,8 +27,8 @@
     }
   ],
   "itemDataVersion": {
-    "major": 0,
-    "minor": 1
+    "major": 2,
+    "minor": 0
   },
   "question": {
     "content": "**What is the place value of the $\\blueD1$ in $\\blueD1{,}000{,}000$?**\n\n[[☃ radio 1]]\n\n",
@@ -42,22 +42,26 @@
             {
               "content": "Thousands",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-bb97a4fc544a187f-0"
             },
             {
               "content": "Hundred thousands",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-bb97a4fc544a187f-1"
             },
             {
               "content": "Millions",
               "correct": true,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-bb97a4fc544a187f-2"
             },
             {
               "content": "Ten millions",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-bb97a4fc544a187f-3"
             }
           ],
           "countChoices": false,
@@ -70,7 +74,7 @@
         "static": false,
         "type": "radio",
         "version": {
-          "major": 1,
+          "major": 2,
           "minor": 0
         }
       }

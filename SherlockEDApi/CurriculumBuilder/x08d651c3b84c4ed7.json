@@ -27,8 +27,8 @@
     }
   ],
   "itemDataVersion": {
-    "major": 0,
-    "minor": 1
+    "major": 2,
+    "minor": 0
   },
   "question": {
     "content": "**The digit $\\greenD8$ in which number  represents a value of  $800{,}000$?**\n\n[[☃ radio 1]]\n",
@@ -41,16 +41,19 @@
           "choices": [
             {
               "content": "$2\\greenD{8}6{,}399$",
-              "correct": false
+              "correct": false,
+              "id": "radio-choice-08d651c3b84c4ed7-0"
             },
             {
               "content": "$\\greenD{8}72{,}450$",
-              "correct": true
+              "correct": true,
+              "id": "radio-choice-08d651c3b84c4ed7-1"
             },
             {
               "content": "$1{,}\\greenD806$",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-08d651c3b84c4ed7-2"
             }
           ],
           "countChoices": false,
@@ -63,7 +66,7 @@
         "static": false,
         "type": "radio",
         "version": {
-          "major": 1,
+          "major": 2,
           "minor": 0
         }
       }

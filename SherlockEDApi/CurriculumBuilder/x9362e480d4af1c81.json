@@ -27,8 +27,8 @@
     }
   ],
   "itemDataVersion": {
-    "major": 0,
-    "minor": 1
+    "major": 2,
+    "minor": 0
   },
   "question": {
     "content": "**What is the place value of the $\\blueD2$ in $6{,}0\\blueD25$?**\n\n[[☃ radio 1]]\n\n",
@@ -41,21 +41,25 @@
           "choices": [
             {
               "content": "Ones",
-              "correct": false
+              "correct": false,
+              "id": "radio-choice-9362e480d4af1c81-0"
             },
             {
               "content": "Tens",
-              "correct": true
+              "correct": true,
+              "id": "radio-choice-9362e480d4af1c81-1"
             },
             {
               "content": "Hundreds",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-9362e480d4af1c81-2"
             },
             {
               "content": "Thousands",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-9362e480d4af1c81-3"
             }
           ],
           "deselectEnabled": false,
@@ -68,7 +72,7 @@
         "static": false,
         "type": "radio",
         "version": {
-          "major": 1,
+          "major": 2,
           "minor": 0
         }
       }

@@ -27,8 +27,8 @@
     }
   ],
   "itemDataVersion": {
-    "major": 0,
-    "minor": 1
+    "major": 2,
+    "minor": 0
   },
   "question": {
     "content": "**The digit $\\greenD6$ in which number  represents a value of  $6$?**\n\n[[☃ radio 1]]\n",
@@ -41,16 +41,19 @@
           "choices": [
             {
               "content": "$5{,}71\\greenD{6}$",
-              "correct": true
+              "correct": true,
+              "id": "radio-choice-d5175a506a6f6caa-0"
             },
             {
               "content": "$18\\greenD6{,}200$",
-              "correct": false
+              "correct": false,
+              "id": "radio-choice-d5175a506a6f6caa-1"
             },
             {
               "content": "$\\greenD644$",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-d5175a506a6f6caa-2"
             }
           ],
           "deselectEnabled": false,
@@ -63,7 +66,7 @@
         "static": false,
         "type": "radio",
         "version": {
-          "major": 1,
+          "major": 2,
           "minor": 0
         }
       }

@@ -27,8 +27,8 @@
     }
   ],
   "itemDataVersion": {
-    "major": 0,
-    "minor": 1
+    "major": 2,
+    "minor": 0
   },
   "question": {
     "content": "**The digit $\\greenD5$ in which number  represents a value of  $50$?**\n\n[[☃ radio 1]]\n",
@@ -41,16 +41,19 @@
           "choices": [
             {
               "content": "$11{,}2\\greenD{5}9$",
-              "correct": true
+              "correct": true,
+              "id": "radio-choice-20e992b6b0a4c641-0"
             },
             {
               "content": "$4\\greenD5{,}307$",
-              "correct": false
+              "correct": false,
+              "id": "radio-choice-20e992b6b0a4c641-1"
             },
             {
               "content": "$2{,}\\greenD504$",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-20e992b6b0a4c641-2"
             }
           ],
           "countChoices": false,
@@ -63,7 +66,7 @@
         "static": false,
         "type": "radio",
         "version": {
-          "major": 1,
+          "major": 2,
           "minor": 0
         }
       }

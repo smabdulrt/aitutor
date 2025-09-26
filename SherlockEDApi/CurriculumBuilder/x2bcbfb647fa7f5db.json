@@ -27,8 +27,8 @@
     }
   ],
   "itemDataVersion": {
-    "major": 0,
-    "minor": 1
+    "major": 2,
+    "minor": 0
   },
   "question": {
     "content": "**What is the place value of the $\\blueD9$ in $21\\blueD9{,}775$?**\n\n[[☃ radio 1]]\n\n",
@@ -42,22 +42,26 @@
             {
               "content": "Hundreds",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-2bcbfb647fa7f5db-0"
             },
             {
               "content": "Thousands",
               "correct": true,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-2bcbfb647fa7f5db-1"
             },
             {
               "content": "Ten thousands",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-2bcbfb647fa7f5db-2"
             },
             {
               "content": "Hundred thousands",
               "correct": false,
-              "isNoneOfTheAbove": false
+              "isNoneOfTheAbove": false,
+              "id": "radio-choice-2bcbfb647fa7f5db-3"
             }
           ],
           "deselectEnabled": false,
@@ -69,7 +73,7 @@
         },
         "type": "radio",
         "version": {
-          "major": 1,
+          "major": 2,
           "minor": 0
         }
       }

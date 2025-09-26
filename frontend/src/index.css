@@ -144,3 +144,7 @@ td {
   color: #aaa !important;
   cursor: not-allowed !important;
 }
+
+a[target="lint-help-window"] {
+  display: none !important;
+}
