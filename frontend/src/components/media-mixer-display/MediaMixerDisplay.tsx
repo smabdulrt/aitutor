@@ -14,10 +14,11 @@ const MediaMixerDisplay: React.FC<MediaMixerDisplayProps> = ({ socket, renderCan
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { toggleCamera, toggleScreen } = useMediaMixer({ socket });
 
   useEffect(() => {
     if (!socket) return;
+
+    console.log('MediaMixerDisplay: Setting up video WebSocket connection');
 
     const image = new Image();
     image.onload = () => {
@@ -33,13 +34,9 @@ const MediaMixerDisplay: React.FC<MediaMixerDisplayProps> = ({ socket, renderCan
     };
 
     socket.onopen = () => {
-      console.log('Connected to MediaMixer WebSocket');
+      console.log('MediaMixerDisplay: Connected to video WebSocket');
       setIsConnected(true);
       setError(null);
-
-      // Send initial commands to match the behavior of the HTML file
-      toggleCamera(true);
-      toggleScreen(true);
     };
 
     socket.onmessage = (event) => {
@@ -50,16 +47,20 @@ const MediaMixerDisplay: React.FC<MediaMixerDisplayProps> = ({ socket, renderCan
     };
 
     socket.onerror = (err) => {
-      console.error('WebSocket error:', err);
-      setError('Failed to connect to MediaMixer. Is it running?');
+      console.error('MediaMixerDisplay: WebSocket error:', err);
+      setError('Failed to connect to MediaMixer video stream. Is it running?');
       setIsConnected(false);
     };
 
     socket.onclose = () => {
-      console.log('Disconnected from MediaMixer WebSocket');
+      console.log('MediaMixerDisplay: Disconnected from video WebSocket');
       setIsConnected(false);
     };
-  }, [socket, renderCanvasRef, toggleCamera, toggleScreen]);
+
+    return () => {
+      console.log('MediaMixerDisplay: Cleaning up video WebSocket');
+    };
+  }, [socket, renderCanvasRef]);
 
   return (
     <div className={cn("media-mixer-display", { "collapsed": isCollapsed })}>

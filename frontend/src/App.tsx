@@ -45,15 +45,22 @@ function App() {
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
   const [mixerStream, setMixerStream] = useState<MediaStream | null>(null);
   const mixerVideoRef = useRef<HTMLVideoElement>(null);
-  const [socket, setSocket] = useState<WebSocket | null>(null);
+  const [commandSocket, setCommandSocket] = useState<WebSocket | null>(null);
+  const [videoSocket, setVideoSocket] = useState<WebSocket | null>(null);
   const [isScratchpadOpen, setScratchpadOpen] = useState(false);
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8765');
-    setSocket(ws);
+    // Command WebSocket for sending frames/commands TO MediaMixer
+    const commandWs = new WebSocket('ws://localhost:8765');
+    setCommandSocket(commandWs);
+
+    // Video WebSocket for receiving video FROM MediaMixer
+    const videoWs = new WebSocket('ws://localhost:8766');
+    setVideoSocket(videoWs);
 
     return () => {
-      ws.close();
+      commandWs.close();
+      videoWs.close();
     };
   }, []);
 
@@ -70,8 +77,8 @@ function App() {
           <SidePanel />
           <main>
             <div className="main-app-area">
-              <div className="question-panel">
-                <ScratchpadCapture socket={socket}>
+              <div className="question-panel" style={{border: '2px solid red'}}>
+                <ScratchpadCapture socket={commandSocket}>
                   <QuestionDisplay />
                   {isScratchpadOpen && (
                     <div className="scratchpad-container">
@@ -80,11 +87,11 @@ function App() {
                   )}
                 </ScratchpadCapture>
               </div>
-              <MediaMixerDisplay socket={socket} renderCanvasRef={renderCanvasRef} />
+              <MediaMixerDisplay socket={videoSocket} renderCanvasRef={renderCanvasRef} />
             </div>
 
             <ControlTray
-              socket={socket}
+              socket={commandSocket}
               renderCanvasRef={renderCanvasRef}
               videoRef={videoRef}
               supportsVideo={true}

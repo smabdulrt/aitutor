@@ -1,0 +1,78 @@
+{
+  "answerArea": {
+    "calculator": false,
+    "options": {
+      "content": "",
+      "images": {},
+      "widgets": {}
+    },
+    "periodicTable": false,
+    "type": "multiple"
+  },
+  "hints": [
+    {
+      "content": "$\\blueD81{,}374$ can be represented as follows:\n\n$=\\blueD{80{,}000}+ {1000}+300+70+4$",
+      "images": {},
+      "widgets": {}
+    },
+    {
+      "content": "$=\\blueD{8 \\text{ ten thousands}} +1 \\text{ thousand} + {3\\text{ hundreds}}+7 \\text{ tens}+4\\text{ ones}$",
+      "images": {},
+      "widgets": {}
+    },
+    {
+      "content": "$\\blueD8$ is in the ten thousands place.",
+      "images": {},
+      "widgets": {}
+    }
+  ],
+  "itemDataVersion": {
+    "major": 0,
+    "minor": 1
+  },
+  "question": {
+    "content": "**What is the place value of the $\\blueD8$ in $\\blueD81{,}374$?**\n\n[[☃ radio 1]]\n\n",
+    "images": {},
+    "widgets": {
+      "radio 1": {
+        "alignment": "default",
+        "graded": true,
+        "options": {
+          "choices": [
+            {
+              "content": "Hundreds",
+              "correct": false,
+              "isNoneOfTheAbove": false
+            },
+            {
+              "content": "Thousands",
+              "correct": false,
+              "isNoneOfTheAbove": false
+            },
+            {
+              "content": "Ten thousands",
+              "correct": true,
+              "isNoneOfTheAbove": false
+            },
+            {
+              "content": "Hundred thousands",
+              "correct": false,
+              "isNoneOfTheAbove": false
+            }
+          ],
+          "deselectEnabled": false,
+          "displayCount": null,
+          "hasNoneOfTheAbove": false,
+          "multipleSelect": false,
+          "onePerLine": true,
+          "randomize": false
+        },
+        "type": "radio",
+        "version": {
+          "major": 1,
+          "minor": 0
+        }
+      }
+    }
+  }
+}
