@@ -37,7 +37,7 @@ import $ from "jquery";
             " ",
         ),
         mouseHookProps = $.event.mouseHooks ? $.event.mouseHooks.props : [],
-        mouseEventProps = $.event.props.concat(mouseHookProps),
+        mouseEventProps = ($.event.props || []).concat(mouseHookProps),
         activeDocHandlers = {},
         resetTimerID = 0,
         startX = 0,

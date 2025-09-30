@@ -1,0 +1,15 @@
+# Core FastAPI and server dependencies
+fastapi
+uvicorn[standard]
+
+# Computer vision and media processing
+opencv-python
+numpy
+Pillow
+mss
+
+# HTTP requests
+requests
+
+# Additional dependencies that might be needed
+python-multipart

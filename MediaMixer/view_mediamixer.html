@@ -81,25 +81,29 @@
         const cameraSlider = document.getElementById('cameraSlider');
         const screenSlider = document.getElementById('screenSlider');
         const statusDiv = document.getElementById('status');
-        const ws = new WebSocket('ws://localhost:8765');
+
+        // Dual WebSocket connections
+        const commandWs = new WebSocket('ws://localhost:8765');
+        const videoWs = new WebSocket('ws://localhost:8766');
 
         let cameraEnabled = true;
         let screenEnabled = true;
-        let wsConnected = false;
+        let commandWsConnected = false;
+        let videoWsConnected = false;
 
         function updateStatus() {
-            const wsStatus = wsConnected ? 'Connected' : 'Disconnected';
+            const wsStatus = (commandWsConnected && videoWsConnected) ? 'Connected' : 'Disconnected';
             const cameraStatus = cameraEnabled ? 'On' : 'Off';
             const screenStatus = screenEnabled ? 'On' : 'Off';
             statusDiv.textContent = `WebSocket: ${wsStatus} | Camera: ${cameraStatus} | Screen Share: ${screenStatus}`;
         }
 
         function sendCommand(command) {
-            if (wsConnected) {
-                ws.send(JSON.stringify(command));
+            if (commandWsConnected) {
+                commandWs.send(JSON.stringify(command));
                 console.log('Sent command:', command);
             } else {
-                console.log('WebSocket not connected, cannot send command:', command);
+                console.log('Command WebSocket not connected, cannot send command:', command);
             }
         }
 
@@ -121,9 +125,10 @@
         cameraSlider.classList.toggle('active', cameraEnabled);
         screenSlider.classList.toggle('active', screenEnabled);
 
-        ws.onopen = () => {
-            console.log('WebSocket connection established');
-            wsConnected = true;
+        // Command WebSocket handlers
+        commandWs.onopen = () => {
+            console.log('Command WebSocket connection established');
+            commandWsConnected = true;
             updateStatus();
 
             // Send initial commands to set backend state
@@ -131,20 +136,39 @@
             sendCommand({ type: 'toggle_screen', data: { enabled: screenEnabled } });
         };
 
-        ws.onmessage = (event) => {
+        commandWs.onclose = (event) => {
+            console.log('Command WebSocket connection closed', event);
+            commandWsConnected = false;
+            updateStatus();
+        };
+
+        commandWs.onerror = (error) => {
+            console.error('Command WebSocket error:', error);
+            commandWsConnected = false;
+            updateStatus();
+        };
+
+        // Video WebSocket handlers
+        videoWs.onopen = () => {
+            console.log('Video WebSocket connection established');
+            videoWsConnected = true;
+            updateStatus();
+        };
+
+        videoWs.onmessage = (event) => {
             console.log('Received frame');
             img.src = 'data:image/jpeg;base64,' + event.data;
         };
 
-        ws.onclose = (event) => {
-            console.log('WebSocket connection closed', event);
-            wsConnected = false;
+        videoWs.onclose = (event) => {
+            console.log('Video WebSocket connection closed', event);
+            videoWsConnected = false;
             updateStatus();
         };
 
-        ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
-            wsConnected = false;
+        videoWs.onerror = (error) => {
+            console.error('Video WebSocket error:', error);
+            videoWsConnected = false;
             updateStatus();
         };
 

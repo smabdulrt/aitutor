@@ -18,12 +18,10 @@ import { useRef, useState, useEffect } from "react";
 import "./App.scss";
 import { LiveAPIProvider } from "./contexts/LiveAPIContext";
 import SidePanel from "./components/side-panel/SidePanel";
-import { Altair } from "./components/altair/Altair";
 import MediaMixerDisplay from "./components/media-mixer-display/MediaMixerDisplay";
 import ScratchpadCapture from "./components/scratchpad-capture/ScratchpadCapture";
 import QuestionDisplay from "./components/question-display/QuestionDisplay";
 import ControlTray from "./components/control-tray/ControlTray";
-import cn from "classnames";
 import { LiveClientOptions } from "./types";
 import Scratchpad from "./components/scratchpad/Scratchpad";
 
