@@ -6,8 +6,8 @@ import uuid
 base_dir = Path(__name__).resolve().parents[1]
 
 # more readable format
-source_dir = base_dir / "khanacademyscrapper/questionbankscrapper/data/NCERT Math Class 6 (Bridge)/Addition and subtraction/Place values/exercises/Identify value of a digit/items"
-dest_dir = base_dir / "aitutor/SherlockEDApi/CurriculumBuilder"
+source_dir = base_dir / "/Users/vandanchopra/Downloads/sample_data_perseus"
+dest_dir = base_dir / "/Users/vandanchopra/Vandan_Personal_Folder/CODE_STUFF/Projects/aitutor/SherlockEDApi/CurriculumBuilder"
 
 # Create destination directory if it doesn't exist
 dest_dir.mkdir(parents=True, exist_ok=True)
@@ -93,7 +93,7 @@ def extract_itemdata_from_files():
     error_count = 0
 
     # Process all JSON files in source directory
-    for json_file in source_dir.glob("*.json"):
+    for json_file in source_dir.rglob("*.json"):
         try:
             # Read the original file
             with open(json_file, 'r', encoding='utf-8') as f:
