@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
+from .agent import execute
+import asyncio
 import json
 import pathlib
 from pydantic import BaseModel, Field
@@ -19,3 +21,16 @@ async def get_questions(sample_size: int = 14):
         sample_size=sample_size
     )
     return data
+
+#endpoint to generate new questions using the agent
+@router.post("/questions/generate") 
+def generate_question(request: Request):
+    json_data = request.json()
+    response = asyncio.run(execute(json_data))  
+    response = response.strip().strip("```json").strip("```").strip()
+    print(f"Raw LLM response: {response}")
+    try:
+        question_json = json.loads(response)
+        return question_json
+    except json.JSONDecodeError as e:
+        return {"error": "Failed to parse JSON", "details": str(e), "response": response}
