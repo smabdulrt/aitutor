@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app import routes as app_routes
+from app.routes import routes as app_routes
 import uvicorn
 
 app = FastAPI(
-    title="Exam System API",
+    title="Exam System API", 
     description="API for managing exam sessions, user responses, and scoring",
     version="1.0.0"
 )

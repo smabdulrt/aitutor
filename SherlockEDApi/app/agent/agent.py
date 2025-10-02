@@ -6,22 +6,29 @@ from google.adk.artifacts import InMemoryArtifactService
 from google.adk.sessions import InMemorySessionService
 import uuid
 import asyncio
-from dotenv import load_dotenv
+from dotenv import load_dotenv 
+from .prompt import prompt
 load_dotenv() # Load environment variables from a .env file if present
 
+
 USER_ID="sherlockED"
+
+
+# def process_widgets(widgets: dict):
+#     content = json_data.content
+#     for widget_key, widget in widgets.items():
+#         # --- Radio widget: add unique IDs to choices
+#         if widget.get("type") == "radio":
+#             choices = widget.get("options", {}).get("choices", [])
+        
+
 
 
 questions_generator_agent = Agent(
     name="questions_generator_agent",
     description="Agent that generates new perseus format questions",
     model="gemini-2.0-flash",
-    instruction="""You are a perseus questions generator agent. Use the provided
-    Perseus json data. Generate a new json that follows the exact same format 
-    but a different question. Ensure the new question is unique and not a 
-    duplicate of the provided example. Do not change the structure of the json.
-    Ensure the question answer is valid. Return just the json, no other text. Do
-    not add any markdown formatting. Just return the raw json start from the first '{'.""",
+    instruction=prompt,
     output_key="question_json"
 )
 
@@ -46,7 +53,7 @@ SESSION_ID = asyncio.run(create_session())
 
 
 async def execute(data: str) -> str:
-    msg = f"Generate a new perseus question in json format using this example: {data}"
+    msg = f"Generate new question from: {data}"
     async for ev in runner.run_async(
         user_id=USER_ID,
         session_id=SESSION_ID,
