@@ -19,7 +19,7 @@ const RendererComponent = () => {
     const rendererRef = useRef<ServerItemRenderer>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8001/api/questions/1")
+        fetch("http://localhost:8001/api/questions/10")
             .then((response) => response.json())
             .then((data) => {
                 console.log("API response:", data);

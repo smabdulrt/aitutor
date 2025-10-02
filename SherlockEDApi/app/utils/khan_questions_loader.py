@@ -6,7 +6,10 @@ import random
 import glob
 import pathlib
 
-path = pathlib.Path(__file__).parent.parent.resolve() / "CurriculumBuilder" 
+# path = pathlib.Path(__file__).resolve().parents[2] / "CurriculumBuilder"
+
+# load gen ai questions into aitutor
+path = pathlib.Path(__file__).resolve().parents[3] / "GenAIQuestions" 
 
 def load_json_objects_from_dir(directory: str, pattern: str = "*.json") -> list:
     """Load all JSON objects from files in a directory matching a pattern."""

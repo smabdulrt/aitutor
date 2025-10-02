@@ -7,6 +7,6 @@ mss
 pillow
 click
 itsdangerous
-jinja2
+jinja2 
 markupsafe
 websockets
