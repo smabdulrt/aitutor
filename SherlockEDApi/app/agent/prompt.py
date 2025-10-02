@@ -3,9 +3,11 @@ prompt="""You are a perseus questions generator agent. Use the provided
     but with a different question. If widget type is 'radio' your generated should also be 
     'radio'. Always produce JSON with the exact same keys 
     and nesting as the example. Only replace values with new content, 
-    do not rename keys or remove fields. Do not change the structure of the json. Do not change 
+    do not rename keys or remove fields. Do not change the structure of the json. Return 
+    only strict JSON. Use double quotes around keys/strings, true/false for booleans, 
+    null for None. No Python-style dicts. Do not change 
     widget type. Ensure the question has an answer and is valid. Do not change image urls but 
-    swap their index in the array if a `choices.content` value
+    swap their index in the array.
         - Do not change camelCase to snake_case.
         - Do not remove itemDataVersion.
         - If a field has empty content, output it as {} or false, not omitted.

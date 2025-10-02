@@ -28,12 +28,19 @@ def load_json_objects_from_dir(directory: str, pattern: str = "*.json") -> list:
             print(f"⚠️ Failed to load {file_path}: {e}")
     return all_objects
 
-def load_questions(sample_size: int = 10):
+def load_questions(sample_size):
     """Loads the requested number of questions"""
     all_questions = load_json_objects_from_dir(path)
-    if all_questions and sample_size <= len(all_questions):
-        try:
-            sample = random.sample(all_questions,sample_size)
-            return sample
-        except Exception as e:
-            print(f"Failed to load questions: {e}")
+    if all_questions:
+        if sample_size <= len(all_questions):
+            try:
+                sample = random.sample(all_questions,sample_size)
+                return sample
+            except Exception as e:
+                print(f"Failed to load questions: {e}")
+        if sample_size > len(all_questions):
+            try:
+                sample = random.sample(all_questions, len(all_questions))
+                return sample
+            except Exception as e:
+                print(f"Failed to load questions: {e}")

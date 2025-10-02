@@ -65,6 +65,6 @@ async def execute(data: str) -> str:
         if ev.is_final_response() and ev.content and ev.content.parts:
             return ev.content.parts[0].text
         
-if __name__ == "__main__":
-    response = asyncio.run(execute("Generate a new perseus question in json format"))
-    print(f"LLM response: {response}")
+# if __name__ == "__main__":
+#     response = asyncio.run(execute("Generate a new perseus question in json format"))
+#     print(f"LLM response: {response}")

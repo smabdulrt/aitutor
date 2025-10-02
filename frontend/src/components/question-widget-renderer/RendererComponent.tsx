@@ -41,10 +41,6 @@ const RendererComponent = () => {
                 return prev; // stay at last valid index
             }
 
-            if (index === perseusItems.length - 1) {
-                setEndOfTest(true);
-            }
-
             setIsAnswered(false);
             return index;
         });

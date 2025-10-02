@@ -10,12 +10,11 @@ from app.utils.khan_questions_loader import load_questions
 
 router = APIRouter()
 
-base_dir=pathlib.Path(__name__).resolve().parents[3]
-print(base_dir)
+base_dir=pathlib.Path(__file__).resolve().parents[3]
 
 # endpoint to get questions 
 @router.get("/questions/{sample_size}")
-async def get_questions(sample_size: int = 14):
+async def get_questions(sample_size: int):
     """Endpoint for retrieving questions"""
     data = load_questions(
         sample_size=sample_size
@@ -41,6 +40,6 @@ async def generate_question(request: Request):
         with open(f"{base_dir}/GenAIQuestions/{file_name}.json", "w") as f:
             json.dump(question_json, f, indent=4)
             print("exicuted")
-        return {"message":"Question generated successfully"},201
+        return {"message":"Question generated successfully"}
     except json.JSONDecodeError as e:
         return {"error": "Failed to parse JSON", "details": str(e), "response": response}
