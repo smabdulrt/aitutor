@@ -1,0 +1,17 @@
+# DashSystem V2 Requirements
+
+# Core dependencies
+pymongo>=4.5.0  # MongoDB driver for Python
+
+# Optional but recommended
+python-dotenv>=1.0.0  # For environment variable management
+
+# For LLM tagging (if using OpenAI)
+openai>=1.0.0
+
+# For testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Existing project dependencies
+# (keep these from the original requirements)
