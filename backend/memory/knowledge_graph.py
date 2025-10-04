@@ -112,19 +112,22 @@ class KnowledgeGraph:
 
     def get_prerequisites(self, skill_id: str) -> List[str]:
         """
-        Get all prerequisites for a skill
+        Get all prerequisites for a skill (including transitive prerequisites)
 
         Args:
             skill_id: Skill to get prerequisites for
 
         Returns:
-            List of prerequisite skill IDs
+            List of prerequisite skill IDs (recursively including all ancestors)
         """
         if skill_id not in self.graph:
             return []
 
-        # Get all predecessors (skills that point to this skill)
-        return list(self.graph.predecessors(skill_id))
+        # Use NetworkX to get all ancestors (transitive prerequisites)
+        # This finds all nodes that have a path to skill_id
+        all_prerequisites = list(nx.ancestors(self.graph, skill_id))
+
+        return all_prerequisites
 
     def find_prerequisite_gaps(
         self,

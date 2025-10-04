@@ -77,10 +77,10 @@ class TestVectorStore:
             {"student_id": "s2", "outcome": "struggled"}
         )
 
-        # Filter by student and outcome
+        # Filter by student and outcome (using $and operator for ChromaDB)
         results = vector_store.similarity_search(
             query="algebra",
-            filter_metadata={"student_id": "s1", "outcome": "struggled"},
+            filter_metadata={"$and": [{"student_id": "s1"}, {"outcome": "struggled"}]},
             k=5
         )
 
@@ -102,8 +102,8 @@ class TestVectorStore:
 
     def test_get_stats(self, vector_store):
         """Test getting collection statistics"""
-        vector_store.store("Test 1", {})
-        vector_store.store("Test 2", {})
+        vector_store.store("Test 1", {"type": "test"})
+        vector_store.store("Test 2", {"type": "test"})
 
         stats = vector_store.get_stats()
 
