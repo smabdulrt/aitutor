@@ -2,6 +2,7 @@
 
 from .ta_core import TeachingAssistant, SessionState, ActivityMonitor
 from .emotional_intelligence import EmotionalIntelligence, EmotionState, EmotionDetectionResult
+from .context_provider import ContextProvider, ContextResult, ContextType
 
 __all__ = [
     'TeachingAssistant',
@@ -9,5 +10,8 @@ __all__ = [
     'ActivityMonitor',
     'EmotionalIntelligence',
     'EmotionState',
-    'EmotionDetectionResult'
+    'EmotionDetectionResult',
+    'ContextProvider',
+    'ContextResult',
+    'ContextType'
 ]
