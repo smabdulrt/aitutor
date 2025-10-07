@@ -36,3 +36,6 @@ ehthumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Project Data
+sample_questions_data/

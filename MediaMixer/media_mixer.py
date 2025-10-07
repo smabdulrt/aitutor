@@ -111,13 +111,11 @@ class MediaMixer:
     def handle_command(self, data):
         """Handle WebSocket commands"""
         if data.get('type') == 'scratchpad_frame':
-            print(f"MediaMixer: Received scratchpad frame, data length: {len(data.get('data', ''))}")
             try:
                 base64_data = data['data'].split(',')[1]
                 img_bytes = base64.b64decode(base64_data)
                 img = Image.open(io.BytesIO(img_bytes))
                 self.scratchpad_frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-                print(f"MediaMixer: Scratchpad frame processed, size: {self.scratchpad_frame.shape}")
             except Exception as e:
                 print(f"MediaMixer: Error processing scratchpad frame: {e}")
 
@@ -211,12 +209,13 @@ async def main():
     try:
         # Start command server (port 8765) - receives commands/frames from frontend
         command_server = await websockets.serve(handle_command_client, "localhost", 8765)
-        print("Command WebSocket server started on ws://localhost:8765")
+        print("✅ Command WebSocket server started on ws://localhost:8765")
 
         # Start video server (port 8766) - sends video frames to frontend
         video_server = await websockets.serve(handle_video_client, "localhost", 8766)
-        print("Video WebSocket server started on ws://localhost:8766")
+        print("✅ Video WebSocket server started on ws://localhost:8766")
 
+        print("✅ MediaMixer ready - Both servers running successfully")
         print("Press Ctrl+C to stop")
 
         await shutdown_event.wait()
@@ -224,14 +223,17 @@ async def main():
     except Exception as e:
         print(f"Server error: {e}")
     finally:
+        print("Stopping MediaMixer...")
         if command_server:
             command_server.close()
             await command_server.wait_closed()
+            print("✅ Command server closed")
         if video_server:
             video_server.close()
             await video_server.wait_closed()
+            print("✅ Video server closed")
         mixer.stop()
-        print("Server shutdown complete")
+        print("✅ MediaMixer shutdown complete")
 
 
 if __name__ == '__main__':

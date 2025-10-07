@@ -7,37 +7,15 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 rm -rf "$SCRIPT_DIR/logs"
 mkdir -p "$SCRIPT_DIR/logs"
 
-# Detect Python environment
-if [[ -z "$VIRTUAL_ENV" ]]; then
-    # Not already in a virtual environment
-    if [[ -d "$SCRIPT_DIR/env" ]]; then
-        echo "Activating local env..."
-        # shellcheck source=/dev/null
-        source "$SCRIPT_DIR/env/bin/activate"
-    elif [[ -d "$SCRIPT_DIR/.env" ]]; then
-        echo "Activating local .env..."
-        # shellcheck source=/dev/null
-        source "$SCRIPT_DIR/.env/bin/activate"
-    else
-        echo "❌ No virtual environment found."
-        echo "👉 Please create one with:"
-        echo "    python -m venv env"
-        echo "    source env/bin/activate"
-        echo "👉 Next, install the required packages with:"
-        echo "    pip install -r requirements.txt"
-        echo "👉 If you plan to use the frontend, also run:"
-        echo "    cd frontend"
-        echo "    npm install --force"
-        echo "    cd .."
-        echo "👉 Finally, run this script again."
-        exit 1
-    fi
-else
-    echo "Using already active virtual environment: $VIRTUAL_ENV"
+# Use the specific Python from the aitutor venv
+PYTHON_BIN="/Users/vandanchopra/Vandan_Personal_Folder/CODE_STUFF/Projects/venvs/aitutor/bin/python"
+
+if [[ ! -f "$PYTHON_BIN" ]]; then
+    echo "❌ Python not found at: $PYTHON_BIN"
+    echo "👉 Please check your virtual environment setup."
+    exit 1
 fi
 
-# Get the python executable (now guaranteed to be from venv)
-PYTHON_BIN="$(command -v python3 || command -v python)"
 echo "Using Python: $PYTHON_BIN"
 
 # Array to hold the PIDs of background processes
@@ -47,14 +25,33 @@ pids=()
 cleanup() {
     echo "Shutting down tutor..."
     for pid in "${pids[@]}"; do
-        echo "Killing process $pid"
-        kill "$pid"
+        if kill -0 "$pid" 2>/dev/null; then
+            echo "Sending SIGTERM to process $pid"
+            kill -TERM "$pid" 2>/dev/null
+        fi
     done
+
+    # Wait briefly for graceful shutdown
+    sleep 2
+
+    # Force kill any remaining processes
+    for pid in "${pids[@]}"; do
+        if kill -0 "$pid" 2>/dev/null; then
+            echo "Force killing process $pid"
+            kill -9 "$pid" 2>/dev/null
+        fi
+    done
+
+    # Kill any lingering processes on MediaMixer ports
+    lsof -ti:8765 | xargs -r kill -9 2>/dev/null || true
+    lsof -ti:8766 | xargs -r kill -9 2>/dev/null || true
+
     echo "All processes terminated."
 }
 
 # Trap the INT signal (sent by Ctrl+C) to run the cleanup function
 trap cleanup INT
+trap cleanup EXIT
 
 # Start the Python backend in the background
 echo "Starting Python backend... Logs -> logs/mediamixer.log"
@@ -62,8 +59,8 @@ echo "Starting Python backend... Logs -> logs/mediamixer.log"
 pids+=($!)
 
 # Start the FastAPI server in the background
-echo "Starting DASH API server... Logs -> logs/api.log"
-(cd "$SCRIPT_DIR" && "$PYTHON_BIN" DashSystem/dash_api.py) > "$SCRIPT_DIR/logs/api.log" 2>&1 &
+echo "Starting DASH API server... Logs -> logs/dashsystem.log"
+(cd "$SCRIPT_DIR" && "$PYTHON_BIN" DashSystem/dash_api.py) > "$SCRIPT_DIR/logs/dashsystem.log" 2>&1 &
 pids+=($!)
 
 # Start the SherlockEDExam FastAPI server in the background
