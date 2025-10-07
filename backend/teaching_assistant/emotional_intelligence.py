@@ -1,8 +1,8 @@
 """
 Emotional Intelligence Layer
 
-Detects student emotions and consults Adam for response strategies.
-The TA detects emotions but defers to Adam for how to respond.
+Detects student emotions and informs Adam to enhance his teaching awareness.
+The TA provides emotional context to Adam, who makes all teaching decisions.
 """
 
 import logging
@@ -45,16 +45,15 @@ class EmotionalIntelligence:
 
     Responsibilities:
     1. Detect student emotions from camera frames and transcript
-    2. Consult Adam (Gemini) for response strategy
-    3. Execute Adam's recommended strategy
+    2. Inform Adam with emotional context
+    3. Provide suggestions (not commands) to enhance Adam's awareness
 
-    Note: The TA detects emotions but does NOT decide how to respond.
-    All response strategies come from Adam.
+    Note: The TA is Adam's intelligent assistant, not his supervisor.
+    Adam makes all teaching decisions. TA provides situational awareness.
     """
 
     def __init__(
         self,
-        adam_callback: Optional[Callable] = None,
         prompt_injection_callback: Optional[Callable] = None,
         history_limit: int = 100
     ):
@@ -62,11 +61,9 @@ class EmotionalIntelligence:
         Initialize Emotional Intelligence
 
         Args:
-            adam_callback: Async function to consult Adam for strategies
-            prompt_injection_callback: Async function to inject prompts to Gemini
+            prompt_injection_callback: Async function to inject context to Adam/Gemini
             history_limit: Maximum emotion history to retain
         """
-        self.adam_callback = adam_callback
         self.prompt_injection_callback = prompt_injection_callback
         self.history_limit = history_limit
 
@@ -194,87 +191,103 @@ class EmotionalIntelligence:
         if len(self.emotion_history) > self.history_limit:
             self.emotion_history = self.emotion_history[-self.history_limit:]
 
-    async def ask_adam_strategy(
+    async def inform_adam_of_emotion(
         self,
-        emotion_state: EmotionState,
-        context: Optional[str] = None
-    ) -> Optional[str]:
+        emotion_result: EmotionDetectionResult,
+        additional_context: Optional[str] = None
+    ) -> bool:
         """
-        Ask Adam (Gemini) for strategy to handle detected emotion
+        Inform Adam about detected student emotion to enhance his teaching awareness
 
         Args:
-            emotion_state: Detected emotion
-            context: Optional context (transcript, situation)
+            emotion_result: Detected emotion result
+            additional_context: Optional additional context
 
         Returns:
-            Adam's recommended strategy, or None if no callback set
-        """
-        if not self.adam_callback:
-            logger.warning("No Adam callback set for strategy consultation")
-            return None
-
-        # Construct query to Adam
-        emotion_name = emotion_state.value
-        query_parts = [
-            f"The student appears to be {emotion_name}."
-        ]
-
-        if context:
-            query_parts.append(f"Context: \"{context}\"")
-
-        query_parts.append(
-            "As an expert teacher, how would you handle this situation? "
-            "Please provide a brief strategy for responding to this emotional state."
-        )
-
-        query = " ".join(query_parts)
-
-        # Consult Adam
-        logger.info(f"Consulting Adam for {emotion_name} strategy")
-        strategy = await self.adam_callback(query)
-
-        logger.info(f"Adam's strategy: {strategy[:50]}...")
-        return strategy
-
-    async def execute_strategy(self, adam_response: str):
-        """
-        Execute Adam's recommended strategy
-
-        Args:
-            adam_response: Strategy from Adam
+            True if context was injected, False otherwise
         """
         if not self.prompt_injection_callback:
             logger.warning("No prompt injection callback set")
-            return
+            return False
 
-        # Format Adam's strategy as a system prompt
-        # This instructs Adam to incorporate the strategy into his next response
-        strategy_prompt = (
-            f"[Teaching Strategy] {adam_response}\n\n"
-            f"Please incorporate this strategy naturally into your next interaction "
-            f"with the student."
-        )
+        # Build context message for Adam
+        emotion_name = emotion_result.emotion.value
+        confidence_pct = int(emotion_result.confidence * 100)
 
-        # Inject the strategy
-        await self.prompt_injection_callback(strategy_prompt)
-        logger.info("Strategy executed (prompt injected)")
+        context_parts = [
+            f"[Student Emotional State] {emotion_name.title()} (confidence: {confidence_pct}%)"
+        ]
+
+        if emotion_result.context:
+            context_parts.append(f"Student said: \"{emotion_result.context}\"")
+
+        # Add teaching suggestions based on emotion
+        suggestions = self._get_teaching_suggestions(emotion_result.emotion)
+        if suggestions:
+            context_parts.append(f"Teaching considerations: {suggestions}")
+
+        if additional_context:
+            context_parts.append(f"Additional context: {additional_context}")
+
+        # Format as informational context (not a command)
+        context_message = "\n".join(context_parts)
+
+        # Inject context to Adam
+        await self.prompt_injection_callback(context_message)
+        logger.info(f"Informed Adam of {emotion_name} emotion")
+        return True
+
+    def _get_teaching_suggestions(self, emotion: EmotionState) -> str:
+        """
+        Get teaching suggestions based on emotion (informational, not commands)
+
+        Args:
+            emotion: Detected emotion
+
+        Returns:
+            Teaching suggestions as a string
+        """
+        suggestions = {
+            EmotionState.FRUSTRATED: (
+                "Student may benefit from breaking problem into smaller steps "
+                "or encouragement to reduce frustration"
+            ),
+            EmotionState.CONFUSED: (
+                "Student may need clarification or a different explanation approach"
+            ),
+            EmotionState.CONFIDENT: (
+                "Student is confident - may be ready for more challenging material"
+            ),
+            EmotionState.DISENGAGED: (
+                "Student appears disengaged - consider re-engaging with questions "
+                "or changing topic approach"
+            ),
+            EmotionState.UNCERTAIN: (
+                "Student is uncertain - gentle guidance or confirmation may help"
+            ),
+            EmotionState.NEUTRAL: ""
+        }
+
+        return suggestions.get(emotion, "")
 
     async def process_emotion(
         self,
         camera_frame=None,
-        transcript: Optional[str] = None
-    ) -> Optional[EmotionDetectionResult]:
+        transcript: Optional[str] = None,
+        auto_inform: bool = True
+    ) -> EmotionDetectionResult:
         """
-        Convenience method: detect emotion, consult Adam, execute strategy
+        Convenience method: detect emotion and optionally inform Adam
 
         This is the main workflow for emotional intelligence:
-        1. Detect emotion
-        2. If significant emotion (not neutral), ask Adam
-        3. Execute Adam's strategy
+        1. Detect emotion from input
+        2. If significant emotion detected and auto_inform=True, inform Adam
+        3. Adam uses this context to adapt his teaching (he makes the decisions)
 
         Args:
             camera_frame: Optional camera frame
             transcript: Optional transcript
+            auto_inform: Whether to automatically inform Adam of non-neutral emotions
 
         Returns:
             Emotion detection result
@@ -285,15 +298,8 @@ class EmotionalIntelligence:
             transcript=transcript
         )
 
-        # Step 2: If significant emotion detected, consult Adam
-        if emotion_result.emotion != EmotionState.NEUTRAL:
-            strategy = await self.ask_adam_strategy(
-                emotion_result.emotion,
-                context=emotion_result.context
-            )
-
-            # Step 3: Execute strategy
-            if strategy:
-                await self.execute_strategy(strategy)
+        # Step 2: If significant emotion detected and auto-inform enabled, inform Adam
+        if auto_inform and emotion_result.emotion != EmotionState.NEUTRAL:
+            await self.inform_adam_of_emotion(emotion_result)
 
         return emotion_result
