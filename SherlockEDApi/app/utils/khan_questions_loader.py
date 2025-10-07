@@ -6,10 +6,10 @@ import random
 import glob
 import pathlib
 
-# path = pathlib.Path(__file__).resolve().parents[2] / "CurriculumBuilder"
+path = pathlib.Path(__file__).resolve().parents[2] / "CurriculumBuilder"
 
 # load gen ai questions into aitutor
-path = pathlib.Path(__file__).resolve().parents[3] / "GenAIQuestions" 
+# path = pathlib.Path(__file__).resolve().parents[3] / "GenAIQuestions" / "new" 
 
 def load_json_objects_from_dir(directory: str, pattern: str = "*.json") -> list:
     """Load all JSON objects from files in a directory matching a pattern."""
@@ -40,7 +40,6 @@ def load_questions(sample_size):
                 print(f"Failed to load questions: {e}")
         if sample_size > len(all_questions):
             try:
-                sample = random.sample(all_questions, len(all_questions))
-                return sample
+                return all_questions
             except Exception as e:
                 print(f"Failed to load questions: {e}")

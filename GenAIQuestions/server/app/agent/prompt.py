@@ -54,5 +54,4 @@ Generated New question json:
                             "content": "![5 rows of squares. 4 squares in each row.](web+graphie://cdn.kastatic.org/ka-perseus-graphie/dfe7176e1a3a419a561eb70345cede2693a9b67d)",
                             "correct": true
                         }
-                        ...```
-    """
+                        ...```"""

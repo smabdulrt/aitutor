@@ -68,7 +68,7 @@ pids+=($!)
 
 # Start the SherlockEDExam FastAPI server in the background
 echo "Starting SherlockED Exam API server... Logs -> logs/api.log"
-(cd "$SCRIPT_DIR" && "$PYTHON_BIN" SherlockEDApi/run_backend.py) > "$SCRIPT_DIR/logs/sherlocked_exam.log" 2>&1 &
+(cd "$SCRIPT_DIR/SherlockEDApi" && "$PYTHON_BIN" run_backend.py) > "$SCRIPT_DIR/logs/sherlocked_exam.log" 2>&1 &
 pids+=($!)
 
 # Give the backend servers a moment to start
