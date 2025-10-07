@@ -22,6 +22,13 @@ from googleapiclient.discovery import build
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
 import time
+from dotenv import load_dotenv
+
+# Load environment variables from .env file in project root
+# Get the project root (parent of VideoFinder folder)
+project_root = Path(__file__).parent.parent
+dotenv_path = project_root / '.env'
+load_dotenv(dotenv_path=dotenv_path)
 
 
 class VideoFinder:
@@ -41,7 +48,7 @@ class VideoFinder:
         
         # Initialize Gemini
         genai.configure(api_key=self.gemini_api_key)
-        self.gemini_model = genai.GenerativeModel('gemini-pro')
+        self.gemini_model = genai.GenerativeModel('models/gemini-2.5-pro')
         
         # Initialize YouTube API
         self.youtube = build('youtube', 'v3', developerKey=self.youtube_api_key)
@@ -50,59 +57,105 @@ class VideoFinder:
         print(f"   - Gemini API: Connected")
         print(f"   - YouTube API: Connected")
     
+    def find_nested_key(self, data: Any, target_key: str) -> Any:
+        """
+        Recursively search for a key in nested dictionary/list structures.
+
+        Args:
+            data: The data structure to search
+            target_key: The key to find
+
+        Returns:
+            The value of the first matching key, or None if not found
+        """
+        if isinstance(data, dict):
+            if target_key in data:
+                return data[target_key]
+            for value in data.values():
+                result = self.find_nested_key(value, target_key)
+                if result is not None:
+                    return result
+        elif isinstance(data, list):
+            for item in data:
+                result = self.find_nested_key(item, target_key)
+                if result is not None:
+                    return result
+        return None
+
     def load_questions(self, folder_path: str) -> List[Dict[str, Any]]:
         """
         Load questions from JSON files in the specified folder.
-        
+        Dynamically finds 'itemData' no matter how deeply nested.
+
         Args:
             folder_path: Path to folder containing question JSON files
-            
+
         Returns:
             List of question dictionaries with metadata
         """
         questions = []
         folder = Path(folder_path)
-        
+
         if not folder.exists():
             raise FileNotFoundError(f"Folder not found: {folder_path}")
-        
+
         # Find all JSON files
         json_files = list(folder.glob('*.json'))
-        
+
         if not json_files:
             raise ValueError(f"No JSON files found in: {folder_path}")
-        
+
         print(f"\n📂 Loading questions from {len(json_files)} files...")
-        
+
         for json_file in json_files:
             try:
                 with open(json_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    
-                    # Extract topic and questions
-                    if isinstance(data, dict):
+
+                    # Try to find itemData dynamically
+                    item_data_str = self.find_nested_key(data, 'itemData')
+
+                    if item_data_str and isinstance(item_data_str, str):
+                        # Parse the itemData JSON string
+                        item_data = json.loads(item_data_str)
+
+                        # Extract question content
+                        question_content = self.find_nested_key(item_data, 'content')
+
+                        if question_content and isinstance(question_content, str):
+                            # Clean up Perseus widgets and markdown
+                            import re
+                            cleaned = re.sub(r'\[\[☃[^\]]+\]\]', '', question_content)
+                            cleaned = re.sub(r'\*\*', '', cleaned)
+                            cleaned = re.sub(r'\$\\\\[^$]+\$', '', cleaned)  # Remove LaTeX
+                            cleaned = cleaned.strip()
+
+                            if cleaned:
+                                # Derive topic from folder structure
+                                topic = json_file.parent.parent.name
+
+                                questions.append({
+                                    'topic': topic,
+                                    'content': cleaned,
+                                    'source_file': json_file.name
+                                })
+
+                    # Fallback: original format handling
+                    elif isinstance(data, dict) and 'questions' in data:
                         topic = data.get('topic', json_file.stem)
-                        question_list = data.get('questions', [])
-                        
-                        for q in question_list:
-                            questions.append({
-                                'topic': topic,
-                                'content': q.get('content', '') if isinstance(q, dict) else str(q),
-                                'source_file': json_file.name
-                            })
-                    elif isinstance(data, list):
-                        # If root is a list of questions
-                        for q in data:
-                            questions.append({
-                                'topic': json_file.stem,
-                                'content': q.get('content', '') if isinstance(q, dict) else str(q),
-                                'source_file': json_file.name
-                            })
-                            
+                        for q in data['questions']:
+                            content = q.get('content', '') if isinstance(q, dict) else str(q)
+                            if content:
+                                questions.append({
+                                    'topic': topic,
+                                    'content': content,
+                                    'source_file': json_file.name
+                                })
+
             except Exception as e:
                 print(f"⚠️  Error loading {json_file.name}: {e}")
                 continue
-        
+
         print(f"✅ Loaded {len(questions)} questions from {len(json_files)} files")
         return questions
     
