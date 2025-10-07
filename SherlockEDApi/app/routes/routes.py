@@ -13,12 +13,7 @@ router = APIRouter()
 base_dir=pathlib.Path(__name__).resolve().parents[1]
 
 
-# class Question(BaseModel):
-#     question: dict = Field(description="The question data")
-#     answerArea: dict = Field(description="The answer area")
-#     hints: List = Field(description="List of question hints")
-
-@router.get("/questions/{sample_size}", response_model=List[Question])
+@router.get("/questions/{sample_size}")
 async def get_questions(sample_size: int = 14):
     """Endpoint for retrieving questions"""
     data = load_questions(

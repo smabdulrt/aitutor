@@ -1,12 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
+// import React, { useEffect, useState, useRef } from "react";
 import {ServerItemRenderer} from "../../package/perseus/src/server-item-renderer";
-import type { PerseusItem } from "@khanacademy/perseus-core";
-import { storybookDependenciesV2 } from "../../package/perseus/testing/test-dependencies";
+// import type { PerseusItem } from "@khanacademy/perseus-core";
+// import { storybookDependenciesV2 } from "../../package/perseus/testing/test-dependencies";
 import { scorePerseusItem } from "@khanacademy/perseus-score";
 import { keScoreFromPerseusScore } from "../../package/perseus/src/util/scoring";
-import { RenderStateRoot } from "@khanacademy/wonder-blocks-core";
-import { PerseusI18nContextProvider } from "../../package/perseus/src/components/i18n-context";
-import { mockStrings } from "../../package/perseus/src/strings";
+// import { RenderStateRoot } from "@khanacademy/wonder-blocks-core";
+// import { PerseusI18nContextProvider } from "../../package/perseus/src/components/i18n-context";
+// import { mockStrings } from "../../package/perseus/src/strings";
+import React, { useEffect, useState, useRef } from "react";
+import { PerseusI18nContextProvider } from "@khanacademy/perseus";
+import { type PerseusItem } from "@khanacademy/perseus-core";
+import { DependenciesV2 } from "../../perseus-init";
+import { mockStrings } from "./type";
+import {RenderStateRoot, View} from "@khanacademy/wonder-blocks-core"
 import { KEScore } from "@khanacademy/perseus-core";
 
 const RendererComponent = () => {
@@ -89,7 +95,7 @@ const RendererComponent = () => {
                                         ref={rendererRef}
                                         problemNum={0}
                                         item={perseusItem}
-                                        dependencies={storybookDependenciesV2}
+                                        dependencies={DependenciesV2}
                                         apiOptions={{}}
                                         linterContext={{
                                             contentType: "",
