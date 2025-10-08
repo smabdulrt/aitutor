@@ -310,11 +310,32 @@ class DASHSystem:
         
         return unique_affected_skills
     
-    def load_user_or_create(self, user_id: str) -> UserProfile:
-        """Load existing user or create new one with all skills initialized"""
+    def load_user_or_create(self, user_id: str, grade_level: Optional[GradeLevel] = None) -> UserProfile:
+        """
+        Load existing user or create a new one.
+        If creating a new user and grade_level is provided, initializes skill levels.
+        """
+        # Check if user exists to determine if it's a creation event
+        is_new_user = not self.user_manager.user_exists(user_id)
+
         all_skill_ids = list(self.skills.keys())
         user_profile = self.user_manager.get_or_create_user(user_id, all_skill_ids)
         
+        # If it's a new user and a grade level is provided, initialize skills
+        if is_new_user and grade_level:
+            print(f"🚀 New user '{user_id}' at grade {grade_level.name}. Initializing past skills...")
+            for skill_id, skill in self.skills.items():
+                # If skill's grade is lower than the user's starting grade
+                if skill.grade_level.value < grade_level.value:
+                    if skill_id in user_profile.skill_states:
+                        # Mark as "mastered" by setting a high memory strength
+                        user_profile.skill_states[skill_id].memory_strength = 3.0
+                        user_profile.skill_states[skill_id].last_practice_time = time.time()
+                        print(f"  - Mastered skill '{skill.name}' from grade {skill.grade_level.name}")
+
+            # Save the updated profile for the new user
+            self.user_manager.save_user(user_profile)
+
         # Sync user profile with current student_states for backward compatibility
         self.student_states[user_id] = {}
         for skill_id, skill_state in user_profile.skill_states.items():
@@ -389,20 +410,46 @@ class DASHSystem:
         """Get skills that need practice based on memory strength decay"""
         recommendations = []
         
-        for skill_id, skill in self.skills.items():
-            probability = self.predict_correctness(student_id, skill_id, current_time)
+        print("\n" + "="*50)
+        print(f"🧠 Calculating Recommended Skills for User: {student_id}")
+        print(f"   Mastery Threshold: {threshold}")
+        print("-"*50)
+
+        # Sort skills by grade level to make the log easier to follow
+        sorted_skills = sorted(self.skills.values(), key=lambda s: s.grade_level.value)
+
+        for skill in sorted_skills:
+            probability = self.predict_correctness(student_id, skill.skill_id, current_time)
             
             # Check if prerequisites are met
             prerequisites_met = True
+            prereq_log = []
             for prereq_id in skill.prerequisites:
                 prereq_prob = self.predict_correctness(student_id, prereq_id, current_time)
                 if prereq_prob < threshold:
                     prerequisites_met = False
+                    prereq_log.append(f"  - ❌ Prereq '{self.skills[prereq_id].name}' not met (Prob: {prereq_prob:.2f})")
                     break
-            
-            # Recommend if probability is below threshold and prerequisites are met
-            if probability < threshold and prerequisites_met:
-                recommendations.append(skill_id)
+                else:
+                    prereq_log.append(f"  - ✅ Prereq '{self.skills[prereq_id].name}' met (Prob: {prereq_prob:.2f})")
+
+            # Log the decision process for each skill
+            if probability < threshold:
+                if prerequisites_met:
+                    print(f"👍 RECOMMEND: '{skill.name}' (Prob: {probability:.2f})")
+                    for log_line in prereq_log:
+                        print(log_line)
+                    recommendations.append(skill.skill_id)
+                else:
+                    print(f"✋ HOLD: '{skill.name}' (Prob: {probability:.2f}) - Prerequisites not met.")
+                    for log_line in prereq_log:
+                        print(log_line)
+            else:
+                print(f"✅ SKIPPING: '{skill.name}' (Prob: {probability:.2f}) - Already mastered.")
+
+        print("-"*50)
+        print(f"Total Recommended Skills: {len(recommendations)}")
+        print("="*50 + "\n")
         
         return recommendations
 
@@ -411,10 +458,18 @@ class DASHSystem:
         Get the next best question for the student, avoiding repeats.
         If no questions are available, try to generate one.
         """
+        print("\n" + "="*50)
+        print(f"🔍 Getting Next Question for User: {student_id}")
+        print("-"*50)
+
         recommended_skills = self.get_recommended_skills(student_id, current_time)
         
         if not recommended_skills:
+            print("No recommended skills found. Student may have mastered all available content.")
+            print("="*50 + "\n")
             return None
+
+        print(f"Recommended skills: {', '.join([self.skills[s].name for s in recommended_skills])}")
 
         user_profile = self.user_manager.load_user(student_id)
         if not user_profile:
