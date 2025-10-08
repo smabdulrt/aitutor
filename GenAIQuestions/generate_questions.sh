@@ -57,9 +57,9 @@ pids+=($!)
 
 echo "The server is started and runs on the following PIDs: ${pids[*]}"
 echo "Press Ctrl+C to stop." 
-sleep 5 
+sleep 4 
 echo -e "\nGetting things ready..."
-sleep 10
+sleep 18
 
 
 # Endpoint
