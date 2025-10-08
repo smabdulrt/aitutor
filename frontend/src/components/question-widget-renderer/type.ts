@@ -1495,10 +1495,14 @@ export function mapErrorToString(
     err: string | null | undefined,
     // the translated Perseus strings
     translatedStrings: PerseusStrings,
-) {
+) { 
     if (!err) {
         return err;
     }
 
-    return translatedStrings[errorToString[err]] || err;
+    if (err in errorToString) {
+        const errorKey = errorToString[err as keyof typeof errorToString];
+        return translatedStrings[errorKey] || err;
+    }
+    return err;
 }

@@ -1,19 +1,13 @@
-// import React, { useEffect, useState, useRef } from "react";
-import {ServerItemRenderer} from "../../package/perseus/src/server-item-renderer";
-// import type { PerseusItem } from "@khanacademy/perseus-core";
-// import { storybookDependenciesV2 } from "../../package/perseus/testing/test-dependencies";
 import { scorePerseusItem } from "@khanacademy/perseus-score";
-import { keScoreFromPerseusScore } from "../../package/perseus/src/util/scoring";
-// import { RenderStateRoot } from "@khanacademy/wonder-blocks-core";
-// import { PerseusI18nContextProvider } from "../../package/perseus/src/components/i18n-context";
-// import { mockStrings } from "../../package/perseus/src/strings";
+import { keScoreFromPerseusScore } from "./scoring";
+import { KEScore } from "@khanacademy/perseus-core";
 import React, { useEffect, useState, useRef } from "react";
-import { PerseusI18nContextProvider } from "@khanacademy/perseus";
+import { ServerItemRenderer, PerseusI18nContextProvider } from "@khanacademy/perseus";
 import { type PerseusItem } from "@khanacademy/perseus-core";
 import { DependenciesV2 } from "../../perseus-init";
+import { KeypadContext } from "@khanacademy/keypad-context";
 import { mockStrings } from "./type";
-import {RenderStateRoot, View} from "@khanacademy/wonder-blocks-core"
-import { KEScore } from "@khanacademy/perseus-core";
+import {RenderStateRoot, useRenderState, RenderState, View} from "@khanacademy/wonder-blocks-core"
 
 const RendererComponent = () => {
     const [perseusItems, setPerseusItems] = useState<PerseusItem[]>([]);
@@ -22,10 +16,10 @@ const RendererComponent = () => {
     const [endOfTest, setEndOfTest] = useState(false);
     const [score, setScore] = useState<KEScore>();
     const [isAnswered, setIsAnswered] = useState(false);
-    const rendererRef = useRef<ServerItemRenderer>(null);
+    const rendererRef = useRef<React.ComponentRef<typeof ServerItemRenderer>>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8001/api/questions/1")
+        fetch("http://localhost:8001/api/questions/20")
             .then((response) => response.json())
             .then((data) => {
                 console.log("API response:", data);
@@ -45,10 +39,6 @@ const RendererComponent = () => {
             if (index >= perseusItems.length) {
                 setEndOfTest(true);
                 return prev; // stay at last valid index
-            }
-
-            if (index === perseusItems.length - 1) {
-                setEndOfTest(true);
             }
 
             setIsAnswered(false);
@@ -90,24 +80,31 @@ const RendererComponent = () => {
                         perseusItems.length > 0 ? (
                         <div>
                             <PerseusI18nContextProvider locale="en" strings={mockStrings}>
-                                <RenderStateRoot>
-                                    <ServerItemRenderer
-                                        ref={rendererRef}
-                                        problemNum={0}
-                                        item={perseusItem}
-                                        dependencies={DependenciesV2}
-                                        apiOptions={{}}
-                                        linterContext={{
-                                            contentType: "",
-                                            highlightLint: true,
-                                            paths: [],
-                                            stack: [],
-                                        }}
-                                        showSolutions="none"
-                                        hintsVisible={0}
-                                        reviewMode={false}
-                                        />
-                                </RenderStateRoot>
+                                    <View>
+                                        <KeypadContext.Consumer >
+                                            {({keypadElement}) => (<RenderStateRoot>
+                                                <ServerItemRenderer
+                                                    ref={rendererRef}
+                                                    problemNum={0}
+                                                    item={perseusItem}
+                                                    dependencies={DependenciesV2}
+                                                    keypadElement={keypadElement}
+                                                    apiOptions={{}}
+                                                    linterContext={{
+                                                        contentType: "",
+                                                        highlightLint: true,
+                                                        paths: [],
+                                                        stack: [],
+                                                    }}
+                                                    showSolutions="none"
+                                                    hintsVisible={0}
+                                                    reviewMode={
+                                                        (score && score?.correct) || 
+                                                        false
+                                                    }/>
+                                            </RenderStateRoot>)}
+                                        </KeypadContext.Consumer>
+                                    </View>
                             </PerseusI18nContextProvider>
                             {isAnswered && <div 
                                 className="flex justify-between mt-9">

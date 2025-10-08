@@ -10,27 +10,90 @@ const LogForTesting = {
     error: () => {},
 };
 
-const testDependencies: PerseusDependencies = {
+interface JIPTDependency {
+    useJIPT: boolean;
+}
+
+interface GraphieMovablesJiptLabelsDependency {
+    addLabel: (label: string, useMath: boolean) => void;
+}
+
+interface SvgImageJiptLabelsDependency {
+    addLabel: (label: string, useMath: boolean) => void;
+}
+
+interface RendererTranslationComponentsDependency {
+    addComponent: (renderer: unknown) => number;
+    removeComponentAtIndex: (index: number) => void;
+}
+
+interface TeXDependencyProps {
+    children: React.ReactNode;
+}
+
+type TeXDependency = React.FC<TeXDependencyProps>;
+
+type StaticUrlFn = (str?: string | null) => string;
+
+interface VideoData {
+    id: string;
+    contentId: string;
+    youtubeId: string;
+    title: string;
+    __typename: string;
+}
+
+type UseVideoStatus =
+    | { status: "success"; data: { video: VideoData } }
+    | { status: "loading" };
+
+type UseVideoDependency = (id: string, kind: string) => UseVideoStatus;
+
+interface InitialRequestUrlDependency {
+    origin: string;
+    host: string;
+    protocol: string;
+}
+
+interface LogDependency {
+    log: (...args: unknown[]) => void;
+    error: (...args: unknown[]) => void;
+}
+
+interface TestDependenciesInterface {
+    JIPT: JIPTDependency;
+    graphieMovablesJiptLabels: GraphieMovablesJiptLabelsDependency;
+    svgImageJiptLabels: SvgImageJiptLabelsDependency;
+    rendererTranslationComponents: RendererTranslationComponentsDependency;
+    TeX: TeXDependency;
+    staticUrl: StaticUrlFn;
+    useVideo: UseVideoDependency;
+    InitialRequestUrl: InitialRequestUrlDependency;
+    isDevServer: boolean;
+    kaLocale: string;
+    Log: LogDependency;
+}
+
+const testDependencies: TestDependenciesInterface = {
     // JIPT
     JIPT: {
         useJIPT: false,
     },
     graphieMovablesJiptLabels: {
-        addLabel: (label, useMath) => {},
+        addLabel: (label: string, useMath: boolean) => {},
     },
     svgImageJiptLabels: {
-        addLabel: (label, useMath) => {},
+        addLabel: (label: string, useMath: boolean) => {},
     },
     rendererTranslationComponents: {
-        addComponent: (renderer) => -1,
-        removeComponentAtIndex: (index) => {},
+        addComponent: (renderer: unknown) => -1,
+        removeComponentAtIndex: (index: number) => {},
     },
 
-    TeX: ({children}: {children: React.ReactNode}) => {
+    TeX: ({children}: TeXDependencyProps) => {
         return <span className="mock-TeX">{children}</span>;
     },
 
-    // @ts-expect-error - TS2322 - Type '(str?: string | null | undefined) => string' is not assignable to type 'StaticUrlFn'.
     staticUrl: (str?: string | null) => {
         // We define the interface such that TypeScript can infer calls properly.
         // However, it means that return types are hard to match here in
@@ -39,7 +102,7 @@ const testDependencies: PerseusDependencies = {
     },
 
     // video widget
-    useVideo: (id, kind) => {
+    useVideo: (id: string, kind: string) => {
         // Used by video-transcript-link.jsx.fixture.js
         if (id === "YoutubeId" && kind === "YOUTUBE_ID") {
             return {
