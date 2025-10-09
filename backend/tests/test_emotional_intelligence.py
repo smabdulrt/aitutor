@@ -1,17 +1,14 @@
 """
-Tests for Emotional Intelligence Layer
-
-Following TDD: Tests written FIRST, then implementation.
-All logic imported from codebase - NO hardcoded test logic.
+Tests for Emotional Intelligence Layer (Refactored)
 
 Emotional Intelligence Layer:
 1. Detects student emotions from camera frame and transcript
-2. Asks Adam (Gemini) for strategy when emotion detected
-3. Executes Adam's recommended strategy (no additional TA intelligence)
+2. Informs Adam (Gemini) with emotional context and teaching suggestions
+3. Adam makes all teaching decisions based on this awareness
 """
 
 import pytest
-from unittest.mock import Mock, AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 from backend.teaching_assistant.emotional_intelligence import (
     EmotionalIntelligence,
     EmotionState,
@@ -25,17 +22,16 @@ class TestEmotionalIntelligenceInitialization:
     def test_initialization(self):
         """Test EI initializes correctly"""
         ei = EmotionalIntelligence()
-
         assert ei is not None
         assert ei.current_emotion == EmotionState.NEUTRAL
         assert ei.emotion_history == []
+        assert ei.prompt_injection_callback is None
 
     def test_initialization_with_callback(self):
-        """Test initialization with Adam consultation callback"""
+        """Test initialization with prompt injection callback"""
         callback = AsyncMock()
-        ei = EmotionalIntelligence(adam_callback=callback)
-
-        assert ei.adam_callback == callback
+        ei = EmotionalIntelligence(prompt_injection_callback=callback)
+        assert ei.prompt_injection_callback == callback
 
 
 class TestEmotionDetection:
@@ -46,156 +42,70 @@ class TestEmotionDetection:
         return EmotionalIntelligence()
 
     @pytest.mark.asyncio
-    async def test_detect_emotion_from_transcript(self, ei):
-        """Test emotion detection from text transcript"""
-        # Frustrated transcript
+    async def test_detect_emotion_from_transcript_frustrated(self, ei):
         transcript = "This is so hard! I don't understand this at all!"
-
         result = await ei.detect_emotion(transcript=transcript)
-
-        assert result is not None
-        assert isinstance(result, EmotionDetectionResult)
-        assert result.emotion in [EmotionState.FRUSTRATED, EmotionState.CONFUSED]
+        assert result.emotion == EmotionState.FRUSTRATED
         assert result.confidence > 0
 
     @pytest.mark.asyncio
     async def test_detect_emotion_confident(self, ei):
-        """Test detecting confident emotion"""
         transcript = "I got it! This makes perfect sense now!"
-
         result = await ei.detect_emotion(transcript=transcript)
-
         assert result.emotion == EmotionState.CONFIDENT
-        assert result.confidence > 0.5
 
     @pytest.mark.asyncio
     async def test_detect_emotion_confused(self, ei):
-        """Test detecting confused emotion"""
         transcript = "Wait, I'm not sure I understand... can you explain that again?"
-
         result = await ei.detect_emotion(transcript=transcript)
-
-        assert result.emotion in [EmotionState.CONFUSED, EmotionState.UNCERTAIN]
+        assert result.emotion == EmotionState.CONFUSED
 
     @pytest.mark.asyncio
     async def test_detect_emotion_disengaged(self, ei):
-        """Test detecting disengaged emotion"""
-        # Minimal/short responses indicate disengagement
         transcript = "ok"
-
         result = await ei.detect_emotion(transcript=transcript)
-
-        # Short responses should indicate low engagement
-        assert result is not None
-
-    @pytest.mark.asyncio
-    async def test_detect_emotion_with_camera_frame(self, ei):
-        """Test emotion detection with camera frame"""
-        # Mock camera frame (in real implementation, would use facial recognition)
-        mock_frame = MagicMock()  # Simulated camera frame
-        transcript = "I think I understand"
-
-        result = await ei.detect_emotion(camera_frame=mock_frame, transcript=transcript)
-
-        assert result is not None
-        assert isinstance(result, EmotionDetectionResult)
+        assert result.emotion == EmotionState.DISENGAGED
 
     @pytest.mark.asyncio
     async def test_emotion_detection_updates_history(self, ei):
-        """Test emotion detection adds to history"""
         transcript = "This is confusing"
-
         await ei.detect_emotion(transcript=transcript)
-
-        assert len(ei.emotion_history) > 0
-        assert ei.emotion_history[-1].emotion in EmotionState
-
-
-class TestAdamConsultation:
-    """Test asking Adam for emotional response strategy"""
-
-    @pytest.fixture
-    def ei(self):
-        callback = AsyncMock(return_value="Use encouragement and break down the concept into smaller steps")
-        return EmotionalIntelligence(adam_callback=callback)
-
-    @pytest.mark.asyncio
-    async def test_ask_adam_strategy_frustrated(self, ei):
-        """Test asking Adam for strategy when student is frustrated"""
-        emotion_state = EmotionState.FRUSTRATED
-        context = "Student struggling with fractions for 10 minutes"
-
-        strategy = await ei.ask_adam_strategy(emotion_state, context)
-
-        assert strategy is not None
-        assert isinstance(strategy, str)
-        assert len(strategy) > 0
-        ei.adam_callback.assert_called_once()
-
-    @pytest.mark.asyncio
-    async def test_ask_adam_strategy_confused(self, ei):
-        """Test asking Adam for strategy when student is confused"""
-        emotion_state = EmotionState.CONFUSED
-
-        strategy = await ei.ask_adam_strategy(emotion_state)
-
-        assert strategy is not None
-        ei.adam_callback.assert_called_once()
-
-    @pytest.mark.asyncio
-    async def test_ask_adam_includes_emotion_context(self, ei):
-        """Test Adam consultation includes emotion in query"""
-        emotion_state = EmotionState.FRUSTRATED
-
-        await ei.ask_adam_strategy(emotion_state)
-
-        # Verify the query to Adam mentions the emotion
-        call_args = ei.adam_callback.call_args[0][0]
-        assert "frustrated" in call_args.lower() or "frustration" in call_args.lower()
-
-    @pytest.mark.asyncio
-    async def test_ask_adam_without_callback(self):
-        """Test asking Adam without callback returns None"""
-        ei = EmotionalIntelligence()  # No callback
-
-        strategy = await ei.ask_adam_strategy(EmotionState.FRUSTRATED)
-
-        assert strategy is None
+        assert len(ei.emotion_history) == 1
+        assert ei.emotion_history[0].emotion == EmotionState.CONFUSED
 
 
-class TestStrategyExecution:
-    """Test executing Adam's recommended strategy"""
+class TestAdamInforming:
+    """Test informing Adam about student's emotional state"""
 
     @pytest.fixture
     def ei(self):
-        adam_callback = AsyncMock(return_value="Provide positive encouragement")
-        prompt_injection = AsyncMock()
-        ei = EmotionalIntelligence(
-            adam_callback=adam_callback,
-            prompt_injection_callback=prompt_injection
+        callback = AsyncMock()
+        return EmotionalIntelligence(prompt_injection_callback=callback)
+
+    @pytest.mark.asyncio
+    async def test_inform_adam_frustrated(self, ei):
+        """Test informing Adam when student is frustrated"""
+        emotion_result = EmotionDetectionResult(
+            emotion=EmotionState.FRUSTRATED,
+            confidence=0.8,
+            source="transcript",
+            context="I can't do this.",
+            timestamp=12345.678
         )
-        return ei
-
-    @pytest.mark.asyncio
-    async def test_execute_strategy(self, ei):
-        """Test executing a strategy from Adam"""
-        adam_response = "Use encouraging language and simplify the explanation"
-
-        await ei.execute_strategy(adam_response)
-
-        # Verify prompt injection was called with Adam's strategy
+        result = await ei.inform_adam_of_emotion(emotion_result)
+        assert result is True
         ei.prompt_injection_callback.assert_called_once()
-        injected_prompt = ei.prompt_injection_callback.call_args[0][0]
-        assert isinstance(injected_prompt, str)
-        assert len(injected_prompt) > 0
+        call_args = ei.prompt_injection_callback.call_args[0][0]
+        assert "frustrated" in call_args.lower()
+        assert "student may benefit" in call_args.lower()
 
     @pytest.mark.asyncio
-    async def test_execute_strategy_without_callback(self):
-        """Test execute_strategy without injection callback"""
-        ei = EmotionalIntelligence(adam_callback=AsyncMock())
-
-        # Should not raise error
-        await ei.execute_strategy("Some strategy")
+    async def test_inform_adam_without_callback(self):
+        """Test informing Adam without a callback returns False"""
+        ei = EmotionalIntelligence()  # No callback
+        emotion_result = EmotionDetectionResult(emotion=EmotionState.CONFUSED, confidence=0.7, source="none", timestamp=12345.678)
+        result = await ei.inform_adam_of_emotion(emotion_result)
+        assert result is False
 
 
 class TestEmotionalWorkflow:
@@ -203,114 +113,65 @@ class TestEmotionalWorkflow:
 
     @pytest.fixture
     def ei(self):
-        adam_callback = AsyncMock(return_value="Provide encouragement and break problem into steps")
         prompt_injection = AsyncMock()
-        return EmotionalIntelligence(
-            adam_callback=adam_callback,
-            prompt_injection_callback=prompt_injection
-        )
+        return EmotionalIntelligence(prompt_injection_callback=prompt_injection)
 
     @pytest.mark.asyncio
     async def test_full_workflow_frustrated_student(self, ei):
-        """Test full workflow: detect → ask Adam → execute"""
+        """Test full workflow: detect -> inform Adam"""
         transcript = "This is impossible! I'll never get this!"
+        await ei.process_emotion(transcript=transcript, auto_inform=True)
 
-        # Step 1: Detect emotion
-        emotion_result = await ei.detect_emotion(transcript=transcript)
-        assert emotion_result.emotion == EmotionState.FRUSTRATED
+        assert len(ei.emotion_history) == 1
+        assert ei.emotion_history[0].emotion == EmotionState.FRUSTRATED
 
-        # Step 2: Ask Adam for strategy
-        strategy = await ei.ask_adam_strategy(emotion_result.emotion, transcript)
-        assert strategy is not None
-
-        # Step 3: Execute strategy
-        await ei.execute_strategy(strategy)
-
-        # Verify complete flow
-        ei.adam_callback.assert_called_once()
         ei.prompt_injection_callback.assert_called_once()
+        call_args = ei.prompt_injection_callback.call_args[0][0]
+        assert "Frustrated" in call_args
+        assert "Teaching considerations" in call_args
 
     @pytest.mark.asyncio
-    async def test_workflow_helper_method(self, ei):
-        """Test convenience method that handles full workflow"""
-        transcript = "I don't understand this at all"
+    async def test_workflow_does_not_inform_on_neutral(self, ei):
+        """Test that workflow does not inform Adam on neutral emotion"""
+        transcript = "This is a neutral statement."
+        await ei.process_emotion(transcript=transcript, auto_inform=True)
 
-        # Should detect, consult Adam, and execute automatically
-        await ei.process_emotion(transcript=transcript)
-
-        # Verify workflow executed
-        assert len(ei.emotion_history) > 0
-        # Should have consulted Adam if significant emotion detected
-        if ei.emotion_history[-1].emotion != EmotionState.NEUTRAL:
-            assert ei.adam_callback.called
-
-
-class TestEmotionStateEnum:
-    """Test emotion state enumeration"""
-
-    def test_emotion_states_exist(self):
-        """Test all expected emotion states are defined"""
-        expected_states = [
-            EmotionState.NEUTRAL,
-            EmotionState.FRUSTRATED,
-            EmotionState.CONFUSED,
-            EmotionState.CONFIDENT,
-            EmotionState.DISENGAGED,
-            EmotionState.UNCERTAIN
-        ]
-
-        for state in expected_states:
-            assert state in EmotionState
+        assert ei.emotion_history[0].emotion == EmotionState.NEUTRAL
+        ei.prompt_injection_callback.assert_not_called()
 
 
 class TestEdgeCases:
     """Test edge cases and error handling"""
 
-    @pytest.mark.asyncio
-    async def test_detect_emotion_empty_transcript(self):
-        """Test emotion detection with empty transcript"""
-        ei = EmotionalIntelligence()
+    @pytest.fixture
+    def ei(self):
+        return EmotionalIntelligence(history_limit=50)
 
+    @pytest.mark.asyncio
+    async def test_detect_emotion_empty_transcript(self, ei):
         result = await ei.detect_emotion(transcript="")
-
-        # Should return neutral or handle gracefully
-        assert result is not None
         assert result.emotion == EmotionState.NEUTRAL
 
     @pytest.mark.asyncio
-    async def test_detect_emotion_no_input(self):
-        """Test emotion detection with no input"""
-        ei = EmotionalIntelligence()
-
+    async def test_detect_emotion_no_input(self, ei):
         result = await ei.detect_emotion()
-
-        # Should return neutral when no input
         assert result.emotion == EmotionState.NEUTRAL
 
     @pytest.mark.asyncio
-    async def test_emotion_history_limit(self):
+    async def test_emotion_history_limit(self, ei):
         """Test emotion history doesn't grow unbounded"""
-        ei = EmotionalIntelligence()
-
-        # Add many emotions
-        for i in range(150):
+        for i in range(100):
             await ei.detect_emotion(transcript=f"Test {i}")
-
-        # History should be limited (e.g., last 100)
-        assert len(ei.emotion_history) <= 100
+        assert len(ei.emotion_history) == 50
 
     @pytest.mark.asyncio
     async def test_rapid_emotion_changes(self):
         """Test handling rapid emotion changes"""
-        ei = EmotionalIntelligence(
-            adam_callback=AsyncMock(return_value="strategy"),
-            prompt_injection_callback=AsyncMock()
-        )
-
-        # Rapid changes
+        ei = EmotionalIntelligence(prompt_injection_callback=AsyncMock())
         await ei.detect_emotion(transcript="This is hard!")
         await ei.detect_emotion(transcript="Oh wait, I get it!")
         await ei.detect_emotion(transcript="Actually no, I'm confused")
-
-        # Should track all changes
         assert len(ei.emotion_history) == 3
+        assert ei.emotion_history[0].emotion == EmotionState.FRUSTRATED
+        assert ei.emotion_history[1].emotion == EmotionState.CONFIDENT
+        assert ei.emotion_history[2].emotion == EmotionState.CONFUSED

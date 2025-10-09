@@ -170,10 +170,35 @@ class MediaMixer:
         """Cleanup on destruction"""
         self.stop()
 
+# Global variable to hold the TA websocket client
+ta_websocket = None
+
+async def ta_client_handler(frontend_websocket):
+    """
+    Connects to the TA server and relays messages.
+    """
+    global ta_websocket
+    uri = "ws://localhost:8766"
+    try:
+        async with websockets.connect(uri) as websocket:
+            ta_websocket = websocket
+            print("Connected to Teaching Assistant server.")
+            # Relay messages from TA server to frontend
+            while True:
+                message = await websocket.recv()
+                await frontend_websocket.send(message)
+    except Exception as e:
+        print(f"Could not connect to Teaching Assistant server: {e}")
+        ta_websocket = None
+
+
 async def handler(websocket):
     print(f"Client connected: {websocket.remote_address}")
     mixer = MediaMixer()
     mixer.running = True
+
+    # Start the TA client handler
+    ta_task = asyncio.create_task(ta_client_handler(websocket))
 
     async def send_frames():
         while mixer.running:
@@ -192,20 +217,27 @@ async def handler(websocket):
                 break
 
     async def receive_commands():
+        global ta_websocket
         while mixer.running:
             try:
                 message = await websocket.recv()
                 try:
-                    # Assume message is a JSON string
                     data = json.loads(message)
+                    # Forward relevant messages to the TA server
+                    if ta_websocket:
+                        if data.get('type') == 'start_session':
+                            await ta_websocket.send(json.dumps(data))
+                        elif data.get('type') == 'conversation_update':
+                             await ta_websocket.send(json.dumps(data))
+                        elif data.get('type') == 'end_session':
+                             await ta_websocket.send(json.dumps(data))
+
                     if data.get('type') == 'scratchpad_frame':
                         base64_data = data['data'].split(',')[1]
                         img_bytes = base64.b64decode(base64_data)
                         img = Image.open(io.BytesIO(img_bytes))
-                        # Convert RGB from browser to BGR for OpenCV
                         mixer.scratchpad_frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
                 except json.JSONDecodeError:
-                    # Message is not JSON, treat as a simple command
                     if message == "start_camera":
                         mixer.show_camera = True
                     elif message == "stop_camera":
@@ -224,11 +256,12 @@ async def handler(websocket):
     send_task = asyncio.create_task(send_frames())
     receive_task = asyncio.create_task(receive_commands())
 
-    await asyncio.gather(send_task, receive_task)
+    await asyncio.gather(send_task, receive_task, ta_task)
 
 async def main():
+    # Note: The TA server now runs on port 8766
     async with websockets.serve(handler, "localhost", 8765):
-        print("WebSocket server started on ws://localhost:8765")
+        print("MediaMixer WebSocket server started on ws://localhost:8765")
         await asyncio.Future()  # run forever
 
 if __name__ == '__main__':

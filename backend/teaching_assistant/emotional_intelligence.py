@@ -155,7 +155,7 @@ class EmotionalIntelligence:
 
         # Confused indicators
         confused_keywords = [
-            "confused", "don't understand", "not sure", "wait",
+            "confused", "don't understand", "not sure", "confusing",
             "can you explain", "what does", "i'm lost"
         ]
         if any(keyword in transcript_lower for keyword in confused_keywords):

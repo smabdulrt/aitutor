@@ -24,6 +24,7 @@ import { vs2015 as dark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import {
   ClientContentLog as ClientContentLogType,
   StreamingLog,
+  TALog,
 } from "../../types";
 import {
   Content,
@@ -207,6 +208,16 @@ const ModelTurnLog = ({ message }: Message): JSX.Element => {
   );
 };
 
+const TALogComponent = memo(({ message }: Message) => {
+  const { content } = message as TALog;
+  return (
+    <div className="rich-log ta-log ta">
+      <h4 className="role-ta">TA</h4>
+      <p>{content}</p>
+    </div>
+  );
+});
+
 const CustomPlainTextLog = (msg: string) => () =>
   <PlainTextMessage message={msg} />;
 
@@ -232,6 +243,9 @@ const filters: Record<LoggerFilterType, (log: StreamingLog) => boolean> = {
 const component = (log: StreamingLog) => {
   if (typeof log.message === "string") {
     return PlainTextMessage;
+  }
+  if ("source" in log.message && log.message.source === 'TA') {
+    return TALogComponent;
   }
   if ("turns" in log.message && "turnComplete" in log.message) {
     return ClientContentLog;

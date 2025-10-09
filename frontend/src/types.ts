@@ -27,6 +27,11 @@ import {
 export type LiveClientOptions = GoogleGenAIOptions & { apiKey: string };
 
 /** log types */
+export type TALog = {
+  source: 'TA';
+  content: string;
+};
+
 export type StreamingLog = {
   date: Date;
   type: string;
@@ -35,7 +40,8 @@ export type StreamingLog = {
     | string
     | ClientContentLog
     | Omit<LiveServerMessage, "text" | "data">
-    | LiveClientToolResponse;
+    | LiveClientToolResponse
+    | TALog;
 };
 
 export type ClientContentLog = {

@@ -16,7 +16,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import "./App.scss";
-import { LiveAPIProvider } from "./contexts/LiveAPIContext";
+import { LiveAPIProvider, useLiveAPIContext } from "./contexts/LiveAPIContext";
 import SidePanel from "./components/side-panel/SidePanel";
 import { Altair } from "./components/altair/Altair";
 import MediaMixerDisplay from "./components/media-mixer-display/MediaMixerDisplay";
@@ -24,8 +24,9 @@ import ScratchpadCapture from "./components/scratchpad-capture/ScratchpadCapture
 import QuestionDisplay from "./components/question-display/QuestionDisplay";
 import ControlTray from "./components/control-tray/ControlTray";
 import cn from "classnames";
-import { LiveClientOptions } from "./types";
+import { LiveClientOptions, TALog } from "./types";
 import Scratchpad from "./components/scratchpad/Scratchpad";
+import { useLoggerStore } from "./lib/store-logger";
 
 const API_KEY = process.env.REACT_APP_GEMINI_API_KEY as string;
 if (typeof API_KEY !== "string") {
@@ -48,14 +49,43 @@ function App() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [isScratchpadOpen, setScratchpadOpen] = useState(false);
 
+  const { log } = useLoggerStore();
+  const { client } = useLiveAPIContext();
+
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:8765');
     setSocket(ws);
 
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: 'start_session', student_name: 'Jules' }));
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const message = JSON.parse(event.data);
+        if (message.type === 'prompt' || message.type === 'log') {
+          const taLog: TALog = {
+            source: 'TA',
+            content: message.data,
+          };
+          log({
+            date: new Date(),
+            type: `ta.${message.type}`,
+            message: taLog,
+          });
+          if (message.type === 'prompt') {
+            client.send([{ text: message.data }]);
+          }
+        }
+      } catch (e) {
+        // Not a JSON message, so we assume it's a video frame
+      }
+    };
+
     return () => {
       ws.close();
     };
-  }, []);
+  }, [log, client]);
 
   useEffect(() => {
     if (mixerVideoRef.current && mixerStream) {
