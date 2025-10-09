@@ -7,6 +7,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 from user_manager import UserManager, UserProfile, SkillState
+from mongo_user_manager import MongoUserManager, mongo_user_manager
+from mongo_skills_manager import MongoSkillsManager, mongo_skills
 from QuestionGeneratorAgent.question_generator_agent import QuestionGeneratorAgent
 
 class GradeLevel(Enum):
@@ -48,8 +50,8 @@ class Question:
     difficulty: float = 0.0
 
 class DASHSystem:
-    def __init__(self, skills_file: Optional[str] = None, curriculum_file: Optional[str] = None):
-        
+    def __init__(self, skills_file: Optional[str] = None, curriculum_file: Optional[str] = None, use_mongodb: bool = True):
+
         # Default file paths relative to the project root
         self.skills_file_path = skills_file if skills_file else "QuestionsBank/skills.json"
         self.curriculum_file_path = curriculum_file if curriculum_file else "QuestionsBank/curriculum.json"
@@ -58,8 +60,19 @@ class DASHSystem:
         self.student_states: Dict[str, Dict[str, StudentSkillState]] = {}
         self.questions: Dict[str, Question] = {}
         self.curriculum: Dict = {}
-        self.user_manager = UserManager(users_folder="Users")
-        
+
+        # Determine whether to use MongoDB or local files
+        self.use_mongodb = use_mongodb and mongo_skills.is_mongodb_available()
+
+        if self.use_mongodb:
+            print("🍃 Using MongoDB for data storage")
+            self.user_manager = mongo_user_manager
+            self.skills_manager = mongo_skills
+        else:
+            print("📁 Using local file storage (MongoDB not available)")
+            self.user_manager = UserManager(users_folder="Users")
+            self.skills_manager = None
+
         # Initialize the Question Generator Agent
         try:
             qg_curriculum_path = "QuestionsBank/curriculum.json"
@@ -69,8 +82,56 @@ class DASHSystem:
             self.question_generator = None
             print(f"⚠️ Could not initialize Question Generator Agent: {e}")
 
-        self._load_from_files(self.skills_file_path, self.curriculum_file_path)
-    
+        self._load_data()
+
+    def _load_data(self):
+        """Load skills and curriculum from MongoDB or JSON files"""
+        if self.use_mongodb:
+            self._load_from_mongodb()
+        else:
+            self._load_from_files(self.skills_file_path, self.curriculum_file_path)
+
+    def _load_from_mongodb(self):
+        """Load skills from MongoDB"""
+        try:
+            # Initialize skills template in MongoDB if not already done
+            skills_data = self.skills_manager.get_all_skills()
+
+            if not skills_data:
+                print("⚠️  No skills found in MongoDB, initializing from JSON...")
+                success = self.skills_manager.initialize_skills_template_from_json(self.skills_file_path)
+                if success:
+                    skills_data = self.skills_manager.get_all_skills()
+                else:
+                    print("❌ Failed to initialize MongoDB, falling back to file loading")
+                    self.use_mongodb = False
+                    self._load_from_files(self.skills_file_path, self.curriculum_file_path)
+                    return
+
+            # Convert MongoDB skills to Skill objects
+            for skill_id, skill_data in skills_data.items():
+                grade_level = GradeLevel[skill_data['grade_level']]
+                skill = Skill(
+                    skill_id=skill_data['skill_id'],
+                    name=skill_data['name'],
+                    grade_level=grade_level,
+                    prerequisites=skill_data['prerequisites'],
+                    forgetting_rate=skill_data['forgetting_rate'],
+                    difficulty=skill_data['difficulty']
+                )
+                self.skills[skill_id] = skill
+
+            # Load curriculum and questions from JSON (questions not in MongoDB yet)
+            self._reload_questions()
+
+            print(f"✅ Loaded {len(self.skills)} skills from MongoDB")
+
+        except Exception as e:
+            print(f"❌ Error loading from MongoDB: {e}")
+            print("🔄 Falling back to file loading...")
+            self.use_mongodb = False
+            self._load_from_files(self.skills_file_path, self.curriculum_file_path)
+
     def _reload_questions(self):
         """Reload only the questions from the curriculum file."""
         try:

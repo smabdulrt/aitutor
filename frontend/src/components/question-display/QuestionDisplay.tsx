@@ -1,59 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import './question-display.scss';
-
-interface Question {
-  question_id: string;
-  skill_ids: string[];
-  content: string;
-  difficulty: number;
-}
+import RendererComponent from "../question-widget-renderer/RendererComponent";
 
 const QuestionDisplay: React.FC = () => {
-  const [question, setQuestion] = useState<Question | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const userId = "1"; // Hardcoded for now
-
-  const fetchQuestion = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`http://localhost:8000/next-question/${userId}`);
-      if (!response.ok) {
-        throw new Error('No recommended question found or API error.');
-      }
-      const data: Question = await response.json();
-      setQuestion(data);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An unknown error occurred.");
-      setQuestion(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    fetchQuestion();
-  }, [fetchQuestion]);
-
-  if (loading) {
-    return <div className="question-display">Loading question...</div>;
-  }
-
-  if (error) {
-    return <div className="question-display error">Error: {error}</div>;
-  }
 
   return (
-    <div className="question-display">
-      <div className="question-content">
-        <h2 className="question-title">Here's your next question:</h2>
-        {question && <p className="question-text">{question.content}</p>}
-      </div>
-      <div className="button-container">
-        <button className="next-question-button" onClick={fetchQuestion} disabled={loading}>
-          Next Question
-        </button>
+    <div className="question-display" style={{width: '100%', height: '100%'}}>
+      <h2 className="question-title">Here's your next question:</h2>
+      <div className="perseus-content" id="perseus-capture-area">
+        <RendererComponent />
       </div>
     </div>
   );
