@@ -36,7 +36,7 @@ pids+=($!) # Save the PID
 
 # Start the Teaching Assistant server in the background
 echo "Starting Teaching Assistant server... Logs -> logs/ta_server.log"
-(cd "$SCRIPT_DIR" && python3 backend/teaching_assistant/ta_server.py) > "$SCRIPT_DIR/logs/ta_server.log" 2>&1 &
+(cd "$SCRIPT_DIR" && python3 -m backend.teaching_assistant.ta_server) > "$SCRIPT_DIR/logs/ta_server.log" 2>&1 &
 pids+=($!) # Save the PID
 
 # Give the backend servers a moment to start

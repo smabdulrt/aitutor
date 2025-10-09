@@ -57,6 +57,7 @@ function App() {
     setSocket(ws);
 
     ws.onopen = () => {
+      console.log('Connected to MediaMixer WebSocket');
       ws.send(JSON.stringify({ type: 'start_session', student_name: 'Jules' }));
     };
 
@@ -80,6 +81,14 @@ function App() {
       } catch (e) {
         // Not a JSON message, so we assume it's a video frame
       }
+    };
+
+    ws.onerror = (error) => {
+      console.error('MediaMixer WebSocket error:', error);
+    };
+
+    ws.onclose = (event) => {
+      console.log('MediaMixer WebSocket closed:', event.code, event.reason);
     };
 
     return () => {

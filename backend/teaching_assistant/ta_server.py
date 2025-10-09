@@ -1,7 +1,7 @@
 import asyncio
 import websockets
 import json
-from ta_core import TeachingAssistant
+from .ta_core import TeachingAssistant
 
 # Dictionary to store TA instances, one per connection
 tas = {}

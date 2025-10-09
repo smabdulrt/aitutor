@@ -179,17 +179,42 @@ async def ta_client_handler(frontend_websocket):
     """
     global ta_websocket
     uri = "ws://localhost:8766"
-    try:
-        async with websockets.connect(uri) as websocket:
-            ta_websocket = websocket
-            print("Connected to Teaching Assistant server.")
-            # Relay messages from TA server to frontend
-            while True:
-                message = await websocket.recv()
-                await frontend_websocket.send(message)
-    except Exception as e:
-        print(f"Could not connect to Teaching Assistant server: {e}")
-        ta_websocket = None
+    max_retries = 3
+    retry_delay = 2
+
+    for attempt in range(max_retries):
+        try:
+            async with websockets.connect(uri) as websocket:
+                ta_websocket = websocket
+                print(f"Connected to Teaching Assistant server on attempt {attempt + 1}.")
+
+                # Notify frontend of successful TA connection
+                await frontend_websocket.send(json.dumps({
+                    "type": "log",
+                    "data": "Teaching Assistant connected successfully"
+                }))
+
+                # Relay messages from TA server to frontend
+                while True:
+                    message = await websocket.recv()
+                    await frontend_websocket.send(message)
+        except websockets.exceptions.ConnectionRefusedError:
+            print(f"TA server connection refused (attempt {attempt + 1}/{max_retries})")
+            if attempt < max_retries - 1:
+                await asyncio.sleep(retry_delay)
+            else:
+                print("Failed to connect to TA server after all retries")
+                # Notify frontend of TA connection failure
+                await frontend_websocket.send(json.dumps({
+                    "type": "log",
+                    "data": "Warning: Teaching Assistant server unavailable"
+                }))
+                ta_websocket = None
+                break
+        except Exception as e:
+            print(f"TA server connection error: {e}")
+            ta_websocket = None
+            break
 
 
 async def handler(websocket):
