@@ -2,6 +2,7 @@ from google.adk.agents import Agent, SequentialAgent
 from typing import List
 import json
 import os 
+from time import sleep
 from google.adk.runners import Runner
 from google.genai import types
 from google.adk.memory import InMemoryMemoryService
@@ -11,7 +12,7 @@ from imagekitio.models.UploadFileRequestOptions import UploadFileRequestOptions
 import uuid
 import asyncio
 from dotenv import load_dotenv 
-from .prompt import generator_prompt,validator_prompt
+from .prompt import generator_prompt, validator_prompt, descriptive_text_extractor_prompt, json_rebuilder_prompt
 from google import genai 
 from PIL import Image
 from io import BytesIO
@@ -45,7 +46,7 @@ def upload_to_imagekit(image_name,image_path):
         )
     print(image_url)
     return image_url
-            
+
 
 def generate_image(prompts: List[str]) ->  List[str]:
     """
@@ -83,6 +84,7 @@ def generate_image(prompts: List[str]) ->  List[str]:
             image_name = f"{str(uuid.uuid4())}.png"
             image_path = f"{BASE_URL}/assets/{image_name}"
             image.save(image_path)
+            sleep(5)
             url = upload_to_imagekit(image_name, image_path)
     return urls
 
@@ -101,19 +103,39 @@ questions_generator_agent = Agent(
     output_key="question_json"
 )
 
-questions_validator_agent = Agent(
-    name="questions_validator_agent",
-    description="Validates generated json and adds image",
+descriptive_text_extractor_agent = Agent(
+    name="descriptive_text_extractor_agent",
+    description="Extracts image URLs and generates descriptive text prompts.",
     model="gemini-2.0-flash",
-    instruction=validator_prompt,
+    instruction=descriptive_text_extractor_prompt,
+    output_key="image_data_with_prompts"
+)
+
+image_generator_agent = Agent(
+    name="image_generator_agent",
+    description="Generates new image URLs from descriptive text prompts.",
+    model="gemini-2.0-flash",
     tools=[generate_image_tool],
-    output_key="validated_json"
+    output_key="generated_image_urls"
+)
+
+json_rebuilder_agent = Agent(
+    name="json_rebuilder_agent",
+    description="Rebuilds the original JSON with new image URLs and alt texts.",
+    model="gemini-2.0-flash",
+    instruction=json_rebuilder_prompt,
+    output_key="updated_json"
 )
 
 questions_agent = SequentialAgent(
     name="questions_agent",
-    description="Generates and validates perseus questions",
-    sub_agents=[questions_generator_agent, questions_validator_agent],
+    description="Generates, processes images, and validates perseus questions",
+    sub_agents=[
+        questions_generator_agent,
+        descriptive_text_extractor_agent,
+        image_generator_agent,
+        json_rebuilder_agent
+    ],
 )
 
 runner = Runner(
