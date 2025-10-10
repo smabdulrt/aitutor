@@ -157,7 +157,7 @@ async def create_session():
 
 SESSION_ID = asyncio.run(create_session()) 
 
-async def execute(data: json) -> json:
+async def execute(data: str) -> str:
     msg = f"Generate new question from: {data}"
     final_response = None
     

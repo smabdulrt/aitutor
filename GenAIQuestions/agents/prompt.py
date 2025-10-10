@@ -278,9 +278,9 @@ Scan the entire JSON structure and identify:
 For EACH image that needs replacement:
 - Extract the visual context from alt text, content fields, and widget descriptions
 - Create a detailed, specific prompt for the image generation tool
-- Ensure all images have a background color of #f0f0f0
-- Ensure not to add numbers or text in the images 
-- If several identical objects in an image, use a grid, no borders and same colors, linear arrangement
+- Include that all images have a background color of #f0f0f0
+- Include ensure not to add numbers or text in the images 
+- If several identical objects in an image include:, use a grid, no borders and same colors, linear arrangement
 - Ensure prompts are: **cartoon style, shapes with soft solid outlines, no fill, educational visuals**
 - Include specific details: colors, shapes, quantities, arrangements mentioned
 

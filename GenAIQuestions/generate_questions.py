@@ -12,7 +12,7 @@ generated_json = Path(__file__).parent.resolve() / "new" / f"{str(uuid.uuid4())}
 # load examples 
 async def main():
     # generate questions 
-    async def generate_questions(data: json) -> json:
+    async def generate_questions(data: str) -> str:
         print(f"Generating questions...")
         try:
             response = await execute(data)
