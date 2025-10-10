@@ -1,4 +1,0 @@
-fastapi
-uvicorn
-google-adk 
-python-dotenv

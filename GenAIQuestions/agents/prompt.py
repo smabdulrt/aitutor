@@ -6,8 +6,8 @@ generator_prompt="""You are a perseus questions generator agent. Use the provide
     do not rename keys or remove fields. Do not change the structure of the json. Return 
     only strict JSON. Use double quotes around keys/strings, true/false for booleans, 
     null for None. No Python-style dicts. Do not change 
-    widget type. Ensure the question has an answer and is valid. Do not change image urls but
-    ensure images have a descriptive alt text describing its content.
+    widget type. Ensure the question has an answer and is valid.
+    Ensure images have a descriptive alt text describing its content.
         - Do not change camelCase to snake_case.
         - Do not remove itemDataVersion.
         - If a field has empty content, output it as {} or false, not omitted.
@@ -57,16 +57,49 @@ Generated New question json:
                         ...```"""
 
 validator_prompt="""
-You are a Perseus-question json validator agent. Read the json {question_json}
-to understand the question generated - pay attention to fields like content, 
-options and hints to understand the questions generated. If there are any image
-urls, for each images and urls generate a prompt to nano banana describing what
-the image should contain. Images should be cartoon images, shapes with soft 
-solid color outline (no fill), graphs but not realistic images. 
-Call the {generate_image} tool passing it the list of prompts for each image
-needed. Add the returned urls into the json in place of the original urls. Only 
-replace urls with new urls in order, do not rename keys or remove fields. 
-Do not change the structure of the json. Return 
-only strict JSON. Use double quotes around keys/strings, true/false for booleans, 
-null for None. No Python-style dicts. Do not change 
-widget type. Return just the json, no other text."""
+    You are a Perseus-question json agent. Your duty is to use tools to generate 
+    new images and append the urls into the provided JSON. Read the json to 
+    understand the question generated. For all urls in JSON, 
+    for each urls, generate a python list containing
+    prompts 'prompts: List[str]' which would be used by an image generation llm(nano banana) 
+    in generating images for the replacement in the question json. 
+
+    Images should be cartoon images, shapes with soft 
+    solid color outline (no fill), graphs, but not realistic images. 
+    Call the generate image tool passing it the list of prompts for each image
+    needed. This tool will return a list of urls.
+
+    Replace the original urls with the returned urls. Do not use 'web+graphie://' in the url but its 
+    rightful https url.Do not rename keys or remove fields. 
+    Do not change the structure of the json. Return 
+    only strict JSON. Use double quotes around keys/strings, true/false for booleans, 
+    null for None. No Python-style dicts. Do not change 
+    widget type. Return just the json, no other text. 
+
+    EXAMPLE:
+
+    Provided Json:
+    ```
+    "images": {
+        "web+graphie://cdn.kastatic.org/ka-perseus-graphie/277671e52ac15ebe141c042b18508387cf552d98": {
+            "height": 80,
+            "width": 380,
+            "alt": "A number line with endpoints at 70,000 and 80,000."
+        }
+    },
+    "replace": false,
+    "widgets": {}
+},```
+
+    Output:
+    ```"images": {
+            "https://ik.imagekit.io/20z1p1q07/7c96b3c3-2209-455d-9a34-b2b037b59073.png": {
+                "height": 80,
+                "width": 380,
+                "alt": "A number line with endpoints at 86,000 and 108,000."
+            }
+        },
+        "replace": false,
+        "widgets": {}
+    }```
+"""
