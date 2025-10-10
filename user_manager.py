@@ -129,11 +129,13 @@ class UserManager:
                 data = json.load(f)
             
             user_profile = UserProfile.from_dict(data)
-            print(f"📂 Loaded user profile: {user_id}")
+            print(f" Loaded user profile: {user_id}")
+            # print(f"📂 Loaded user profile: {user_id}")
             return user_profile
             
         except (json.JSONDecodeError, KeyError, TypeError) as e:
-            print(f"❌ Error loading user {user_id}: {e}")
+            # print(f"❌ Error loading user {user_id}: {e}")
+            print(f" Error loading user {user_id}: {e}")
             return None
     
     def save_user(self, user_profile: UserProfile):
@@ -145,10 +147,12 @@ class UserManager:
             with open(file_path, 'w') as f:
                 json.dump(user_profile.to_dict(), f, indent=2)
             
-            print(f"💾 Saved user profile: {user_profile.user_id}")
+            # print(f"💾 Saved user profile: {user_profile.user_id}")
+            print(f" Saved user profile: {user_profile.user_id}")
             
         except Exception as e:
-            print(f"❌ Error saving user {user_profile.user_id}: {e}")
+            print(f" Error saving user {user_profile.user_id}: {e}")
+            # print(f"❌ Error saving user {user_profile.user_id}: {e}")
     
     def get_or_create_user(self, user_id: str, all_skill_ids: List[str]) -> UserProfile:
         """Get existing user or create new one if doesn't exist"""

@@ -1,0 +1,29 @@
+FROM python:3.11
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libxml2-dev \
+    libxslt1-dev \
+    libffi-dev \
+    zlib1g-dev \
+    libssl-dev \
+    libjpeg-dev \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install --only-binary=:all: \
+    yarl==1.9.4 \
+    lxml==4.9.4 \
+    python-crfsuite==0.9.9
+
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+CMD ["python", "dash_api.py"]

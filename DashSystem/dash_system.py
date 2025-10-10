@@ -62,12 +62,14 @@ class DASHSystem:
         
         # Initialize the Question Generator Agent
         try:
-            qg_curriculum_path = "QuestionsBank/curriculum.json"
+            # qg_curriculum_path = "QuestionsBank/curriculum.json"
+            qg_curriculum_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../QuestionGeneratorAgent/curriculum.json"))
             self.question_generator = QuestionGeneratorAgent(curriculum_file=qg_curriculum_path)
             print("✅ Question Generator Agent initialized.")
         except Exception as e:
             self.question_generator = None
-            print(f"⚠️ Could not initialize Question Generator Agent: {e}")
+            # print(f"⚠️ Could not initialize Question Generator Agent: {e}")
+            print(f"Warring: Could not initialize Question Generator Agent: {e}")
 
         self._load_from_files(self.skills_file_path, self.curriculum_file_path)
     
@@ -88,9 +90,11 @@ class DASHSystem:
                             difficulty=question_data['difficulty']
                         )
                         self.questions[question.question_id] = question
-            print(f"✅ Reloaded {len(self.questions)} questions from curriculum.")
+            # print(f"✅ Reloaded {len(self.questions)} questions from curriculum.")
+            print(f" Reloaded {len(self.questions)} questions from curriculum.")
         except Exception as e:
-            print(f"❌ Error reloading questions: {e}")
+            # print(f"❌ Error reloading questions: {e}")
+            print(f" Error reloading questions: {e}")
 
     def _load_from_files(self, skills_file: str, curriculum_file: str):
         """Load skills and curriculum from JSON files"""
@@ -114,19 +118,26 @@ class DASHSystem:
             # Load curriculum and questions
             self._reload_questions()
             
-            print(f"✅ Loaded {len(self.skills)} skills from JSON files")
+            # print(f"✅ Loaded {len(self.skills)} skills from JSON files")
+            print(f" Loaded {len(self.skills)} skills from JSON files")
             
         except FileNotFoundError as e:
-            print(f"❌ Error: Could not find file {e.filename}")
-            print("🔄 Falling back to hardcoded curriculum...")
+            # print(f"❌ Error: Could not find file {e.filename}")
+            print(f" Error: Could not find file {e.filename}")
+            # print("🔄 Falling back to hardcoded curriculum...")
+            print(" Falling back to hardcoded curriculum...")
             self._initialize_k12_math_curriculum_fallback()
         except json.JSONDecodeError as e:
-            print(f"❌ Error: Invalid JSON format - {e}")
-            print("🔄 Falling back to hardcoded curriculum...")
+            print(f" Error: Invalid JSON format - {e}")
+            # print(f"❌ Error: Invalid JSON format - {e}")
+            # print("🔄 Falling back to hardcoded curriculum...")
+            print(" Falling back to hardcoded curriculum...")
             self._initialize_k12_math_curriculum_fallback()
         except Exception as e:
-            print(f"❌ Unexpected error loading curriculum: {e}")
-            print("🔄 Falling back to hardcoded curriculum...")
+            print(f" Unexpected error loading curriculum: {e}")
+            # print(f"❌ Unexpected error loading curriculum: {e}")
+            # print("🔄 Falling back to hardcoded curriculum...")
+            print(" Falling back to hardcoded curriculum...")
             self._initialize_k12_math_curriculum_fallback()
     
     def _initialize_k12_math_curriculum_fallback(self):

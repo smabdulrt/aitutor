@@ -1,0 +1,38 @@
+# Use a small and secure Python image
+FROM python:3.11-slim
+
+# Set the working directory inside the container
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    python3-dev \
+    python3-all-dev \
+    libc-dev \
+    libffi-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    zlib1g-dev \
+    libssl-dev \
+    libjpeg-dev \
+    libpq-dev \
+    libblas-dev \
+    liblapack-dev \
+    gfortran \
+    libgl1 \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Copy the requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the source code
+COPY . .
+
+# Expose port (change if your backend runs on another port)
+EXPOSE 8080
+
+# Command to run your backend script
+CMD ["python", "media_mixer.py"]
