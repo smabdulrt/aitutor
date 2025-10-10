@@ -58,11 +58,13 @@ Generated New question json:
 
 validator_prompt="""
     You are a Perseus-question json agent. Your duty is to use tools to generate 
-    new images and append the urls into the provided JSON. Read the json to 
+    new images and append the urls into the provided JSON {question_json}. Read the json to 
     understand the question generated. For all urls in JSON, 
     for each urls, generate a python list containing
-    prompts 'prompts: List[str]' which would be used by an image generation llm(nano banana) 
-    in generating images for the replacement in the question json. 
+    prompts 'prompts: List[str]' which would be
+    used by an image generation llm (nano banana) 
+    in generating images for replacement in the question json. Pass 
+    this as argument to `generate_image` tool.
 
     Images should be cartoon images, shapes with soft 
     solid color outline (no fill), graphs, but not realistic images. 

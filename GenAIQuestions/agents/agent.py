@@ -133,11 +133,12 @@ async def create_session():
     )
     return session.id
 
-SESSION_ID = asyncio.run(create_session())
-
+SESSION_ID = asyncio.run(create_session()) 
 
 async def execute(data: json) -> json:
     msg = f"Generate new question from: {data}"
+    final_response = None
+    
     async for ev in runner.run_async(
         user_id=USER_ID,
         session_id=SESSION_ID,
@@ -145,5 +146,22 @@ async def execute(data: json) -> json:
             role="user",
             parts=[types.Part(text=msg)]
         )):
-        if ev.is_final_response() and ev.content and ev.content.parts:
-            return ev.content.parts[0].text 
+        
+        # Print all event details for comprehensive debugging
+        print(f"=== EVENT ===")
+        print(f"Type: {type(ev).__name__}")
+        print(f"is_final: {ev.is_final_response()}")
+        
+        if hasattr(ev, 'content') and ev.content and ev.content.parts:
+            response_text = ev.content.parts[0].text
+            print(f"Content: {response_text[:200]}...")  # First 200 chars
+            if ev.is_final_response():
+                final_response = response_text
+                
+        # Check for tool-related events
+        if hasattr(ev, 'tool_calls') and ev.tool_calls:
+            print(f"TOOL CALLS: {ev.tool_calls}")
+            
+        print("=============")
+    
+    return final_response
