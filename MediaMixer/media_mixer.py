@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
 """
-Clean MediaMixer - Combines camera, screen share, and scratchpad streams
+MediaMixer - Cloud Run Compatible Version
+Combines camera, screen share, and scratchpad streams
 """
 
 import cv2
 import numpy as np
 from PIL import Image
-import mss
 import base64
 import io
 import asyncio
 import websockets
 import signal
 import json
+import os
 
 
 class MediaMixer:
-    """Clean MediaMixer implementation"""
+    """MediaMixer - receives all frames from browser"""
 
     def __init__(self, width=1280, height=2160, fps=15):
         self.width = width
@@ -24,59 +25,15 @@ class MediaMixer:
         self.fps = fps
         self.section_height = height // 3
 
-        # State
+        # State - all frames come from browser
         self.running = False
         self.show_camera = False
         self.show_screen = False
-        self.camera = None
-        self.screen_capture = mss.mss()
         self.scratchpad_frame = None
+        self.camera_frame = None
+        self.screen_frame = None
 
-        print("MediaMixer initialized - waiting for toggle commands")
-
-    def init_camera(self):
-        """Initialize camera when needed"""
-        if not self.camera:
-            self.camera = cv2.VideoCapture(0)
-            if self.camera.isOpened():
-                self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-                self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-                print("Camera initialized successfully")
-            else:
-                print("Warning: Could not open camera")
-                self.camera = None
-
-    def release_camera(self):
-        """Release camera resources"""
-        if self.camera:
-            print("Releasing camera resources...")
-            self.camera.release()
-            self.camera = None
-
-    def get_camera_frame(self):
-        """Get camera frame if enabled"""
-        if not self.show_camera or not self.camera:
-            return None
-
-        ret, frame = self.camera.read()
-        if ret:
-            return cv2.resize(frame, (self.width, self.section_height))
-        return None
-
-    def get_screen_frame(self):
-        """Get screen frame if enabled"""
-        if not self.show_screen:
-            return None
-
-        try:
-            monitor = self.screen_capture.monitors[1]
-            screenshot = self.screen_capture.grab(monitor)
-            frame = np.array(screenshot)
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGRA2BGR)
-            return cv2.resize(frame, (self.width, self.section_height))
-        except Exception as e:
-            print(f"Error capturing screen: {e}")
-            return None
+        print("MediaMixer initialized - waiting for frames from browser")
 
     def mix_frames(self):
         """Mix all sources into single frame"""
@@ -90,14 +47,16 @@ class MediaMixer:
         mixed_frame[0:self.section_height, :] = scratchpad
 
         # Section 2: Screen share (black if disabled)
-        screen_frame = self.get_screen_frame()
-        if screen_frame is not None:
-            mixed_frame[self.section_height:2*self.section_height, :] = screen_frame
+        if self.show_screen and self.screen_frame is not None:
+            screen = cv2.resize(self.screen_frame, (self.width, self.section_height))
+            mixed_frame[self.section_height:2*self.section_height, :] = screen
+        else:
+            mixed_frame[self.section_height:2*self.section_height, :] = 0
 
         # Section 3: Camera (gray if disabled)
-        camera_frame = self.get_camera_frame()
-        if camera_frame is not None:
-            mixed_frame[2*self.section_height:3*self.section_height, :] = camera_frame
+        if self.show_camera and self.camera_frame is not None:
+            camera = cv2.resize(self.camera_frame, (self.width, self.section_height))
+            mixed_frame[2*self.section_height:3*self.section_height, :] = camera
         else:
             mixed_frame[2*self.section_height:3*self.section_height, :] = 64
 
@@ -111,92 +70,101 @@ class MediaMixer:
     def handle_command(self, data):
         """Handle WebSocket commands"""
         if data.get('type') == 'scratchpad_frame':
-            print(f"MediaMixer: Received scratchpad frame, data length: {len(data.get('data', ''))}")
             try:
                 base64_data = data['data'].split(',')[1]
                 img_bytes = base64.b64decode(base64_data)
                 img = Image.open(io.BytesIO(img_bytes))
                 self.scratchpad_frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-                print(f"MediaMixer: Scratchpad frame processed, size: {self.scratchpad_frame.shape}")
             except Exception as e:
-                print(f"MediaMixer: Error processing scratchpad frame: {e}")
+                print(f"Error processing scratchpad frame: {e}")
+
+        elif data.get('type') == 'camera_frame':
+            try:
+                base64_data = data['data'].split(',')[1] if ',' in data['data'] else data['data']
+                img_bytes = base64.b64decode(base64_data)
+                img = Image.open(io.BytesIO(img_bytes))
+                self.camera_frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+            except Exception as e:
+                print(f"Error processing camera frame: {e}")
+
+        elif data.get('type') == 'screen_frame':
+            try:
+                base64_data = data['data'].split(',')[1] if ',' in data['data'] else data['data']
+                img_bytes = base64.b64decode(base64_data)
+                img = Image.open(io.BytesIO(img_bytes))
+                self.screen_frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+            except Exception as e:
+                print(f"Error processing screen frame: {e}")
 
         elif data.get('type') == 'toggle_camera':
             enabled = data.get('data', {}).get('enabled', False)
             self.show_camera = enabled
             print(f"Camera toggled: {'ON' if enabled else 'OFF'}")
 
-            if enabled and not self.camera:
-                self.init_camera()
-            elif not enabled:
-                self.release_camera()
-
         elif data.get('type') == 'toggle_screen':
             enabled = data.get('data', {}).get('enabled', False)
             self.show_screen = enabled
             print(f"Screen share toggled: {'ON' if enabled else 'OFF'}")
 
-        else:
-            print(f"Unknown command: {data.get('type')}")
-
     def stop(self):
         """Clean shutdown"""
         print("Stopping MediaMixer...")
         self.running = False
-        self.release_camera()
-        cv2.destroyAllWindows()
         print("MediaMixer stopped")
 
 
-# Global mixer instance shared between both servers
+# Global mixer instance
 mixer = MediaMixer()
 
-async def handle_command_client(websocket):
-    """Handle WebSocket client for commands/input (port 8765)"""
-    print(f"Command client connected: {websocket.remote_address}")
 
-    try:
-        async for message in websocket:
-            try:
-                data = json.loads(message)
-                mixer.handle_command(data)
-            except Exception as e:
-                print(f"Error processing command: {e}")
-    except websockets.exceptions.ConnectionClosed:
-        pass
-    finally:
-        print(f"Command client {websocket.remote_address} disconnected")
-
-
-async def handle_video_client(websocket):
-    """Handle WebSocket client for video output (port 8766)"""
-    print(f"Video client connected: {websocket.remote_address}")
-    mixer.running = True
-
-    try:
-        while mixer.running:
-            try:
-                frame = mixer.mix_frames()
-                base64_frame = mixer.frame_to_base64(frame)
-                await websocket.send(base64_frame)
-
-                # Responsive sleep for quick shutdown
-                for _ in range(67):  # 67ms total (15 FPS)
-                    if not mixer.running:
-                        break
-                    await asyncio.sleep(0.001)  # 1ms chunks
-
-            except websockets.exceptions.ConnectionClosed:
-                break
-            except Exception as e:
-                print(f"Error sending frames: {e}")
-                break
-    finally:
-        print(f"Video client {websocket.remote_address} disconnected")
+async def handle_websocket(websocket):
+    """Handle WebSocket connections - path is in websocket.path"""
+    path = websocket.path
+    print(f"Client connected from {websocket.remote_address} on path {path}")
+    
+    if path == "/command":
+        # Command connection - receives frames and commands
+        try:
+            async for message in websocket:
+                try:
+                    data = json.loads(message)
+                    mixer.handle_command(data)
+                except Exception as e:
+                    print(f"Error processing command: {e}")
+        except websockets.exceptions.ConnectionClosed:
+            pass
+        finally:
+            print(f"Command client disconnected")
+    
+    elif path == "/video":
+        # Video connection - sends mixed frames
+        mixer.running = True
+        try:
+            while mixer.running:
+                try:
+                    frame = mixer.mix_frames()
+                    base64_frame = mixer.frame_to_base64(frame)
+                    await websocket.send(base64_frame)
+                    
+                    # 15 FPS
+                    await asyncio.sleep(1/15)
+                    
+                except websockets.exceptions.ConnectionClosed:
+                    break
+                except Exception as e:
+                    print(f"Error sending frames: {e}")
+                    break
+        finally:
+            print(f"Video client disconnected")
+    else:
+        print(f"Unknown path: {path}")
 
 
 async def main():
     """Main server function"""
+    # Get port from environment (Cloud Run uses PORT env var)
+    port = int(os.environ.get('PORT', 8080))
+    
     shutdown_event = asyncio.Event()
 
     def signal_handler(signum, frame):
@@ -206,30 +174,25 @@ async def main():
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
 
-    command_server = None
-    video_server = None
+    server = None
     try:
-        # Start command server (port 8765) - receives commands/frames from frontend
-        command_server = await websockets.serve(handle_command_client, "localhost", 8765)
-        print("Command WebSocket server started on ws://localhost:8765")
-
-        # Start video server (port 8766) - sends video frames to frontend
-        video_server = await websockets.serve(handle_video_client, "localhost", 8766)
-        print("Video WebSocket server started on ws://localhost:8766")
-
-        print("Press Ctrl+C to stop")
+        # Single WebSocket server with path-based routing
+        server = await websockets.serve(handle_websocket, "0.0.0.0", port)
+        print(f"MediaMixer WebSocket server started on port {port}")
+        print(f"  - Command endpoint: /command")
+        print(f"  - Video endpoint: /video")
+        print("Waiting for connections...")
 
         await shutdown_event.wait()
 
     except Exception as e:
         print(f"Server error: {e}")
+        import traceback
+        traceback.print_exc()
     finally:
-        if command_server:
-            command_server.close()
-            await command_server.wait_closed()
-        if video_server:
-            video_server.close()
-            await video_server.wait_closed()
+        if server:
+            server.close()
+            await server.wait_closed()
         mixer.stop()
         print("Server shutdown complete")
 

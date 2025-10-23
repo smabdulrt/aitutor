@@ -32,7 +32,7 @@
     "eventemitter3": "^5.0.1",
     "html-to-image": "^1.11.13",
     "html2canvas": "^1.4.1",
-    "jquery": "^1.11.3",
+    "jquery": "^2.2.4",
     "lodash": "^4.17.21",
     "raphael": "^2.3.0",
     "react": "^18.3.1",
@@ -57,7 +57,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
+    "type-check": "tsc --noEmit",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "serve": "vite preview"

@@ -19,7 +19,9 @@ const RendererComponent = () => {
     const rendererRef = useRef<ServerItemRenderer>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8001/api/questions/16")
+        // fetch("http://localhost:8001/api/questions/16")
+        const SHERLOCKED_API_URL = import.meta.env.VITE_SHERLOCKED_API_URL || 'http://localhost:8001';
+        fetch(`${SHERLOCKED_API_URL}/api/questions/16`)
             .then((response) => response.json())
             .then((data) => {
                 console.log("API response:", data);

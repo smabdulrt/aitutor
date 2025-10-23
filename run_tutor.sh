@@ -37,8 +37,29 @@ else
 fi
 
 # Get the python executable (now guaranteed to be from venv)
-PYTHON_BIN="$(command -v python3 || command -v python)"
+if [[ -n "$VIRTUAL_ENV" ]]; then
+    # If a virtual environment is already active, use its Python
+    PYTHON_BIN="$(command -v python)"
+else
+    # Try to find a virtual environment in the project
+    if [[ -d "$SCRIPT_DIR/venv" ]]; then
+        echo "Activating local venv..."
+        if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+            # Windows Git Bash
+            source "$SCRIPT_DIR/venv/Scripts/activate"
+        else
+            # macOS / Linux
+            source "$SCRIPT_DIR/venv/bin/activate"
+        fi
+        PYTHON_BIN="$(command -v python)"
+    else
+        echo "⚠️ No virtual environment found, using system Python."
+        # Use the best available Python command
+        PYTHON_BIN="$(command -v python3 || command -v python)"
+    fi
+fi
 echo "Using Python: $PYTHON_BIN"
+
 
 # Array to hold the PIDs of background processes
 pids=()

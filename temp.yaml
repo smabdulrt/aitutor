@@ -1,0 +1,179 @@
+# Deploy DashSystem API to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'dash-api'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/dash-api'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+    id: 'deploy-dash-api'
+    waitFor: ['push-dash-api']
+
+  # Deploy SherlockED API to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'sherlocked-api'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/sherlocked-api'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+    id: 'deploy-sherlocked-api'
+    waitFor: ['push-sherlocked-api']
+
+  # Deploy MediaMixer to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'mediamixer'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/mediamixer'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+      - '--timeout'
+      - '3600'
+      - '--cpu'
+      - '2'
+      - '--memory'
+      - '2Gi'
+    id: 'deploy-mediamixer'
+    waitFor: ['push-mediamixer']
+
+  # Deploy Frontend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'tutor-frontend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/tutor-frontend'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+    id: 'deploy-frontend'
+    waitFor: ['push-frontend']
+
+
+
+
+
+
+
+    steps:
+  # Build DashSystem API
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/dash-api'
+      - '-f'
+      - 'DashSystem/Dockerfile'
+      - '.'
+    id: 'build-dash-api'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/dash-api']
+    id: 'push-dash-api'
+
+  # Build SherlockED API
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/sherlocked-api'
+      - '-f'
+      - 'SherlockEDApi/Dockerfile'
+      - 'SherlockEDApi'
+    id: 'build-sherlocked-api'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/sherlocked-api']
+    id: 'push-sherlocked-api'
+
+  # Build MediaMixer
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/mediamixer'
+      - '-f'
+      - 'MediaMixer/Dockerfile'
+      - 'MediaMixer'
+    id: 'build-mediamixer'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/mediamixer']
+    id: 'push-mediamixer'
+
+  # Build Frontend
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/tutor-frontend'
+      - '-f'
+      - 'frontend/Dockerfile'
+      - 'frontend'
+    id: 'build-frontend'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/tutor-frontend']
+    id: 'push-frontend'
+
+  # Push all images
+  # - name: 'gcr.io/cloud-builders/docker'
+  #   args: ['push', 'gcr.io/$PROJECT_ID/dash-api']
+  #   id: 'push-dash-api'
+  #   waitFor: ['build-dash-api']
+
+  # - name: 'gcr.io/cloud-builders/docker'
+  #   args: ['push', 'gcr.io/$PROJECT_ID/sherlocked-api']
+  #   id: 'push-sherlocked-api'
+  #   waitFor: ['build-sherlocked-api']
+
+  # - name: 'gcr.io/cloud-builders/docker'
+  #   args: ['push', 'gcr.io/$PROJECT_ID/mediamixer']
+  #   id: 'push-mediamixer'
+  #   waitFor: ['build-mediamixer']
+
+  # - name: 'gcr.io/cloud-builders/docker'
+  #   args: ['push', 'gcr.io/$PROJECT_ID/tutor-frontend']
+  #   id: 'push-frontend'
+  #   waitFor: ['build-frontend']
+
+  
+
+images:
+  - 'gcr.io/$PROJECT_ID/dash-api'
+  - 'gcr.io/$PROJECT_ID/sherlocked-api'
+  - 'gcr.io/$PROJECT_ID/mediamixer'
+  - 'gcr.io/$PROJECT_ID/tutor-frontend'
+
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: 3600s

@@ -1,19 +1,3 @@
-/**
- * Copyright 2024 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import { useRef, useState, useEffect } from "react";
 import "./App.scss";
 import { LiveAPIProvider } from "./contexts/LiveAPIContext";
@@ -30,16 +14,17 @@ if (typeof API_KEY !== "string") {
   throw new Error("set VITE_GEMINI_API_KEY in .env");
 }
 
+// Get WebSocket URLs from environment or use defaults for local dev
+const MEDIAMIXER_COMMAND_WS = import.meta.env.VITE_MEDIAMIXER_COMMAND_WS || 'ws://localhost:8080/command';
+const MEDIAMIXER_VIDEO_WS = import.meta.env.VITE_MEDIAMIXER_VIDEO_WS || 'ws://localhost:8080/video';
+
 const apiOptions: LiveClientOptions = {
   apiKey: API_KEY,
 };
 
 function App() {
-  // this video reference is used for displaying the active stream, whether that is the webcam or screen capture
-  // feel free to style as you see fit
   const videoRef = useRef<HTMLVideoElement>(null);
   const renderCanvasRef = useRef<HTMLCanvasElement>(null);
-  // either the screen capture, the video or null, if null we hide it
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
   const [mixerStream, setMixerStream] = useState<MediaStream | null>(null);
   const mixerVideoRef = useRef<HTMLVideoElement>(null);
@@ -48,12 +33,20 @@ function App() {
   const [isScratchpadOpen, setScratchpadOpen] = useState(false);
 
   useEffect(() => {
+    console.log('Connecting to MediaMixer...');
+    console.log('Command WS:', MEDIAMIXER_COMMAND_WS);
+    console.log('Video WS:', MEDIAMIXER_VIDEO_WS);
+
     // Command WebSocket for sending frames/commands TO MediaMixer
-    const commandWs = new WebSocket('ws://localhost:8765');
+    const commandWs = new WebSocket(MEDIAMIXER_COMMAND_WS);
+    commandWs.onopen = () => console.log('Command WebSocket connected');
+    commandWs.onerror = (error) => console.error('Command WebSocket error:', error);
     setCommandSocket(commandWs);
 
     // Video WebSocket for receiving video FROM MediaMixer
-    const videoWs = new WebSocket('ws://localhost:8766');
+    const videoWs = new WebSocket(MEDIAMIXER_VIDEO_WS);
+    videoWs.onopen = () => console.log('Video WebSocket connected');
+    videoWs.onerror = (error) => console.error('Video WebSocket error:', error);
     setVideoSocket(videoWs);
 
     return () => {
@@ -75,7 +68,7 @@ function App() {
           <SidePanel />
           <main>
             <div className="main-app-area">
-              <div className="question-panel" style={{border: '2px solid red'}}>
+              <div className="question-panel">
                 <ScratchpadCapture socket={commandSocket}>
                   <QuestionDisplay />
                   {isScratchpadOpen && (

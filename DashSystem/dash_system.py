@@ -8,7 +8,11 @@ from enum import Enum
 
 from user_manager import UserManager, UserProfile, SkillState
 from QuestionGeneratorAgent.question_generator_agent import QuestionGeneratorAgent
-
+import sys
+if sys.platform == "win32":
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding="utf-8")
+    sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding="utf-8")
 class GradeLevel(Enum):
     K = 0
     GRADE_1 = 1
@@ -62,7 +66,7 @@ class DASHSystem:
         
         # Initialize the Question Generator Agent
         try:
-            qg_curriculum_path = "QuestionsBank/curriculum.json"
+            qg_curriculum_path = os.path.abspath(qg_curriculum_path)
             self.question_generator = QuestionGeneratorAgent(curriculum_file=qg_curriculum_path)
             print("✅ Question Generator Agent initialized.")
         except Exception as e:
