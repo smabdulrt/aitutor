@@ -24,6 +24,11 @@ class MediaMixer:
         self.height = height
         self.fps = fps
         self.section_height = height // 3
+        
+        # Performance optimization: use smaller internal resolution
+        self.internal_width = 640  # Half resolution
+        self.internal_height = 1080  # Half resolution
+        self.internal_section_height = self.internal_height // 3
 
         # State - all frames come from browser
         self.running = False
@@ -37,34 +42,36 @@ class MediaMixer:
 
     def mix_frames(self):
         """Mix all sources into single frame"""
-        mixed_frame = np.zeros((self.height, self.width, 3), dtype=np.uint8)
+        # Use smaller internal resolution for better performance
+        mixed_frame = np.zeros((self.internal_height, self.internal_width, 3), dtype=np.uint8)
 
         # Section 1: Scratchpad (white if no data)
         if self.scratchpad_frame is not None:
-            scratchpad = cv2.resize(self.scratchpad_frame, (self.width, self.section_height))
+            scratchpad = cv2.resize(self.scratchpad_frame, (self.internal_width, self.internal_section_height))
         else:
-            scratchpad = np.ones((self.section_height, self.width, 3), dtype=np.uint8) * 255
-        mixed_frame[0:self.section_height, :] = scratchpad
+            scratchpad = np.ones((self.internal_section_height, self.internal_width, 3), dtype=np.uint8) * 255
+        mixed_frame[0:self.internal_section_height, :] = scratchpad
 
         # Section 2: Screen share (black if disabled)
         if self.show_screen and self.screen_frame is not None:
-            screen = cv2.resize(self.screen_frame, (self.width, self.section_height))
-            mixed_frame[self.section_height:2*self.section_height, :] = screen
+            screen = cv2.resize(self.screen_frame, (self.internal_width, self.internal_section_height))
+            mixed_frame[self.internal_section_height:2*self.internal_section_height, :] = screen
         else:
-            mixed_frame[self.section_height:2*self.section_height, :] = 0
+            mixed_frame[self.internal_section_height:2*self.internal_section_height, :] = 0
 
         # Section 3: Camera (gray if disabled)
         if self.show_camera and self.camera_frame is not None:
-            camera = cv2.resize(self.camera_frame, (self.width, self.section_height))
-            mixed_frame[2*self.section_height:3*self.section_height, :] = camera
+            camera = cv2.resize(self.camera_frame, (self.internal_width, self.internal_section_height))
+            mixed_frame[2*self.internal_section_height:3*self.internal_section_height, :] = camera
         else:
-            mixed_frame[2*self.section_height:3*self.section_height, :] = 64
+            mixed_frame[2*self.internal_section_height:3*self.internal_section_height, :] = 64
 
         return mixed_frame
 
     def frame_to_base64(self, frame):
-        """Convert frame to base64 JPEG"""
-        _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+        """Convert frame to base64 JPEG with lower quality for performance"""
+        # Reduce quality to 60 for better performance (was 80)
+        _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 60])
         return base64.b64encode(buffer).decode('utf-8')
 
     def handle_command(self, data):
@@ -140,14 +147,16 @@ async def handle_websocket(websocket):
         # Video connection - sends mixed frames
         mixer.running = True
         try:
+            # Reduce frame rate to 10 FPS for better performance (was 15)
+            frame_delay = 1/10
             while mixer.running:
                 try:
                     frame = mixer.mix_frames()
                     base64_frame = mixer.frame_to_base64(frame)
                     await websocket.send(base64_frame)
                     
-                    # 15 FPS
-                    await asyncio.sleep(1/15)
+                    # 10 FPS for better network performance
+                    await asyncio.sleep(frame_delay)
                     
                 except websockets.exceptions.ConnectionClosed:
                     break
@@ -163,7 +172,7 @@ async def handle_websocket(websocket):
 async def main():
     """Main server function"""
     # Get port from environment (Cloud Run uses PORT env var)
-    port = int(os.environ.get('PORT', 8080))
+    port = int(os.environ.get('PORT', 8765))  # 8765 for local, 8080 for cloud
     
     shutdown_event = asyncio.Event()
 

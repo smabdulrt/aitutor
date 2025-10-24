@@ -15,8 +15,8 @@ if (typeof API_KEY !== "string") {
 }
 
 // Get WebSocket URLs from environment or use defaults for local dev
-const MEDIAMIXER_COMMAND_WS = import.meta.env.VITE_MEDIAMIXER_COMMAND_WS || 'ws://localhost:8080/command';
-const MEDIAMIXER_VIDEO_WS = import.meta.env.VITE_MEDIAMIXER_VIDEO_WS || 'ws://localhost:8080/video';
+const MEDIAMIXER_COMMAND_WS = import.meta.env.VITE_MEDIAMIXER_COMMAND_WS || 'ws://localhost:8765';
+const MEDIAMIXER_VIDEO_WS = import.meta.env.VITE_MEDIAMIXER_VIDEO_WS || 'ws://localhost:8765';
 
 const apiOptions: LiveClientOptions = {
   apiKey: API_KEY,

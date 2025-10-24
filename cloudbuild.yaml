@@ -49,7 +49,7 @@ steps:
       - --build-arg
       - VITE_MEDIAMIXER_VIDEO_WS=wss://mediamixer-utmfhquz6a-uc.a.run.app/video
       - --build-arg
-      - VITE_GEMINI_API_KEY=AIzaSyAx0rMrqAcDFVUKjfefVnukaubCr08PoAA
+      - VITE_GEMINI_API_KEY=geminikey
       - '.'
     id: 'build-frontend'
 

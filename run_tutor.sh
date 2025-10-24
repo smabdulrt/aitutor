@@ -79,17 +79,17 @@ trap cleanup INT
 
 # Start the Python backend in the background
 echo "Starting Python backend... Logs -> logs/mediamixer.log"
-(cd "$SCRIPT_DIR" && "$PYTHON_BIN" MediaMixer/media_mixer.py) > "$SCRIPT_DIR/logs/mediamixer.log" 2>&1 &
+(cd "$SCRIPT_DIR" && PORT=8765 "$PYTHON_BIN" MediaMixer/media_mixer.py) > "$SCRIPT_DIR/logs/mediamixer.log" 2>&1 &
 pids+=($!)
 
 # Start the FastAPI server in the background
 echo "Starting DASH API server... Logs -> logs/api.log"
-(cd "$SCRIPT_DIR" && "$PYTHON_BIN" DashSystem/dash_api.py) > "$SCRIPT_DIR/logs/api.log" 2>&1 &
+(cd "$SCRIPT_DIR" && PORT=8000 "$PYTHON_BIN" DashSystem/dash_api.py) > "$SCRIPT_DIR/logs/api.log" 2>&1 &
 pids+=($!)
 
 # Start the SherlockEDExam FastAPI server in the background
 echo "Starting SherlockED Exam API server... Logs -> logs/api.log"
-(cd "$SCRIPT_DIR" && "$PYTHON_BIN" SherlockEDApi/run_backend.py) > "$SCRIPT_DIR/logs/sherlocked_exam.log" 2>&1 &
+(cd "$SCRIPT_DIR" && PORT=8001 "$PYTHON_BIN" SherlockEDApi/run_backend.py) > "$SCRIPT_DIR/logs/sherlocked_exam.log" 2>&1 &
 pids+=($!)
 
 # Give the backend servers a moment to start
@@ -101,7 +101,7 @@ FRONTEND_PORT=$(grep -o '"port":[[:space:]]*[0-9]*' "$SCRIPT_DIR/frontend/vite.c
 DASH_API_PORT=$(grep -o 'port=[0-9]*' "$SCRIPT_DIR/DashSystem/dash_api.py" 2>/dev/null | grep -o '[0-9]*' || echo "8000")
 SHERLOCKED_API_PORT=$(grep -o 'port=[0-9]*' "$SCRIPT_DIR/SherlockEDApi/run_backend.py" 2>/dev/null | grep -o '[0-9]*' || echo "8001")
 MEDIAMIXER_COMMAND_PORT=$(grep -o 'localhost",[[:space:]]*[0-9]*' "$SCRIPT_DIR/MediaMixer/media_mixer.py" 2>/dev/null | head -1 | grep -o '[0-9]*' || echo "8765")
-MEDIAMIXER_VIDEO_PORT=$(grep -o 'localhost",[[:space:]]*[0-9]*' "$SCRIPT_DIR/MediaMixer/media_mixer.py" 2>/dev/null | tail -1 | grep -o '[0-9]*' || echo "8766")
+MEDIAMIXER_VIDEO_PORT=$(grep -o 'localhost",[[:space:]]*[0-9]*' "$SCRIPT_DIR/MediaMixer/media_mixer.py" 2>/dev/null | tail -1 | grep -o '[0-9]*' || echo "8765")
 
 # Start the Node.js frontend in the background
 echo "Starting Node.js frontend... Logs -> logs/frontend.log"

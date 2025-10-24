@@ -80,7 +80,8 @@ export const useMediaCapture = ({ socket }: UseMediaCaptureProps) => {
         const ctx = canvas.getContext('2d')!;
         
         ctx.drawImage(video, 0, 0);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        // Reduce quality for better performance
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
         
         // Send to MediaMixer via WebSocket
         if (socket && socket.readyState === WebSocket.OPEN) {
@@ -90,8 +91,8 @@ export const useMediaCapture = ({ socket }: UseMediaCaptureProps) => {
           }));
         }
         
-        // Continue loop
-        requestAnimationFrame(captureLoop);
+        // Continue loop - reduced to ~5 FPS for better performance
+        setTimeout(() => requestAnimationFrame(captureLoop), 200);
       };
       
       captureLoop();
@@ -140,7 +141,8 @@ export const useMediaCapture = ({ socket }: UseMediaCaptureProps) => {
         const ctx = canvas.getContext('2d')!;
         
         ctx.drawImage(video, 0, 0);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        // Reduce quality for better performance
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
         
         // Send to MediaMixer via WebSocket
         if (socket && socket.readyState === WebSocket.OPEN) {
@@ -150,8 +152,8 @@ export const useMediaCapture = ({ socket }: UseMediaCaptureProps) => {
           }));
         }
         
-        // Continue loop
-        requestAnimationFrame(captureLoop);
+        // Continue loop - reduced to ~5 FPS for better performance
+        setTimeout(() => requestAnimationFrame(captureLoop), 200);
       };
       
       captureLoop();
