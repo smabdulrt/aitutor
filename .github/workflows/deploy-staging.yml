@@ -1,0 +1,37 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - staging-deployed
+  workflow_dispatch:
+
+jobs:
+  deploy-staging:
+    name: Trigger Cloud Build (Staging)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Trigger Cloud Build for Staging
+        run: |
+          gcloud builds submit \
+            --config=cloudbuild-staging.yaml \
+            --substitutions=_VITE_GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}" \
+            --project=aitutor-473420 \
+            .
+
+      - name: Deployment Complete
+        run: |
+          echo "🎉 Staging deployment triggered!"
+          echo "📦 Check Cloud Build: https://console.cloud.google.com/cloud-build/builds?project=aitutor-473420"
