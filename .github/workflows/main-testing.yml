@@ -32,6 +32,6 @@ jobs:
         run: |
           if [ "${{ github.ref_name }}" = "staging" ]; then
             ./deploy.sh staging
-          elif [ "${{ github.ref_name }}" = "main" ]; then
+          elif [ "${{ github.ref_name }}" = "staging-deployed" ]; then
             ./deploy.sh prod
           fi
