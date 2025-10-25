@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - staging
+      - staging-deployed
 
 jobs:
   deploy:
