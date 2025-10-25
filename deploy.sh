@@ -41,7 +41,7 @@ if [ "$ENV" = "staging" ]; then
     SERVICE_SUFFIX="-staging"
 else
     echo "📦 Deploying PRODUCTION environment..."
-    CONFIG_FILE="cloudbuild-prod.yaml"
+    CONFIG_FILE="cloudbuild-staging.yaml"
     
     DASH_API_URL="https://dash-api-utmfhquz6a-uc.a.run.app"
     SHERLOCKED_API_URL="https://sherlocked-api-utmfhquz6a-uc.a.run.app"
