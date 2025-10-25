@@ -18,15 +18,14 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: aitutor-473420
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
           
-      - name: Authenticate gcloud and set config
+      - name: Authenticate using access token
+        env:
+          GCP_ACCESS_TOKEN: ${{ secrets.GCP_ACCESS_TOKEN }}
         run: |
-          echo "🔐 Authenticating service account..."
-          gcloud auth activate-service-account --key-file <(echo "${{ secrets.GCP_SA_KEY }}")
+          echo "🔐 Authenticating with access token..."
+          gcloud auth activate-refresh-token account-name "$GCP_ACCESS_TOKEN" || true
           gcloud config set project aitutor-473420
-          gcloud config set account "$(gcloud auth list --filter=status:ACTIVE --format='value(account)')"
           gcloud auth list
 
       - name: Grant execute permissions
